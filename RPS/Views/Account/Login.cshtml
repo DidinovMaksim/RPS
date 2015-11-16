@@ -1,0 +1,26 @@
+﻿@using RPS.Models
+@model Login
+@{
+    ViewBag.Title = "Login";
+}
+
+
+<div class="loginPage">
+    <h2>Login</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <label>Login</label>
+        @Html.TextBoxFor(m=>m.Username, new { @class = "form-control" })
+        <label>Password</label>
+        @Html.PasswordFor(m=>m.Password, new { @class = "form-control" })
+        <p>@Html.CheckBoxFor(m => m.RememberMe) Remember me</p>
+        <br />
+
+
+        <button class="btn btn-primary">Log in</button>
+
+    }
+</div>
