@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище DB_9DF713_RPSModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Call">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Customer" Type="int" Nullable="false" />
+          <Property Name="Agent" Type="int" Nullable="false" />
+          <Property Name="CallText" Type="text" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateSolved" Type="datetime" />
+          <Property Name="DateArchived" Type="datetime" />
+          <Property Name="Reason" Type="text" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CallArchivedReason">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Reason" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CallStatus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="ntext" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MPhone" Type="text" />
+          <Property Name="Email" Type="text" />
+          <Property Name="UserFN" Type="text" />
+          <Property Name="UserLN" Type="text" />
+          <Property Name="Birthday" Type="date" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Call_CallStatus">
+          <End Role="CallStatus" Type="Self.CallStatus" Multiplicity="1" />
+          <End Role="Call" Type="Self.Call" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CallStatus">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Call">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Call_User_Agent">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Call" Type="Self.Call" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Call">
+              <PropertyRef Name="Agent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Call_User_Customer">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Call" Type="Self.Call" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Call">
+              <PropertyRef Name="Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище DB_9DF713_RPSModelContainer">
+          <EntitySet Name="Call" EntityType="Self.Call" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CallArchivedReason" EntityType="Self.CallArchivedReason" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CallStatus" EntityType="Self.CallStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Call_CallStatus" Association="Self.FK_Call_CallStatus">
+            <End Role="CallStatus" EntitySet="CallStatus" />
+            <End Role="Call" EntitySet="Call" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Call_User_Agent" Association="Self.FK_Call_User_Agent">
+            <End Role="User" EntitySet="User" />
+            <End Role="Call" EntitySet="Call" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Call_User_Customer" Association="Self.FK_Call_User_Customer">
+            <End Role="User" EntitySet="User" />
+            <End Role="Call" EntitySet="Call" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DB_9DF713_RPSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Call">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Customer" Type="Int32" Nullable="false" />
+          <Property Name="Agent" Type="Int32" Nullable="false" />
+          <Property Name="CallText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateSolved" Type="DateTime" Precision="3" />
+          <Property Name="DateArchived" Type="DateTime" Precision="3" />
+          <Property Name="Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CallStatus" Relationship="Self.FK_Call_CallStatus" FromRole="Call" ToRole="CallStatus" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Call_User_Agent" FromRole="Call" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="Self.FK_Call_User_Customer" FromRole="Call" ToRole="User" />
+        </EntityType>
+        <EntityType Name="CallArchivedReason">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CallStatus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Call" Relationship="Self.FK_Call_CallStatus" FromRole="CallStatus" ToRole="Call" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MPhone" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UserFN" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UserLN" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Birthday" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Call" Relationship="Self.FK_Call_User_Agent" FromRole="User" ToRole="Call" />
+          <NavigationProperty Name="Call1" Relationship="Self.FK_Call_User_Customer" FromRole="User" ToRole="Call" />
+        </EntityType>
+        <Association Name="FK_Call_CallStatus">
+          <End Role="CallStatus" Type="Self.CallStatus" Multiplicity="1" />
+          <End Role="Call" Type="Self.Call" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CallStatus">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Call">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Call_User_Agent">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Call" Type="Self.Call" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Call">
+              <PropertyRef Name="Agent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Call_User_Customer">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Call" Type="Self.Call" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Call">
+              <PropertyRef Name="Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DB_9DF713_RPSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Call" EntityType="Self.Call" />
+          <EntitySet Name="CallArchivedReason" EntityType="Self.CallArchivedReason" />
+          <EntitySet Name="CallStatus" EntityType="Self.CallStatus" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK_Call_CallStatus" Association="Self.FK_Call_CallStatus">
+            <End Role="CallStatus" EntitySet="CallStatus" />
+            <End Role="Call" EntitySet="Call" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Call_User_Agent" Association="Self.FK_Call_User_Agent">
+            <End Role="User" EntitySet="User" />
+            <End Role="Call" EntitySet="Call" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Call_User_Customer" Association="Self.FK_Call_User_Customer">
+            <End Role="User" EntitySet="User" />
+            <End Role="Call" EntitySet="Call" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище DB_9DF713_RPSModelContainer" CdmEntityContainer="DB_9DF713_RPSEntities">
+          <EntitySetMapping Name="Call">
+            <EntityTypeMapping TypeName="DB_9DF713_RPSModel.Call">
+              <MappingFragment StoreEntitySet="Call">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Customer" ColumnName="Customer" />
+                <ScalarProperty Name="Agent" ColumnName="Agent" />
+                <ScalarProperty Name="CallText" ColumnName="CallText" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateSolved" ColumnName="DateSolved" />
+                <ScalarProperty Name="DateArchived" ColumnName="DateArchived" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CallArchivedReason">
+            <EntityTypeMapping TypeName="DB_9DF713_RPSModel.CallArchivedReason">
+              <MappingFragment StoreEntitySet="CallArchivedReason">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CallStatus">
+            <EntityTypeMapping TypeName="DB_9DF713_RPSModel.CallStatus">
+              <MappingFragment StoreEntitySet="CallStatus">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="DB_9DF713_RPSModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="MPhone" ColumnName="MPhone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserFN" ColumnName="UserFN" />
+                <ScalarProperty Name="UserLN" ColumnName="UserLN" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

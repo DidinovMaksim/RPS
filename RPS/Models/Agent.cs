@@ -7,5 +7,6 @@ namespace RPS.Models
 {
     public class Agent
     {
+
     }
 }
