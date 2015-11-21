@@ -3,8 +3,9 @@
         loadTable();
     });
     function loadTable() {
+
         $.ajax({
-            url: 'Agent/getGridData',
+            url: 'getGridData',
             datatype: "json",
             data: "{}",
             contentType: "application/json; charset=utf-8",
@@ -19,7 +20,7 @@
                             name: 'id',
                             index: 'id',
                             key: true,
-                            hidden: true,
+                            hidden: false,
                         },
                         {
                             name: 'Login',
