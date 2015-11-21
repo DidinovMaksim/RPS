@@ -10,7 +10,7 @@ namespace RPS.Controllers
     {
         // GET: Dispatcher
         [Authorize(Roles = "Dispatcher")]
-        public ActionResult Dispatcher()
+        public ActionResult Index()
         {
             return View();
         }

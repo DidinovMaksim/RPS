@@ -148,7 +148,7 @@
     <Compile Include="Controllers\ArchivistController.cs" />
     <Compile Include="Controllers\DispatcherController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\UsersTestController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -267,7 +267,8 @@
       <DependentUpon>RpsModel.edmx</DependentUpon>
       <LastGenOutput>RpsModel.cs</LastGenOutput>
     </Content>
-    <Content Include="Scripts\AgentGrid.js" />
+    <Content Include="Scripts\RoleScripts\AdministratorFunctionality.js" />
+    <Content Include="Scripts\RoleScripts\AgentFunctionality.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\RpsModel.edmx">
@@ -335,6 +336,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\RoleScripts\ArchivistFunctionality.js" />
+    <Content Include="Scripts\RoleScripts\DispatcherFunctionality.js" />
+    <Content Include="Scripts\RoleScripts\TestPageFunctionality.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -353,15 +357,11 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Dispatcher\Dispatcher.cshtml" />
-    <Content Include="Views\Administrator\Administrator.cshtml" />
-    <Content Include="Views\Agent\Agent.cshtml" />
-    <Content Include="Views\Archivist\Archivist.cshtml" />
-    <Content Include="Views\UsersTest\Create.cshtml" />
-    <Content Include="Views\UsersTest\Delete.cshtml" />
-    <Content Include="Views\UsersTest\Details.cshtml" />
-    <Content Include="Views\UsersTest\Edit.cshtml" />
-    <Content Include="Views\UsersTest\Index.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Dispatcher\Index.cshtml" />
+    <Content Include="Views\Administrator\Index.cshtml" />
+    <Content Include="Views\Archivist\Index.cshtml" />
+    <Content Include="Views\Agent\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

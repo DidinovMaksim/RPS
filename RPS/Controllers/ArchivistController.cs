@@ -10,7 +10,7 @@ namespace RPS.Controllers
     {
         // GET: Archivist
         [Authorize(Roles = "Archivist")]
-        public ActionResult Archivist()
+        public ActionResult Index()
         {
             return View();
         }

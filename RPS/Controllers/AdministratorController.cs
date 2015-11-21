@@ -11,7 +11,7 @@ namespace RPS.Controllers
         // GET: Administrator
 
         [Authorize(Roles = "Administrator")]
-        public ActionResult Administrator()
+        public ActionResult Index()
         {
             return View();
         }

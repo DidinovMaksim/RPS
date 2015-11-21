@@ -30,7 +30,27 @@
     
     <script src="~/Scripts/i18n/grid.locale-en.js"></script>
     <script src="~/Scripts/jquery.jqGrid.min.js" type="text/javascript"></script>
-    <script src="~/Scripts/AgentGrid.js"></script>
+
+    @{
+        if (User.Identity.IsAuthenticated)
+        {
+            switch (Roles.GetRolesForUser()[0])
+            {
+                case "Administrator":<script src="~/Scripts/RoleScripts/AdministratorFunctionality.js" ></script>
+                    break;
+                case "Agent":<script src="~/Scripts/RoleScripts/AgentFunctionality.js" ></script>
+                    break;
+                case "Archivist":<script src="~/Scripts/RoleScripts/ArchivistFunctionality.js" ></script>
+                    break;
+                case "Dispatcher":<script src="~/Scripts/RoleScripts/DispatcherFunctionality.js" ></script>
+                    break;
+            }
+        }
+    }
+    <script src="~/Scripts/RoleScripts/TestPageFunctionality.js"></script>
+
+
+
 </head>
 <body>
 
@@ -47,19 +67,20 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home page", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Test page", "Index", "Test")</li>
 
                     @{
                         if(User.Identity.IsAuthenticated)
                         {
                             switch(Roles.GetRolesForUser()[0])
                             {
-                                case "Administrator": <li>@Html.ActionLink("Administrator page", "Administrator", "Administrator")</li>
+                                case "Administrator": <li>@Html.ActionLink("Administrator page", "Index", "Administrator")</li>
                                     break;
-                                case "Agent": <li>@Html.ActionLink("Agent page", "Agent", "Agent")</li> 
+                                case "Agent": <li>@Html.ActionLink("Agent page", "Index", "Agent")</li> 
                                     break;
-                                case "Archivist": <li>@Html.ActionLink("Archivist page", "Archivist", "Archivist")</li>
+                                case "Archivist": <li>@Html.ActionLink("Archivist page", "Index", "Archivist")</li>
                                     break;
-                                case "Dispatcher": <li>@Html.ActionLink("Dispatcher page", "Dispatcher", "Dispatcher")</li>
+                                case "Dispatcher": <li>@Html.ActionLink("Dispatcher page", "Index", "Dispatcher")</li>
                                     break;
                             }
                         }
