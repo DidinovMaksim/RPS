@@ -1,8 +1,12 @@
 ﻿(function ($) {
-    $(document).ready(function () {
+    $(document).ready(function() {
         loadTable();
     });
     function loadTable() {
+ 
+        var gridSelector = '#jqg';
+        var arOps = ["eq", "ne", "lt", "le", "gt", "ge", "bw", "bn", "in", "ni", "ew", "en", "cn", "nc"];
+ 
         $.ajax({
             url: 'Test/getGridData',
             datatype: "json",
@@ -10,32 +14,50 @@
             contentType: "application/json; charset=utf-8",
             method: "GET",
             success: function (result) {
-                console.log(result);
                 $("#jqg").jqGrid({
                     datatype: "local",
-                    colNames: ['Id', 'Name', 'IsActive'],
+                    colNames: ['id', 'Name', 'IsActive','btn'],
                     colModel: [
                         {
                             name: 'id',
                             index: 'id',
                             key: true,
                             hidden: false,
+                            sorttype: "int",
+                            sortable: true
                         },
                         {
                             name: 'Login',
                             index: 'Login',
                             width: 150,
                             sortable: true,
-                            editable: true
+                            editable: true,
+                            sorttype:"string",
                         },
                         {
                             name: 'IsActive',
                             index: 'IsActive',
                             width: 80,
                             sortable: true,
-                            editable: true
+                            editable: true,
+                            sorttype: "bool",
+                        },
+                        {
+                            name: 'Actions',
+                            index: 'Actions',
+                            width: 100,
+                            height: 120,
+                            formater: 'actions',
+                            editable: false,
+                            sortable : false,
+                            search : false,
+                            formatter: function (cellvalue, options, rowobject) {
+                                return '<button id="openbtn" onclick="Popup()" >Upload</button>';
+                            }
                         }
+ 
                     ],
+                    cellEdit: true,
                     data: JSON.parse(result),
                     rowNum: 10,
                     autowidth: true,
@@ -43,16 +65,40 @@
                     rowList: [10, 20, 30, 40],
                     viewrecords: true,
                     caption: "RPS",
+                    search: true,
                     jsonReader: {
-                        root: "rows",
-                        page: "pages",
-                        total: "total",
-                        repeatitems: false,
-                        id: "0"
+                        cell: ""
                     },
-                }).navGrid("#pager", { edit: true, add: true, del: true },
+                    loadComplete: function (data) {
+                        var newCapture = "",
+                            filters, rules, rule, op, i, iOp,s
+                            postData = $('#jqg').jqGrid("getGridParam", "postData"),
+                            isFiltering = $('#jqg').jqGrid("getGridParam", "search");
+ 
+                        if (isFiltering === true && typeof postData.filters !== "undefined") {
+                            filters = $.parseJSON(postData.filters);
+                            newCapture = "Filter: [";
+                            rules = filters.rules;
+                            for (i = 0; i < rules.length; i++) {
+                                rule = rules[i];
+                                op = rule.op; // the code name of the operation
+                                iOp = $.inArray(op, arOps);
+                                if (iOp >= 0 && typeof $.jgrid.search.odata[iOp] !== "undefined") {
+                                    op = $.jgrid.search.odata[iOp].text;
+                                }
+                                newCapture += rule.field + " " + op + " '" + rule.data + "'";
+                                if (i + 1 !== rules.length) {
+                                    newCapture += ", ";
+                                }
+                            }
+                            newCapture += "]";
+                        }
+                        $(gridSelector).jqGrid("setCaption", newCapture);
+                        $(this).triggerHandler("jqGridLoadComplete", data);
+                    },
+                }).navGrid("#pager", { edit: true, add: true, del: true, search: true, refresh: true },
                 {
-                    //edit options
+                //edit options
                     zIndex: 100,
                     url: 'Test/EditGridData',
                     closeOnEscape: true,
@@ -68,7 +114,7 @@
                     closeOnEscape: true,
                     closeAfterEdit: true,
                     afterComplete: function (result) {
-
+ 
                     }
                 },
                 //delete
@@ -81,10 +127,14 @@
                     msg: "Are you sure ?",
                     afterComplete: function (result) {
                     }
-                }
-                );
+                },
+                {
+                    multipleSearch: true,
+                    multipleGroup: true,
+                    showQuery: true
+                });
+                $("#jqg").jqGrid('filterToolbar', { searchOnEnter: false });
             }
         })
     }
-
 }(jQuery));
