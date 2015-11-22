@@ -19,6 +19,7 @@ namespace RPS.Models
         {
             this.Call = new HashSet<Call>();
             this.Call1 = new HashSet<Call>();
+            this.webpages_Roles = new HashSet<webpages_Roles>();
         }
     
         public int id { get; set; }
@@ -34,5 +35,7 @@ namespace RPS.Models
         public virtual ICollection<Call> Call { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Call> Call1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<webpages_Roles> webpages_Roles { get; set; }
     }
 }

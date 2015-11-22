@@ -22,10 +22,6 @@ namespace RPS.Controllers
         public string getGridData()
         {
 
-            /*return JsonConvert.SerializeObject(db.User.ToList(), Formatting.Indented, 
-                new JsonSerializerSettings
-                {ReferenceLoopHandling = ReferenceLoopHandling.Serialize});*/
-
 
             return JsonConvert.SerializeObject(db.User.ToList(), Formatting.None,
                         new JsonSerializerSettings()
@@ -33,7 +29,12 @@ namespace RPS.Controllers
                             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                         });
 
-            //return JsonConvert.SerializeObject(db.User.ToList());
+            /*var innerJoinQuery =
+                from user in db.User
+                join prod in products on category.ID equals prod.CategoryID
+                select new { ProductName = prod.Name, Category = category.Name }; //produces flat sequence*/
+                
+           
 
         }
         public string EditGridData(User usr)

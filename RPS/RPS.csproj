@@ -184,6 +184,9 @@
     <Compile Include="Models\User.cs">
       <DependentUpon>RpsModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\webpages_Roles.cs">
+      <DependentUpon>RpsModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

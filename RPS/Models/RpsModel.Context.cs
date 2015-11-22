@@ -29,5 +29,6 @@ namespace RPS.Models
         public virtual DbSet<CallArchivedReason> CallArchivedReason { get; set; }
         public virtual DbSet<CallStatus> CallStatus { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<webpages_Roles> webpages_Roles { get; set; }
     }
 }

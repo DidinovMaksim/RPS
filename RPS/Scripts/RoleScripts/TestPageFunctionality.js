@@ -14,9 +14,12 @@
             contentType: "application/json; charset=utf-8",
             method: "GET",
             success: function (result) {
+                //console.log(result),
+                console.log((JSON.parse(result)[0])["webpages_Roles"][0]["RoleId"]),
+                //alert((JSON.parse(result)[0]["webpages_Roles"])),
                 $("#jqg").jqGrid({
                     datatype: "local",
-                    colNames: ['id', 'Name', 'IsActive','btn'],
+                    colNames: ['id', 'Name', 'IsActive','btn', "User role"],
                     colModel: [
                         {
                             name: 'id',
@@ -54,7 +57,15 @@
                             formatter: function (cellvalue, options, rowobject) {
                                 return '<button id="openbtn" onclick="Popup()" >Upload</button>';
                             }
-                        }
+                        },
+                        {
+                            
+                            name: 'webpages_Roles.0.RoleName',
+                            index: 'webpages_Roles.0.RoleName',
+                            width: 80,
+                            sortable: true,
+                            
+                        },
  
                     ],
                     cellEdit: true,
