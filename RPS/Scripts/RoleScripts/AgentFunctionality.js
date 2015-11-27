@@ -1,14 +1,36 @@
-﻿function TestButtonClick()
+﻿function Reply()
 {
-    alert("РАБОТИРУЕТ!");
-    jQuery(".callInfo").dialog("open");
+    jQuery(".Reply").dialog("open");
+    var rowId = $("#jqgAgent").jqGrid('getGridParam', 'selrow');
+    var rowData = $("#jqgAgent").getRowData(rowId);
+
+    document.getElementById("custId").value = rowData['id'];
 
 }
+function reloadJQGrid() {
+    $.ajax({
+        url: 'Agent/getGridData',
+        datatype: "json",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        mathod: 'GET',
+        success: function (result) {
+            jQuery("#jqgAgent")
+            .jqGrid('setGridParam',
+                {
+                    datatype: 'local',
+                    data: JSON.parse(result)
+                })
+        .trigger("reloadGrid");
+        }
+    });
+}
+
 (function ($) {
     
     $(document).ready(function () {
         loadTable();
-        jQuery(".callInfo").dialog();
+        jQuery(".Reply").dialog({autoOpen:false});
     });
     function loadTable(){
 
@@ -68,7 +90,7 @@
                                 name:"Reply",
                                 index:"Reply",
                                 formatter: function (cellvalue, options, rowobject) {
-                                    return '<button id="openbtn" onclick="TestButtonClick()" >Reply</button>';
+                                    return '<button id="openbtn" onclick="Reply()" >Reply</button>';
                                 },
                                 search: false,
                             

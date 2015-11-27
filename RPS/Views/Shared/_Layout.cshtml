@@ -24,24 +24,6 @@
 
     <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" type="text/css" />
     
-   
-
-    @{
-        if (User.Identity.IsAuthenticated)
-        {
-            switch (Roles.GetRolesForUser()[0])
-            {
-                case "Administrator":<script src="~/Scripts/RoleScripts/AdministratorFunctionality.js" ></script>
-                    break;
-                case "Agent":<script src="~/Scripts/RoleScripts/AgentFunctionality.js" ></script>
-                    break;
-                case "Archivist":<script src="~/Scripts/RoleScripts/ArchivistFunctionality.js" ></script>
-                    break;
-                case "Dispatcher":<script src="~/Scripts/RoleScripts/DispatcherFunctionality.js" ></script>
-                    break;
-            }
-        }
-    }
     <script src="~/Scripts/RoleScripts/TestPageFunctionality.js"></script>
 
 

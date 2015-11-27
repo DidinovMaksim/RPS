@@ -62,7 +62,7 @@ namespace RPS.Controllers
             db.SaveChanges();
             return "Deleted";
         }
-        public string AddGridData([Bind(Exclude = "id")] Call call)
+        public string ReplyCall([Bind(Exclude = "id")] Call call)
         {
             db.Call.Add(call);
             db.SaveChanges();

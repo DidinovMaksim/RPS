@@ -1,18 +1,39 @@
-﻿
+﻿@using RPS.ValidationModels
+@model CallValidation
+
+
 @{
     ViewBag.Title = "Agent page";
 }
-<script src="@Url.Content("~/Scripts/RoleScripts/AgentFunctionality.js")" type="text/javascript"></script>
+<script src="~/Scripts/RoleScripts/AgentFunctionality.js"></script>
 
-
-
-
-<script type="text/javascript">
-    $(document).ready(function ()
+<div class="Reply" >
+    @using (@Ajax.BeginForm("ReplyCall", "Agent", new AjaxOptions() { OnFailure = "reloadJQGrid()", OnSuccess = "reloadJQGrid()", UpdateTargetId = "add-item", InsertionMode = InsertionMode.Replace }))
     {
-        AgentFunctionality.OnInit();
-    });
-</script>
+        <h1 class="text" id="adding-form-header">Add new Product!</h1>
+        //<p id="product-validation-string">@Model.ModelError</p>
+        <table>
+            <tr>
+                <td>
+                    <p class="text">name</p>
+                    @Html.TextBoxFor(m => m.Customer, new { id = "custId" })
+                    @Html.ValidationMessageFor(m => m.Customer)
+                </td>
+                <td>
+                    <p class="text">price</p>
+                    @Html.TextBoxFor(m => m.Agent, new { id = "text-field" })
+                    @Html.ValidationMessageFor(m => m.Agent)
+                </td>
+                <td>
+                    <input type="submit" id="add-button" value="Add product" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+
+
+
 
 <h2>Index</h2>
 <table id="jqgAgent"></table>

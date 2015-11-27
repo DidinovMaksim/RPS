@@ -188,6 +188,8 @@
       <DependentUpon>RpsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValidationModels\CallValidation.cs" />
+    <Compile Include="ValidationModels\UserValidation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
