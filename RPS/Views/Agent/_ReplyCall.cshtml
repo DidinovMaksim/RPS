@@ -2,7 +2,7 @@
 @model CallValidation
 
 
-@using (@Ajax.BeginForm("ReplyCall", "Agent", new AjaxOptions() { OnBegin = "Aler()", OnFailure = "Aler()", OnSuccess = "Aler()", UpdateTargetId = "Reply", InsertionMode = InsertionMode.InsertBefore }))
+@using (@Ajax.BeginForm("ReplyCall", "Agent", new AjaxOptions() { OnBegin = "reloadJQGrid()", OnFailure = "reloadJQGrid()", OnSuccess = "reloadJQGrid()", UpdateTargetId = "Reply", InsertionMode = InsertionMode.Replace }))
 {
     <h1 class="text" id="adding-form-header">Reply to the client!</h1>
     //<p id="product-validation-string">@Model.ModelError</p>
