@@ -1,8 +1,106 @@
-﻿
+﻿@using RPS.ValidationModels
+@using RPS.Controllers
+@using RPS.Models
+@model UserValidation
+
 @{
     ViewBag.Title = "Administrator page";
 }
 <script src="~/Scripts/RoleScripts/AdministratorFunctionality.js"></script>
 
-<h2>Index</h2>
+<h1>Administrator page</h1>
+<table id="jqgAdmin" title="Add new user"></table>
+<div id="pager"></div>
 
+<div class="addUserWindow">
+    @using (@Ajax.BeginForm("ReplyCall", "Administrator", new AjaxOptions() { OnFailure = "reloadJQGrid()", OnSuccess = "reloadJQGrid()", UpdateTargetId = "add-item", InsertionMode = InsertionMode.Replace }))
+    {
+        <table>
+            <tr>
+                <td>Login: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Login, new { id = "login" })
+                </td>
+            </tr>
+            <tr>
+                <td>Mobile phone: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.MPhone, new { id = "phone" })
+                </td>
+            </tr>
+            <tr>
+                <td>Email: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Email, new { id = "email" })
+                </td>
+            </tr>
+            <tr>
+                <td>User firts name: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.UserFN, new { id = "name" })
+                </td>
+            </tr>
+            <tr>
+                <td>User last name: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.UserFN, new { id = "name" })
+                </td>
+            </tr>
+            <tr>
+                <td>Birthday: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Birthday, new { id = "birthday" })
+                </td>
+            </tr>
+            <tr>
+                <td>Is active ?: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.IsActive, new { id = "IsActive" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" id="add-button" value="Add user" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+<button class="addUserButton" onclick="addUser()">Add user</button>
+
+<div>
+    <table>
+        <tr>
+            <td>User first name: </td>
+            <td>@Html.TextBoxFor(m => m.UserFN, new { id = "fname" })</td>
+        </tr>
+        <tr>
+            <td>User last name: </td>
+            <td>@Html.TextBoxFor(m => m.UserLN, new { id = "lname" })</td>
+        </tr>
+        <tr>
+            <td>Phone: </td>
+            <td>@Html.TextBoxFor(m => m.MPhone, new { id = "phone" })</td>
+        </tr>
+        <tr>
+            <td>Email: </td>
+            <td>@Html.TextBoxFor(m => m.Email, new { id = "email" })</td>
+        </tr>
+        <tr>
+            <td>Role: </td>
+            @{
+                AdministratorController adControl = new AdministratorController();
+                List<SelectListItem> roleList = adControl.getRoles();
+            }
+            <td>@Html.DropDownListFor(m => m.IsActive, roleList, "--Select status--", new { id = "role" })</td>
+        </tr>
+        <tr>
+            <td>Active/Inactive: </td>
+            <td>@Html.TextBoxFor(m => m.IsActive, new { id = "IsActive" })</td>
+        </tr>
+        @*<tr>
+                <td>Password: </td>
+                <td>@Html.TextBoxFor(m => m.UserFN, new { id = "password" })</td>
+            </tr>*@
+    </table>
+</div>

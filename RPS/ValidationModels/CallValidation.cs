@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using RPS.Models;
 
 namespace RPS.ValidationModels
 {
@@ -17,6 +18,19 @@ namespace RPS.ValidationModels
         public Nullable<System.DateTime> DateArchived { get; set; }
         public string Reason { get; set; }
         public bool IsDeleted { get; set; }
+
+        public void AddAnswer()
+        {
+            DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities();
+            var upd = from call in db.Call where call.id == id select call;
+            upd.ToList()[0].Reason = Reason;
+
+            db.SaveChanges();
+
+
+
+        }
+
 
     }
 }

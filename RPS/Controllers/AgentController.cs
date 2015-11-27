@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using RPS.Models;
+using RPS.ValidationModels;
 using Newtonsoft.Json;
 
 using System.Data.Entity;
@@ -62,11 +63,16 @@ namespace RPS.Controllers
             db.SaveChanges();
             return "Deleted";
         }
-        public string ReplyCall([Bind(Exclude = "id")] Call call)
+        public PartialViewResult _ReplyCall(CallValidation call)
         {
-            db.Call.Add(call);
-            db.SaveChanges();
-            return "added";
+
+            return PartialView(new CallValidation());
+            
+        }
+        public ActionResult ReplyCall(CallValidation call)
+        {
+            call.AddAnswer();
+            return PartialView("_ReplyCall", new CallValidation());
         }
 
 

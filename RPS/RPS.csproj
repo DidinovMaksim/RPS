@@ -367,6 +367,7 @@
     <Content Include="Views\Administrator\Index.cshtml" />
     <Content Include="Views\Archivist\Index.cshtml" />
     <Content Include="Views\Agent\Index.cshtml" />
+    <Content Include="Views\Agent\_ReplyCall.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

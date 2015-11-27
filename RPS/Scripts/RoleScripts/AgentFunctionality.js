@@ -1,11 +1,13 @@
 ﻿function Reply()
 {
-    jQuery(".Reply").dialog("open");
+    jQuery("#Reply").dialog("open");
     var rowId = $("#jqgAgent").jqGrid('getGridParam', 'selrow');
     var rowData = $("#jqgAgent").getRowData(rowId);
 
-    document.getElementById("custId").value = rowData['id'];
-
+    
+    document.getElementById("id").value = rowData['id'];
+    document.getElementById("CustName").value = rowData['User1.UserFN'] + " " + rowData['User1.UserLN'];
+    document.getElementById("CallText").value = rowData['CallText'];
 }
 function reloadJQGrid() {
     $.ajax({
@@ -30,7 +32,10 @@ function reloadJQGrid() {
     
     $(document).ready(function () {
         loadTable();
-        jQuery(".Reply").dialog({autoOpen:false});
+        jQuery("#Reply").dialog({
+            autoOpen: false,
+            width:400
+        });
     });
     function loadTable(){
 
