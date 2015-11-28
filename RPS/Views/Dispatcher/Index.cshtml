@@ -1,8 +1,96 @@
-﻿
+﻿@using RPS.ValidationModels
+@model CallValidation
+
 @{
     ViewBag.Title = "Dispatcher page";
 }
 <script src="~/Scripts/RoleScripts/DispatcherFunctionality.js"></script>
 
+
 <h2>Index</h2>
+
+<div id="Reply">
+    @using (@Ajax.BeginForm("ReplyCall", "Agent", new AjaxOptions(){
+        OnBegin = "reloadJQGrid()",
+        OnFailure = "reloadJQGrid()",
+        OnSuccess = "reloadJQGrid()",
+        UpdateTargetId = "Reply",
+        InsertionMode = InsertionMode.Replace
+    }))
+    {
+        <h1 class="text" id="adding-form-header">Add new call!</h1>
+        //<p id="product-validation-string">@Model.ModelError</p>
+        <table>
+            <tr>
+                <td>
+                    <p class="text">Customer name: </p>
+                </td>
+                <td>
+                    
+                    @Html.HiddenFor(m => m.id, new { id = "id" })
+
+                    @{ 
+                        string[] languages =  {
+                            "HTML",
+                            "CSS",
+                            "JavaScript",
+                            "Java",
+                            "Ruby",
+                            "PHP",
+                            "Go",
+                            "Erlang",
+                            "Python",
+                            "C",
+                            "C#",
+                            "C++"
+                        };
+                    }
+
+                    <datalist id="languages">
+                        @foreach (var s in languages)
+                        {
+                        <option value="@s"/> 
+                        }
+                    </datalist>
+                    <input type="text" list="languages" />
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="text">Question:</p>
+                </td>
+                <td>
+                    @Html.TextAreaFor(m => m.CallText, new { id = "CallText" })
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="text">Agent: </p>
+                </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Reason, new { id = "Reason" })
+                    
+
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" id="add-button" value="Add product" />
+                </td>
+            </tr>
+        </table>
+
+    }
+</div>
+
+<button onclick="CreateNewCall()">Create New</button>
+
+<table id="jqgDispatcher"></table>
+<div id="pager"></div>
+
+
+
 
