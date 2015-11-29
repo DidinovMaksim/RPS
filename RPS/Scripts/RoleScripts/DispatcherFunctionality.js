@@ -19,19 +19,11 @@ function reloadJQGrid() {
 }
 
 function Attach() {
-    alert('new call!');
+    jQuery("#attachCall").dialog("open");
 }
 
 function CreateNewCall() {
-    
-    jQuery("#Reply").dialog("open");
-    //var rowId = $("#jqgDispatcher").jqGrid('getGridParam', 'selrow');
-    //var rowData = $("#jqgDispatcher").getRowData(rowId);
-
-
-    //document.getElementById("id").value = rowData['id'];
-    //document.getElementById("CustName").value = rowData['User1.UserFN'] + " " + rowData['User1.UserLN'];
-    //document.getElementById("CallText").value = rowData['CallText'];
+    jQuery("#createCall").dialog("open");
 }
 
 (function ($) {
@@ -39,7 +31,17 @@ function CreateNewCall() {
     $(document).ready(function () {
         loadTable();
         
-        jQuery("#Reply").dialog({
+        jQuery("#createCall").dialog({
+            autoOpen: false,
+            width: 400
+        });
+
+        jQuery("#callInfo").dialog({
+            autoOpen: false,
+            width: 400
+        });
+
+        jQuery("#attachCall").dialog({
             autoOpen: false,
             width: 400
         });
@@ -56,7 +58,7 @@ function CreateNewCall() {
             contentType: "application/json; charset=utf-8",
             method: "GET",
             success: function (result) {
-                console.log(result);
+                
                 $("#jqgDispatcher").jqGrid({
                     datatype: "local",
                     colNames: ['id', 'Status', 'Call date', 'Attach', 'Customer', 'Agent'],
@@ -108,6 +110,8 @@ function CreateNewCall() {
                             search: false,
                         },
 
+                 
+
            
                     ],
                     data: JSON.parse(result),
@@ -131,6 +135,18 @@ function CreateNewCall() {
 
 
                     //},
+                    ondblClickRow : function(rowid, iRow, iCol,e ) {
+
+ 
+                        var callData = $("#jqgDispatcher").getGridParam('data')[iRow-1];
+
+                        document.getElementById("callInfoCustName").innerHTML = callData.User1.UserFN + ' ' + callData.User1.UserLN;
+                        document.getElementById("callInfoCustEmail").innerHTML = callData.User1.Email;
+                        document.getElementById("callInfoCustPhone").innerHTML = callData.User1.MPhone;
+                        document.getElementById("callInfoCallText").innerHTML = callData.CallText;
+
+                        jQuery("#callInfo").dialog("open");
+                    },
                     jsonReader: {
                         root: "rows",
                         page: "pages",
@@ -148,6 +164,10 @@ function CreateNewCall() {
                         }
                     },
                     loadComplete: function (data) {
+                        
+                        document.getElementById("cssload-thecube").style.display = 'none';
+
+                       
                         var newCapture = "",
                             filters, rules, rule, op, i, iOp, s
                         postData = $('#jqgDispatcher').jqGrid("getGridParam", "postData"),
@@ -174,7 +194,7 @@ function CreateNewCall() {
                         $(gridSelector).jqGrid("setCaption", newCapture);
                         $(this).triggerHandler("jqGridLoadComplete", data);
                     },
-                }).navGrid("#pager", { edit: true, add: true, del: true },
+                }).navGrid("#pager", { edit: false, add: false, del: true },
                 {
                     //edit options
                     zIndex: 100,

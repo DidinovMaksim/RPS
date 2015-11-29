@@ -7,14 +7,17 @@
 <script src="~/Scripts/RoleScripts/DispatcherFunctionality.js"></script>
 
 
+<link href="Content/Loader.css" rel="stylesheet">
+
+
 <h2>Index</h2>
 
-<div id="Reply">
-    @using (@Ajax.BeginForm("ReplyCall", "Agent", new AjaxOptions(){
+<div id="createCall"  style="display: none;">
+    @using (@Ajax.BeginForm("CreateCall", "Dispatcher", new AjaxOptions(){
         OnBegin = "reloadJQGrid()",
         OnFailure = "reloadJQGrid()",
         OnSuccess = "reloadJQGrid()",
-        UpdateTargetId = "Reply",
+        UpdateTargetId = "createCall",
         InsertionMode = InsertionMode.Replace
     }))
     {
@@ -23,7 +26,7 @@
         <table>
             <tr>
                 <td>
-                    <p class="text">Customer name: </p>
+                    <p class="text">Choose customer name: </p>
                 </td>
                 <td>
                     
@@ -45,11 +48,11 @@
                             "C++"
                         };
                     }
-
+                   
                     <datalist id="languages">
                         @foreach (var s in languages)
                         {
-                        <option value="@s"/> 
+                        <option value="@s">123</option> 
                         }
                     </datalist>
                     <input type="text" list="languages" />
@@ -78,7 +81,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" id="add-button" value="Add product" />
+                    <input type="submit" id="add-button" value="Add new call" />
                 </td>
             </tr>
         </table>
@@ -86,8 +89,115 @@
     }
 </div>
 
+<div id="callInfo" style="display: none;" >
+    <h1>Full information</h1>
+    <table>
+        <tr>
+            <td>
+                <p class="text">Customer name: </p>
+            </td>
+            <td>
+                <p id="callInfoCustName"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="text">E-mail:</p>
+            </td>
+            <td>
+                <p id="callInfoCustEmail"></p>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="text">Phone: </p>
+            </td>
+            <td>
+                <p id="callInfoCustPhone"></p>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="text">Question: </p>
+            </td>
+            <td>
+                <p id="callInfoCallText"></p>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<div id="attachCall" style="display: none;">
+    @using (@Ajax.BeginForm("CreateCall", "Dispatcher", new AjaxOptions()
+    {
+        OnBegin = "reloadJQGrid()",
+        OnFailure = "reloadJQGrid()",
+        OnSuccess = "reloadJQGrid()",
+        UpdateTargetId = "attachCall",
+        InsertionMode = InsertionMode.Replace
+    }))
+    {
+        <h1 class="text" id="adding-form-header">Attach call to agent</h1>
+        //<p id="product-validation-string">@Model.ModelError</p>
+        <table>
+            <tr>
+                <td>
+                    <p class="text">Choose agent: </p>
+                </td>
+                <td>
+
+                    @Html.HiddenFor(m => m.id, new { id = "id" })
+
+                    @{
+                        string[] languages =  {
+                            "HTML",
+                            "CSS",
+                            "JavaScript",
+                            "Java",
+                            "Ruby",
+                            "PHP",
+                            "Go",
+                            "Erlang",
+                            "Python",
+                            "C",
+                            "C#",
+                            "C++"
+                        };
+                    }
+
+                    <datalist id="languages">
+                        @foreach (var s in languages)
+                        {
+                            <option value="@s">123</option>
+                        }
+                    </datalist>
+                    <input type="text" list="languages" />
+
+                </td>
+            </tr>
+            
+         
+            <tr>
+                <td>
+                    <input type="submit" id="add-button" value="Attach call" />
+                </td>
+            </tr>
+        </table>
+
+     }
+</div>
+
 <button onclick="CreateNewCall()">Create New</button>
 
+<div id="cssload-thecube">
+    <div class="cssload-cube cssload-c1"></div>
+    <div class="cssload-cube cssload-c2"></div>
+    <div class="cssload-cube cssload-c4"></div>
+    <div class="cssload-cube cssload-c3"></div>
+</div>
 <table id="jqgDispatcher"></table>
 <div id="pager"></div>
 

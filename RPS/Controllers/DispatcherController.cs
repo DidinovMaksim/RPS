@@ -23,11 +23,7 @@ namespace RPS.Controllers
 
         public string getGridData()
         {
-           
-
             List<Call> calls = (from call in db.Call where call.Status == 1 select call).ToList();
-
-          
 
             return JsonConvert.SerializeObject(calls, Formatting.None,
                         new JsonSerializerSettings()
@@ -52,17 +48,22 @@ namespace RPS.Controllers
             db.SaveChanges();
             return "Deleted";
         }
-        public PartialViewResult _ReplyCall(CallValidation call)
-        {
+        //public PartialViewResult _ReplyCall(CallValidation call)
+        //{
 
-            return PartialView(new CallValidation());
+        //    return PartialView(new CallValidation());
 
-        }
-        public ActionResult ReplyCall(CallValidation call)
-        {
-            call.AddAnswer();
-            return PartialView("_ReplyCall", new CallValidation());
-        }
+        //}
+        //public ActionResult ReplyCall(CallValidation call)
+        //{
+        //    call.AddAnswer();
+        //    return PartialView("_ReplyCall", new CallValidation());
+        //}
+
+        public string CreateCall(CallValidation call) => "";
+
+        public string AttachCall(CallValidation call) => "";
+
 
     }
 }

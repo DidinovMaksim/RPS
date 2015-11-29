@@ -22,7 +22,7 @@ namespace RPS.Controllers
         public string getGridData()
         {
 
-
+            return "";
             return JsonConvert.SerializeObject(db.User.ToList(), Formatting.None,
                         new JsonSerializerSettings()
                         {
