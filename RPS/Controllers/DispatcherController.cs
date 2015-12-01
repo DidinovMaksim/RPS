@@ -60,9 +60,9 @@ namespace RPS.Controllers
         //    return PartialView("_ReplyCall", new CallValidation());
         //}
 
-        public string CreateCall(CallValidation call) => "";
+        //public string CreateCall(CallValidation call) => "";
 
-        public string AttachCall(CallValidation call) => "";
+        //public string AttachCall(CallValidation call) => "";
 
 
     }

@@ -19,7 +19,7 @@ namespace RPS.Controllers
         public ActionResult Index()
         {
             return View();
-            
+
         }
         [HttpGet]
         public string getGridData()
@@ -63,18 +63,20 @@ namespace RPS.Controllers
             db.SaveChanges();
             return "Deleted";
         }
-        public PartialViewResult _ReplyCall(CallValidation call)
+        [HttpGet]
+        public PartialViewResult _ReplyCall(String id)
         {
-
             return PartialView(new CallValidation());
-            
         }
-        public ActionResult ReplyCall(CallValidation call)
+        [HttpPost]
+        public JsonResult _ReplyCall(CallValidation call)
         {
-            call.AddAnswer();
-            return PartialView("_ReplyCall", new CallValidation());
+            //call.AddAnswer();
+            //return Json(new CallValidation());
+            return Json(new
+            {
+                State = "Win!"
+            }, JsonRequestBehavior.AllowGet);
         }
-
-
     }
 }

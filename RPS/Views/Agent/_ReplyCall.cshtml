@@ -1,51 +1,51 @@
-﻿@using RPS.ValidationModels
-@model CallValidation
+﻿@model RPS.ValidationModels.CallValidation
+
+<div id="reply-call-form">
+    @*@using (Ajax.BeginForm("_ReplyCall", "Agent", new AjaxOptions() { OnBegin = "reloadJQGrid()", OnFailure = "reloadJQGrid()", OnSuccess = "alert('test');", UpdateTargetId = "Reply" }))*@
+    @using (Ajax.BeginForm("_ReplyCall", new AjaxOptions() { OnSuccess = "Aler", UpdateTargetId = "reply-call-form" }))
+    {
+        @*<form id="replyForm" method="post" data-ajax-success="Aler" data-ajax-method="Post" data-ajax="true" action="/Agent/_ReplyCall" novalidate="novalidate">*@
+        <h1 class="text" id="adding-form-header">Reply to the client!</h1>
+        @*<p id="product-validation-string">@Model.ModelError</p>*@
+        <table>
+            <tr>
+                <td>
+                    <p class="text">Customer name: </p>
+                </td>
+                <td>
+                    <input type="text" id="CustName" />
+                    @Html.HiddenFor(m => m.id, new { id = "id" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="text">Call text:</p>
+                </td>
+                <td>
+                    @Html.TextAreaFor(m => m.CallText, new { id = "CallText" })
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="text">Answer: </p>
+                </td>
+                <td>
+                    @Html.TextAreaFor(m => m.Reason, new { id = "Reason" })
 
 
-@using (@Ajax.BeginForm("ReplyCall", "Agent", new AjaxOptions() { OnBegin = "reloadJQGrid()", OnFailure = "reloadJQGrid()", OnSuccess = "reloadJQGrid()", UpdateTargetId = "Reply", InsertionMode = InsertionMode.Replace }))
-{
-    <h1 class="text" id="adding-form-header">Reply to the client!</h1>
-    //<p id="product-validation-string">@Model.ModelError</p>
-    <table>
-        <tr>
-            <td>
-                <p class="text">Customer name: </p>
-            </td>
-            <td>
-                <input type="text" id="CustName" />
-                @Html.HiddenFor(m => m.id, new { id = "id" })
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p class="text">Call text:</p>
-            </td>
-            <td>
-                @Html.TextAreaFor(m => m.CallText, new { id = "CallText" })
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p class="text">Answer: </p>
-            </td>
-            <td>
-                @Html.TextAreaFor(m => m.Reason, new { id = "Reason" })
-
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="button" id="add-button" value="Add product" />
-            </td>
-        </tr>
-    </table>
-
-}
-<script>
-    function Aler() {
-        console.log("sd");
-        alert("asd");
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" id="add-reply-call" value="Add reply" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+<script type="text/javascript">
+    function Aler(data) {
+        alert(data.State);
     }
 </script>

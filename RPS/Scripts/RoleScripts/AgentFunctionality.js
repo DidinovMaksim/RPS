@@ -1,13 +1,31 @@
 ﻿function Reply()
 {
-    jQuery("#Reply").dialog("open");
+    
+    
     var rowId = $("#jqgAgent").jqGrid('getGridParam', 'selrow');
     var rowData = $("#jqgAgent").getRowData(rowId);
-
-    
+    /*
+    jQuery("#Reply").dialog("open");
     document.getElementById("id").value = rowData['id'];
     document.getElementById("CustName").value = rowData['User1.UserFN'] + " " + rowData['User1.UserLN'];
     document.getElementById("CallText").value = rowData['CallText'];
+    */
+
+    $.ajax({
+        url: 'Agent/_ReplyCall',
+        data: {
+            id: rowId
+        },
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET',
+        success: function (result) {
+            $('#popup').html(result);
+            $('#popup').dialog({
+                width: 350,
+                height: 350
+            });
+        }
+    });
 }
 function reloadJQGrid() {
     $.ajax({

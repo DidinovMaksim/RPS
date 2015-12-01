@@ -273,6 +273,8 @@
       <DependentUpon>RpsModel.edmx</DependentUpon>
       <LastGenOutput>RpsModel.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\RoleScripts\AdministratorFunctionality.js" />
     <Content Include="Scripts\RoleScripts\AgentFunctionality.js" />
     <Content Include="Scripts\bootstrap.js" />

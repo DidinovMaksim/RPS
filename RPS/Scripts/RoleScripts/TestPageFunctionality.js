@@ -15,7 +15,7 @@
             method: "GET",
             success: function (result) {
                 //console.log(result),
-                console.log((JSON.parse(result)[0])["webpages_Roles"][0]["RoleId"]),
+                //console.log((JSON.parse(result)[0])["webpages_Roles"][0]["RoleId"]),
                 //alert((JSON.parse(result)[0]["webpages_Roles"])),
                 $("#jqg").jqGrid({
                     datatype: "local",
