@@ -14,8 +14,6 @@
             <td>
                 <input type="text" id="CustName" />
                 @Html.HiddenFor(m => m.id, new { id = "id" })
-
-
             </td>
         </tr>
         <tr>
@@ -23,7 +21,7 @@
                 <p class="text">Call text:</p>
             </td>
             <td>
-                @Html.TextBoxFor(m => m.CallText, new { id = "CallText" })
+                @Html.TextAreaFor(m => m.CallText, new { id = "CallText" })
 
             </td>
         </tr>
@@ -32,14 +30,14 @@
                 <p class="text">Answer: </p>
             </td>
             <td>
-                @Html.TextBoxFor(m => m.Reason, new { id = "Reason" })
+                @Html.TextAreaFor(m => m.Reason, new { id = "Reason" })
 
 
             </td>
         </tr>
         <tr>
             <td>
-                <input type="submit" id="add-button" value="Add product" />
+                <input type="button" id="add-button" value="Add product" />
             </td>
         </tr>
     </table>

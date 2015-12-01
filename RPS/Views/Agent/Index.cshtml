@@ -1,12 +1,10 @@
-﻿A3@using RPS.ValidationModels
+﻿@using RPS.ValidationModels
 @model CallValidation
-
 
 @{
     ViewBag.Title = "Agent page";
 }
 <script src="~/Scripts/RoleScripts/AgentFunctionality.js"></script>
-
 
 
 <div id="Reply">
@@ -16,13 +14,54 @@
 
 <table id="jqgAgent"></table>
 <div id="pager"></div>
-<div class="callInfo">
 
-    <input id="callText" type="text" name="callText" readonly/>
-    <input id="callDateCreated" type="text" readonly/>
-    <input id="callCustName" type="text" readonly/>
-    <input id="callCustSur" type="text" readonly/>
+<div class="callInfo" >
+    <table>
+        <tr>
+            <td>
+                <!--<label for="callText">Text call: </label>-->
+                <p>Call text:</p>
+            </td>
+            <td>
+                <textarea id="callText"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>Date crated:</p>
+            </td>
+            <td>
+                <input id="callDateCreated" type="text" name="callDateCreated" readonly />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>Customer name:</p>
+            </td>
+            <td>
+                <input id="callCustName" type="text" name="callCustName" readonly />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>Customer surname:</p>
+            </td>
+            <td>
+                <input id="callCustSur" type="text" name="callCustSur" readonly />
+            </td>
+        </tr>
 
+        @*<input id="callDateCreated" type="text" readonly />
+        <br />
+
+        <label for="callCustName">Customer name: </label>
+        <input id="callCustName" type="text" readonly />
+        <br />
+
+        <label for="callCustSur">Customer surname: </label>
+        <input id="callCustSur" type="text" readonly />
+        <br />*@
+    </table>
 </div>
 
 <datalist id="languages">

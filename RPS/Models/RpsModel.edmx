@@ -4,14 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Хранилище DB_9DF713_RPSModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище DB_9DF713_RPSModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Call">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Customer" Type="int" Nullable="false" />
-          <Property Name="Agent" Type="int" Nullable="false" />
+          <Property Name="Agent" Type="int" />
           <Property Name="CallText" Type="text" Nullable="false" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
@@ -75,7 +75,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Call_User_Agent">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Call" Type="Self.Call" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -150,7 +150,8 @@
             <End Role="webpages_UsersInRoles" EntitySet="webpages_UsersInRoles" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_9DF713_RPSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -160,7 +161,7 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Customer" Type="Int32" Nullable="false" />
-          <Property Name="Agent" Type="Int32" Nullable="false" />
+          <Property Name="Agent" Type="Int32" />
           <Property Name="CallText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
@@ -201,7 +202,15 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Call" Relationship="Self.FK_Call_User_Agent" FromRole="User" ToRole="Call" />
           <NavigationProperty Name="Call1" Relationship="Self.FK_Call_User_Customer" FromRole="User" ToRole="Call" />
-          <NavigationProperty Name="webpages_Roles" Relationship="DB_9DF713_RPSModel.webpages_UsersInRoles" FromRole="User" ToRole="webpages_Roles" />
+          <NavigationProperty Name="webpages_Roles" Relationship="Self.webpages_UsersInRoles" FromRole="User" ToRole="webpages_Roles" />
+        </EntityType>
+        <EntityType Name="webpages_Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.webpages_UsersInRoles" FromRole="webpages_Roles" ToRole="User" />
         </EntityType>
         <Association Name="FK_Call_CallStatus">
           <End Role="CallStatus" Type="Self.CallStatus" Multiplicity="1" />
@@ -216,7 +225,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Call_User_Agent">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Call" Type="Self.Call" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -239,11 +248,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="webpages_UsersInRoles">
+          <End Role="webpages_Roles" Type="Self.webpages_Roles" Multiplicity="*" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+        </Association>
         <EntityContainer Name="DB_9DF713_RPSEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Call" EntityType="Self.Call" />
           <EntitySet Name="CallArchivedReason" EntityType="Self.CallArchivedReason" />
           <EntitySet Name="CallStatus" EntityType="Self.CallStatus" />
           <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="webpages_Roles" EntityType="Self.webpages_Roles" />
           <AssociationSet Name="FK_Call_CallStatus" Association="Self.FK_Call_CallStatus">
             <End Role="CallStatus" EntitySet="CallStatus" />
             <End Role="Call" EntitySet="Call" />
@@ -256,24 +270,11 @@
             <End Role="User" EntitySet="User" />
             <End Role="Call" EntitySet="Call" />
           </AssociationSet>
-          <EntitySet Name="webpages_Roles" EntityType="DB_9DF713_RPSModel.webpages_Roles" />
-          <AssociationSet Name="webpages_UsersInRoles" Association="DB_9DF713_RPSModel.webpages_UsersInRoles">
+          <AssociationSet Name="webpages_UsersInRoles" Association="Self.webpages_UsersInRoles">
             <End Role="webpages_Roles" EntitySet="webpages_Roles" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="webpages_Roles">
-          <Key>
-            <PropertyRef Name="RoleId" />
-          </Key>
-          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="User" Relationship="DB_9DF713_RPSModel.webpages_UsersInRoles" FromRole="webpages_Roles" ToRole="User" />
-        </EntityType>
-        <Association Name="webpages_UsersInRoles">
-          <End Type="DB_9DF713_RPSModel.webpages_Roles" Role="webpages_Roles" Multiplicity="*" />
-          <End Type="DB_9DF713_RPSModel.User" Role="User" Multiplicity="*" />
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -329,17 +330,17 @@
           <EntitySetMapping Name="webpages_Roles">
             <EntityTypeMapping TypeName="DB_9DF713_RPSModel.webpages_Roles">
               <MappingFragment StoreEntitySet="webpages_Roles">
-                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <AssociationSetMapping Name="webpages_UsersInRoles" TypeName="DB_9DF713_RPSModel.webpages_UsersInRoles" StoreEntitySet="webpages_UsersInRoles">
-            <EndProperty Name="User">
-              <ScalarProperty Name="id" ColumnName="UserId" />
-            </EndProperty>
             <EndProperty Name="webpages_Roles">
               <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+            </EndProperty>
+            <EndProperty Name="User">
+              <ScalarProperty Name="id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
         </EntityContainerMapping>
