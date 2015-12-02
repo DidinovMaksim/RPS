@@ -29,6 +29,21 @@ namespace RPS.ValidationModels
             db.SaveChanges();
         }
 
+        public void AddCall()
+        {
+            DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities();
+            db.Call.Add(new Call {
+                Customer = this.Customer,
+                CallText = this.CallText,
+                Agent = this.Agent,
+                DateCreated = DateTime.Now,
+                Status = 1
+            });
+            db.SaveChanges();
+        }
+
+        
+
 
     }
 }

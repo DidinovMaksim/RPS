@@ -65,5 +65,97 @@ namespace RPS.Controllers
         //public string AttachCall(CallValidation call) => "";
 
 
+        public string GetAgentsList()
+        {
+            List<User> us = (from user in db.User where user.webpages_Roles.Count != 0 select user).ToList();
+            List<User> agents = (from user in us where user.webpages_Roles.ToList()[0].RoleId == 3 select user).ToList();
+
+            return JsonConvert.SerializeObject(agents, Formatting.Indented,
+                        new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        });
+        }
+
+        public string GetDict()
+        {
+            List<User> us = (from user in db.User where user.webpages_Roles.Count != 0 select user).ToList();
+            List<User> agents = (from user in us where user.webpages_Roles.ToList()[0].RoleId == 3 select user).ToList();
+
+            List<KeyValuePair<int, string>> list = new List<KeyValuePair<int, string>>();
+
+            foreach (var agent in agents)
+                list.Add(new KeyValuePair<int, string>(agent.id, agent.UserFN));
+
+
+            return JsonConvert.SerializeObject(list, Formatting.Indented,
+                        new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        });
+        }
+
+        public IEnumerable<SelectListItem> GetAgents()
+        {
+            List<User> us = (from user in db.User where user.webpages_Roles.Count != 0 select user).ToList();
+           
+            var agents = from user in us
+                    where user.webpages_Roles.ToList()[0].RoleId == 3
+                    select new SelectListItem() { Value = user.id.ToString(), Text = user.UserFN };
+
+            return agents;
+        }
+
+        public IEnumerable<SelectListItem> GetCustomers()
+        {
+            List<User> us = (from user in db.User where user.webpages_Roles.Count == 0 select user).ToList();
+           // List<User> agents = (from user in us where user.webpages_Roles.ToList()[0].RoleId == 3 select user).ToList();
+
+
+            var customers = from user in db.User
+                            where user.webpages_Roles.Count == 0
+                            select new SelectListItem() { Value = user.id.ToString(), Text = user.UserFN };
+
+            //foreach (var agent in agents)
+            //   list.Add(new KeyValuePair<int, string>(agent.id, agent.UserFN));
+
+            return customers;
+        }
+
+        [HttpGet]
+        public PartialViewResult AttachAgent(string id)
+        {
+            ViewData["AgentsList"] = GetAgents();
+            return PartialView(new CallValidation());
+        }
+
+        [HttpPost]
+        public string AttachAgent(int? id, int? Agent)
+        {
+            if (id == null) return "<p>Error</p>";
+            DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities();
+            var upd = from call in db.Call where call.id == id select call;
+
+            upd.ToList()[0].Agent = Agent;
+            db.SaveChanges();
+
+            return "<p>Succes</p>";
+        }
+
+        public PartialViewResult AddCall()
+        {
+            ViewData["AgentsList"]      = GetAgents();
+            ViewData["CustomerList"] = GetCustomers();
+            return PartialView(new CallValidation());
+        }
+
+        [HttpPost]
+        public string AddCall(CallValidation call)
+        {
+            call.AddCall();
+            return "<p>Succes</p>";
+        }
+
+
     }
 }

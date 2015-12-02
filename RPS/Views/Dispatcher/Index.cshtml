@@ -1,19 +1,18 @@
-﻿@using RPS.ValidationModels
-@model CallValidation
+﻿ @model RPS.ValidationModels.CallValidation
 
 @{
     ViewBag.Title = "Dispatcher page";
 }
+
 <script src="~/Scripts/RoleScripts/DispatcherFunctionality.js"></script>
-
-
 <link href="Content/Loader.css" rel="stylesheet">
 
 
-<h2>Index</h2>
+<h2>Dispatcher page</h2>
 
-<div id="createCall"  style="display: none;">
-    @using (@Ajax.BeginForm("CreateCall", "Dispatcher", new AjaxOptions(){
+<div id="createCall" style="display: none;">
+    @using (@Ajax.BeginForm("CreateCall", "Dispatcher", new AjaxOptions()
+    {
         OnBegin = "reloadJQGrid()",
         OnFailure = "reloadJQGrid()",
         OnSuccess = "reloadJQGrid()",
@@ -29,10 +28,13 @@
                     <p class="text">Choose customer name: </p>
                 </td>
                 <td>
-                    
+
                     @Html.HiddenFor(m => m.id, new { id = "id" })
 
-                    @{ 
+
+
+
+                    @{
                         string[] languages =  {
                             "HTML",
                             "CSS",
@@ -48,11 +50,11 @@
                             "C++"
                         };
                     }
-                   
+
                     <datalist id="languages">
                         @foreach (var s in languages)
                         {
-                        <option value="@s">123</option> 
+                            <option value="@s">123</option>
                         }
                     </datalist>
                     <input type="text" list="languages" />
@@ -74,7 +76,7 @@
                 </td>
                 <td>
                     @Html.TextBoxFor(m => m.Reason, new { id = "Reason" })
-                    
+
 
 
                 </td>
@@ -86,10 +88,10 @@
             </tr>
         </table>
 
-    }
+                        }
 </div>
 
-<div id="callInfo" style="display: none;" >
+<div id="callInfo" style="display: none;">
     <h1>Full information</h1>
     <table>
         <tr>
@@ -130,18 +132,21 @@
 
 </div>
 
-<div id="attachCall" style="display: none;">
-    @using (@Ajax.BeginForm("CreateCall", "Dispatcher", new AjaxOptions()
+@*<div id="attachCall" style="display: none;">
+    @using (@Ajax.BeginForm("AttachAgent", "Dispatcher", new AjaxOptions()
     {
-        OnBegin = "reloadJQGrid()",
-        OnFailure = "reloadJQGrid()",
-        OnSuccess = "reloadJQGrid()",
+        // OnBegin = "reloadJQGrid()",
+        // OnFailure = "reloadJQGrid()",
+        // OnSuccess = "reloadJQGrid()",
         UpdateTargetId = "attachCall",
-        InsertionMode = InsertionMode.Replace
+        InsertionMode = InsertionMode.Replace,
+        //OnSuccess = "alert('suces')",
+        // OnBegin = "alert('begin')",
+        //OnFailure = "HandleError"
     }))
     {
         <h1 class="text" id="adding-form-header">Attach call to agent</h1>
-        //<p id="product-validation-string">@Model.ModelError</p>
+
         <table>
             <tr>
                 <td>
@@ -149,37 +154,14 @@
                 </td>
                 <td>
 
-                    @Html.HiddenFor(m => m.id, new { id = "id" })
+                    
+                    <input type="text" value="666" name="callId" />
 
-                    @{
-                        string[] languages =  {
-                            "HTML",
-                            "CSS",
-                            "JavaScript",
-                            "Java",
-                            "Ruby",
-                            "PHP",
-                            "Go",
-                            "Erlang",
-                            "Python",
-                            "C",
-                            "C#",
-                            "C++"
-                        };
-                    }
-
-                    <datalist id="languages">
-                        @foreach (var s in languages)
-                        {
-                            <option value="@s">123</option>
-                        }
-                    </datalist>
-                    <input type="text" list="languages" />
+                    <datalist id="attachAgentID"></datalist>
+                    <input type="text" list="attachAgentID" name="attachAgentID" />
 
                 </td>
             </tr>
-            
-         
             <tr>
                 <td>
                     <input type="submit" id="add-button" value="Attach call" />
@@ -187,8 +169,11 @@
             </tr>
         </table>
 
-     }
+    }
 </div>
+*@
+
+<div id="popup"></div>
 
 <button onclick="CreateNewCall()">Create New</button>
 

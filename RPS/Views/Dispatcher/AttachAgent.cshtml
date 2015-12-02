@@ -1,0 +1,45 @@
+﻿@model RPS.ValidationModels.CallValidation
+
+<div id="attachCall">
+    @using (@Ajax.BeginForm("AttachAgent", "Dispatcher", new AjaxOptions()
+    {
+        OnSuccess = "reloadJQGrid()",
+        UpdateTargetId = "attachCall",
+        InsertionMode = InsertionMode.Replace,
+    }))
+    {
+        <h1 class="text" id="adding-form-header">Attach call to agent</h1>
+
+        <table>
+            <tr>
+                <td>
+                    <p class="text">Choose agent: </p>
+                </td>
+                <td>
+
+                    @Html.HiddenFor(m => m.id, new { id = "id" })
+                    
+                    @Html.DropDownListFor(m => m.Agent, (IEnumerable<SelectListItem>)ViewData["AgentsList"], new { id = "Agent" })
+
+                    <input type="text" list="1" />
+                    <datalist id="1">
+                        @foreach (var data in (IEnumerable<SelectListItem>)ViewData["AgentsList"])
+                        {
+                            <option value="@data.Text"></option>
+                        }
+
+                    </datalist>
+
+                  
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" id="add-button" value="Attach call" />
+                </td>
+            </tr>
+        </table>
+
+    }
+</div>

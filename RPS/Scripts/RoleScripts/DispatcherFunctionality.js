@@ -1,5 +1,4 @@
-﻿
-function reloadJQGrid() {
+﻿function reloadJQGrid() {
     $.ajax({
         url: 'Dispatcher/getGridData',
         datatype: "json",
@@ -18,19 +17,90 @@ function reloadJQGrid() {
     });
 }
 
+function HandleError(data) {
+    alert("error");
+    console.log(data);
+}
+
 function Attach() {
-    jQuery("#attachCall").dialog("open");
+
+    ////Reading agents list
+    //$.ajax({
+    //    //url: 'Dispatcher/GetAgentsList',
+    //    url: 'Dispatcher/GetDict',
+    //    contentType: 'application/json; charset=utf-8',
+    //    type: 'GET',
+    //    success: function (result) {
+    //        result = JSON.parse(result);
+
+    //        console.log(result);
+
+    //        $('#attachAgentID').empty();
+    //        $(result).each(function (index, item) {
+
+    //            var option = $('<option data-value="' + item.Key + '" value="' + item.Value + '"></option>')
+    //            $('#attachAgentID').append(option);
+    //        })
+
+    //        jQuery("#attachCall").dialog("open");
+
+
+
+    //        //$('#popup').html(result);
+    //        //$('#popup').dialog({
+    //        //    width: 350,
+    //        //    height: 350
+    //        //});
+    //    }
+    //});
+
+
+
+    var rowId = $("#jqgDispatcher").jqGrid('getGridParam', 'selrow');
+    var rowData = $("#jqgDispatcher").getRowData(rowId);
+
+
+    $.ajax({
+        url: 'Dispatcher/AttachAgent',
+        data: {
+            id: rowId
+        },
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET',
+        success: function (result) {
+            $('#popup').html(result);
+            $('#popup').dialog({
+                width: 350,
+                height: 350
+            });
+        }
+    });
 }
 
 function CreateNewCall() {
-    jQuery("#createCall").dialog("open");
+
+    $.ajax({
+        url: 'Dispatcher/AddCall',
+        //data: {
+        //    id: rowId
+        //},
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET',
+        success: function (result) {
+            $('#popup').html(result);
+            $('#popup').dialog({
+                width: 350,
+                height: 350
+            });
+        }
+    });
 }
 
 (function ($) {
 
     $(document).ready(function () {
         loadTable();
-        
+
         jQuery("#createCall").dialog({
             autoOpen: false,
             width: 400
@@ -58,10 +128,10 @@ function CreateNewCall() {
             contentType: "application/json; charset=utf-8",
             method: "GET",
             success: function (result) {
-                
+
                 $("#jqgDispatcher").jqGrid({
                     datatype: "local",
-                    colNames: ['id', 'Status', 'Call date', 'Attach', 'Customer', 'Agent'],
+                    colNames: ['id', 'Status', 'Call date', 'Attach', 'Customer', 'Agent', 'CustomerLN', 'CustomerEmail', 'CustomerPhone', 'CallText'],
                     colModel: [
                         {
                             name: 'id',
@@ -83,6 +153,8 @@ function CreateNewCall() {
                             width: 80,
                             sortable: true,
                             sorttype: "date",
+                            formatter: 'date',
+                            formatoptions: { newformat: 'd.m.Y' }
                         },
                         {
                             name: "Attach",
@@ -110,9 +182,13 @@ function CreateNewCall() {
                             search: false,
                         },
 
-                 
+                        { name: 'User1.UserLN', index: 'User1.UserLN', hidden: true },
+                        { name: 'User1.Email', index: 'User1.Email', hidden: true },
+                        { name: 'User1.MPhone', index: 'User1.MPhone', hidden: true },
+                        { name: 'CallText', index: 'CallText', hidden: true },
 
-           
+
+
                     ],
                     data: JSON.parse(result),
                     rowNum: 10,
@@ -135,15 +211,22 @@ function CreateNewCall() {
 
 
                     //},
-                    ondblClickRow : function(rowid, iRow, iCol,e ) {
+                    ondblClickRow: function (rowid, iRow, iCol, e) {
 
- 
-                        var callData = $("#jqgDispatcher").getGridParam('data')[iRow-1];
 
-                        document.getElementById("callInfoCustName").innerHTML = callData.User1.UserFN + ' ' + callData.User1.UserLN;
-                        document.getElementById("callInfoCustEmail").innerHTML = callData.User1.Email;
-                        document.getElementById("callInfoCustPhone").innerHTML = callData.User1.MPhone;
-                        document.getElementById("callInfoCallText").innerHTML = callData.CallText;
+                        //var callData = $("#jqgDispatcher").getGridParam('data')[iRow - 1];
+
+                        var callData = $("#jqgDispatcher").getRowData(rowid);
+
+                        document.getElementById("callInfoCustName").innerHTML = callData['User1.UserFN'] + ' ' + callData['User1.UserLN'];
+                        document.getElementById("callInfoCustEmail").innerHTML = callData['User1.Email'];
+                        document.getElementById("callInfoCustPhone").innerHTML = callData['User1.MPhone'];
+                        document.getElementById("callInfoCallText").innerHTML = callData['CallText'];
+
+                        //document.getElementById("callInfoCustName").innerHTML = callData.User1.UserFN + ' ' + callData.User1.UserLN;
+                        //document.getElementById("callInfoCustEmail").innerHTML = callData.User1.Email;
+                        //document.getElementById("callInfoCustPhone").innerHTML = callData.User1.MPhone;
+                        //document.getElementById("callInfoCallText").innerHTML = callData.CallText;
 
                         jQuery("#callInfo").dialog("open");
                     },
@@ -164,10 +247,10 @@ function CreateNewCall() {
                         }
                     },
                     loadComplete: function (data) {
-                        
+
                         document.getElementById("cssload-thecube").style.display = 'none';
 
-                       
+
                         var newCapture = "",
                             filters, rules, rule, op, i, iOp, s
                         postData = $('#jqgDispatcher').jqGrid("getGridParam", "postData"),
