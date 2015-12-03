@@ -1,5 +1,46 @@
 ﻿@model RPS.ValidationModels.CallValidation
 
+<style>
+    .autocomplete-suggestions {
+        border: 1px solid #999;
+        background: #FFF;
+        overflow: auto;
+    }
+
+    .autocomplete-suggestion {
+        padding: 2px 5px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .autocomplete-selected {
+        background: #F0F0F0;
+    }
+
+    .autocomplete-suggestions strong {
+        font-weight: normal;
+        color: #3399FF;
+    }
+
+    .autocomplete-group {
+        padding: 2px 5px;
+    }
+
+        .autocomplete-group strong {
+            display: block;
+            border-bottom: 1px solid #000;
+        }
+</style>
+
+<script>
+    $("#autocompleteCustomer").autocomplete({
+        source: '/Dispatcher/GetCustomersJSON',
+    });
+    $("#autocompleteAgent").autocomplete({
+        source: '/Dispatcher/GetAgentsJSON',
+    });
+</script>
+
 <div id="createCall" >
     @using (@Ajax.BeginForm("AddCall", "Dispatcher", new AjaxOptions()
     {
@@ -18,18 +59,16 @@
                     <p class="text">Choose customer name: </p>
                 </td>
                 <td>
-@Html.DropDownListFor(m => m.Customer,
-                    (IEnumerable<SelectListItem>)ViewData["CustomerList"], new { id = "Customer" })
-
-</td>
+                    <input type="text" name="Customer" id="autocompleteCustomer" />
+                </td>
             </tr>
             <tr>
+
                 <td>
                     <p class="text">Enter question:</p>
                 </td>
                 <td>
                     @Html.TextAreaFor(m => m.CallText, new { id = "CallText" })
-
                 </td>
             </tr>
             <tr>
@@ -37,12 +76,9 @@
                     <p class="text">Choose agent(not required): </p>
                 </td>
                 <td>
-                    @Html.DropDownListFor(m => m.Agent, 
-                   (IEnumerable<SelectListItem>)ViewData["AgentsList"], new { id = "Agent" })
-
-
-
-
+                    @*Html.DropDownListFor(m => m.Agent,
+    (IEnumerable<SelectListItem>)ViewData["AgentsList"], new { id = "Agent" })*@
+                    <input type="text" name="Agent" id="autocompleteAgent" />
                 </td>
             </tr>
             <tr>

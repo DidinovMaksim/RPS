@@ -70,8 +70,8 @@ function Attach() {
         success: function (result) {
             $('#popup').html(result);
             $('#popup').dialog({
-                width: 350,
-                height: 350
+                width: 350
+               // height: 350
             });
         }
     });
@@ -81,41 +81,31 @@ function CreateNewCall() {
 
     $.ajax({
         url: 'Dispatcher/AddCall',
-        //data: {
-        //    id: rowId
-        //},
+
         contentType: 'application/json; charset=utf-8',
         type: 'GET',
         success: function (result) {
             $('#popup').html(result);
             $('#popup').dialog({
-                width: 350,
-                height: 350
+                width: 400
+               // height: 350
             });
         }
     });
 }
+
 
 (function ($) {
 
     $(document).ready(function () {
         loadTable();
 
-        jQuery("#createCall").dialog({
-            autoOpen: false,
-            width: 400
-        });
-
         jQuery("#callInfo").dialog({
             autoOpen: false,
             width: 400
         });
-
-        jQuery("#attachCall").dialog({
-            autoOpen: false,
-            width: 400
-        });
     });
+
     function loadTable() {
 
         var gridSelector = '#jqgDispatcher';
@@ -296,7 +286,6 @@ function CreateNewCall() {
                     closeOnEscape: true,
                     closeAfterEdit: true,
                     afterComplete: function (result) {
-
                     }
                 },
                 //delete

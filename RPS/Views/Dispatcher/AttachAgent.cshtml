@@ -1,6 +1,53 @@
 ﻿@model RPS.ValidationModels.CallValidation
 
+
+<style>
+    .autocomplete-suggestions {
+        border: 1px solid #999;
+        background: #FFF;
+        overflow: auto;
+    }
+
+    .autocomplete-suggestion {
+        padding: 2px 5px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .autocomplete-selected {
+        background: #F0F0F0;
+    }
+
+    .autocomplete-suggestions strong {
+        font-weight: normal;
+        color: #3399FF;
+    }
+
+    .autocomplete-group {
+        padding: 2px 5px;
+    }
+
+        .autocomplete-group strong {
+            display: block;
+            border-bottom: 1px solid #000;
+        }
+</style>
+
+<script>
+    $("#autocomplete").autocomplete({
+        source: '/Dispatcher/GetAgentsJSON',
+        //data: { term: request.term   },
+        select: function (event, ui) {
+          // alert('You selected: ' + ui.item.value + ', ' + ui.item.data);
+        }
+    });
+</script>
+
+
 <div id="attachCall">
+
+    
+
     @using (@Ajax.BeginForm("AttachAgent", "Dispatcher", new AjaxOptions()
     {
         OnSuccess = "reloadJQGrid()",
@@ -19,18 +66,9 @@
 
                     @Html.HiddenFor(m => m.id, new { id = "id" })
                     
-                    @Html.DropDownListFor(m => m.Agent, (IEnumerable<SelectListItem>)ViewData["AgentsList"], new { id = "Agent" })
+                    @*Html.DropDownListFor(m => m.Agent, (IEnumerable<SelectListItem>)ViewData["AgentsList"], new { id = "Agent" })*@
 
-                    <input type="text" list="1" />
-                    <datalist id="1">
-                        @foreach (var data in (IEnumerable<SelectListItem>)ViewData["AgentsList"])
-                        {
-                            <option value="@data.Text"></option>
-                        }
-
-                    </datalist>
-
-                  
+                    <input type="text" name="Agent" id="autocomplete" />
 
                 </td>
             </tr>
