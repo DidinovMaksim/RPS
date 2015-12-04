@@ -1,8 +1,187 @@
-﻿
+﻿@using RPS.ValidationModels
+@model CallValidation
+
 @{
     ViewBag.Title = "Archivist page";
 }
 <script src="~/Scripts/RoleScripts/ArchivistFunctionality.js"></script>
 
+
+<link href="Content/Loader.css" rel="stylesheet">
+
+
 <h2>Index</h2>
+
+<div id="callInfo" style="display: none;">
+    <h1>Full information</h1>
+    <table>
+        <tr>
+            <td>
+                <p class="text">Customer name: </p>
+            </td>
+            <td>
+                <p id="callInfoCustName"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="text">E-mail:</p>
+            </td>
+            <td>
+                <p id="callInfoCustEmail"></p>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="text">Phone: </p>
+            </td>
+            <td>
+                <p id="callInfoCustPhone"></p>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="text">Question: </p>
+            </td>
+            <td>
+                <p id="callInfoCallText"></p>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<div id="activeCall" style="display: none;">
+    @using (@Ajax.BeginForm("CreateCall", "Archivistr", new AjaxOptions()
+    {
+        OnBegin = "reloadJQGrid()",
+        OnFailure = "reloadJQGrid()",
+        OnSuccess = "reloadJQGrid()",
+        UpdateTargetId = "activeCall",
+        InsertionMode = InsertionMode.Replace
+    }))
+    {
+        <h1 class="text" id="adding-form-header">Active call to arhivist</h1>
+        //<p id="product-validation-string">@Model.ModelError</p>
+        <table>
+            <tr>
+                <td>
+                    <p class="text">Status: </p>
+                </td>
+                <td>
+
+                    @Html.HiddenFor(m => m.id, new { id = "id" })
+
+                    @{
+                        string[] status =  {
+                                "Visitor",
+                                "Dispatcher",
+                                "Agent",
+                                "Archivist",
+                                "Administrator"
+                            };
+                    }
+
+                    <datalist id="status">
+                        @foreach (var s in status)
+                        {
+                            <option value="@s">123</option>
+                        }
+                    </datalist>
+                    <input type="text" list="status" />
+
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <input type="submit" id="add-button" value="Active call" />
+                </td>
+            </tr>
+        </table>
+
+                        }
+</div>
+@*
+    <div id="archivedCall" style="display: none;">
+        @using (@Ajax.BeginForm("CreateCall", "Archivistr", new AjaxOptions()
+        {
+            OnBegin = "reloadJQGrid()",
+            OnFailure = "reloadJQGrid()",
+            OnSuccess = "reloadJQGrid()",
+            UpdateTargetId = "archivedCall",
+            InsertionMode = InsertionMode.Replace
+        }))
+        {
+            <h1 class="text" id="adding-form-header">Archived call to arhivist</h1>
+            //<p id="product-validation-string">@Model.ModelError</p>
+            <table>
+                <tr>
+                    <td>
+                        <p class="text">Status: </p>
+                    </td>
+                    <td>
+
+                        @Html.HiddenFor(m => m.id, new { id = "id" })
+
+                        @{
+                            string[] status =  {
+                                "Visitor",
+                                "Dispatcher",
+                                "Agent",
+                                "Archivist",
+                                "Administrator"
+                            };
+                        }
+
+                        <datalist id="status">
+                            @foreach (var s in status)
+                            {
+                                <option value="@s">123</option>
+                            }
+                        </datalist>
+                        <input type="text" list="status" />
+
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        <input type="submit" id="add-button" value="Archived call" />
+                    </td>
+                </tr>
+            </table>
+
+                            }
+    </div>
+*@
+
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-1">Active</a></li>
+        <li><a href="#tabs-2">Archived</a></li>
+    </ul>
+    <div id="tabs-1">
+        <div id="cssload-thecube">
+            <div class="cssload-cube cssload-c1"></div>
+            <div class="cssload-cube cssload-c2"></div>
+            <div class="cssload-cube cssload-c4"></div>
+            <div class="cssload-cube cssload-c3"></div>
+        </div>
+        <table id="jqgArchivistActive"></table>
+        <div id="pagerActive"></div>
+    </div>
+    <div id="tabs-2">
+        <table id="jqgArchivist"></table>
+        <div id="pagerArchived"></div>
+    </div>
+</div>
+
+
+
+
 
