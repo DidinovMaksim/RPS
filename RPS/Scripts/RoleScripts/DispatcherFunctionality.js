@@ -22,8 +22,8 @@ function HandleError(data) {
     console.log(data);
 }
 
-function Attach() {
-
+function Attach(rowid) {
+    //alert(rowid);
     ////Reading agents list
     //$.ajax({
     //    //url: 'Dispatcher/GetAgentsList',
@@ -56,14 +56,14 @@ function Attach() {
 
 
 
-    var rowId = $("#jqgDispatcher").jqGrid('getGridParam', 'selrow');
-    var rowData = $("#jqgDispatcher").getRowData(rowId);
+    //var rowId = $("#jqgDispatcher").jqGrid('getGridParam', 'selrow');
+    //var rowData = $("#jqgDispatcher").getRowData(rowId);
 
 
     $.ajax({
         url: 'Dispatcher/AttachAgent',
         data: {
-            id: rowId
+            id: rowid
         },
         contentType: 'application/json; charset=utf-8',
         type: 'GET',
@@ -99,6 +99,8 @@ function CreateNewCall() {
 
     $(document).ready(function () {
         loadTable();
+
+        
 
         jQuery("#callInfo").dialog({
             autoOpen: false,
@@ -149,8 +151,10 @@ function CreateNewCall() {
                         {
                             name: "Attach",
                             index: "Attach",
+                            width:50,
                             formatter: function (cellvalue, options, rowobject) {
-                                return '<button id="openbtn" onclick="Attach()" >Attach</button>';
+                                
+                                return '<button id="openbtn" onclick="Attach(' + rowobject.id + ')" >Attach</button>';
                             },
                             search: false,
 
@@ -158,16 +162,24 @@ function CreateNewCall() {
                         {
                             name: 'User1.UserFN',
                             index: 'User1.UserFN',
-                            width: 80,
+                           // width: 80,
                             sortable: true,
+
+                            formatter: function (cellvalue, options, rowobject) { 
+                                return cellvalue + ' ' + rowobject.User1.UserLN;
+                            },
 
                             search: false,
                         },
                         {
                             name: 'User.UserFN',
                             index: 'User.UserFN',
-                            width: 80,
+                          //  width: 80,
                             sortable: true,
+
+                            formatter: function (cellvalue, options, rowobject) {
+                                return cellvalue + ' ' + rowobject.User.UserLN;
+                            },
 
                             search: false,
                         },
@@ -208,7 +220,7 @@ function CreateNewCall() {
 
                         var callData = $("#jqgDispatcher").getRowData(rowid);
 
-                        document.getElementById("callInfoCustName").innerHTML = callData['User1.UserFN'] + ' ' + callData['User1.UserLN'];
+                        document.getElementById("callInfoCustName").innerHTML = callData['User1.UserFN'];// + ' ' + callData['User1.UserLN'];
                         document.getElementById("callInfoCustEmail").innerHTML = callData['User1.Email'];
                         document.getElementById("callInfoCustPhone").innerHTML = callData['User1.MPhone'];
                         document.getElementById("callInfoCallText").innerHTML = callData['CallText'];

@@ -48,52 +48,36 @@ namespace RPS.Controllers
             db.SaveChanges();
             return "Deleted";
         }
-        //public PartialViewResult _ReplyCall(CallValidation call)
+
+        //public string GetAgentsList()
         //{
+        //    List<User> us = (from user in db.User where user.webpages_Roles.Count != 0 select user).ToList();
+        //    List<User> agents = (from user in us where user.webpages_Roles.ToList()[0].RoleId == 3 select user).ToList();
 
-        //    return PartialView(new CallValidation());
-
+        //    return JsonConvert.SerializeObject(agents, Formatting.Indented,
+        //                new JsonSerializerSettings()
+        //                {
+        //                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        //                });
         //}
-        //public ActionResult ReplyCall(CallValidation call)
+
+        //public string GetDict()
         //{
-        //    call.AddAnswer();
-        //    return PartialView("_ReplyCall", new CallValidation());
+        //    List<User> us = (from user in db.User where user.webpages_Roles.Count != 0 select user).ToList();
+        //    List<User> agents = (from user in us where user.webpages_Roles.ToList()[0].RoleId == 3 select user).ToList();
+
+        //    List<KeyValuePair<int, string>> list = new List<KeyValuePair<int, string>>();
+
+        //    foreach (var agent in agents)
+        //        list.Add(new KeyValuePair<int, string>(agent.id, agent.UserFN));
+
+
+        //    return JsonConvert.SerializeObject(list, Formatting.Indented,
+        //                new JsonSerializerSettings()
+        //                {
+        //                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        //                });
         //}
-
-        //public string CreateCall(CallValidation call) => "";
-
-        //public string AttachCall(CallValidation call) => "";
-
-
-        public string GetAgentsList()
-        {
-            List<User> us = (from user in db.User where user.webpages_Roles.Count != 0 select user).ToList();
-            List<User> agents = (from user in us where user.webpages_Roles.ToList()[0].RoleId == 3 select user).ToList();
-
-            return JsonConvert.SerializeObject(agents, Formatting.Indented,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
-        }
-
-        public string GetDict()
-        {
-            List<User> us = (from user in db.User where user.webpages_Roles.Count != 0 select user).ToList();
-            List<User> agents = (from user in us where user.webpages_Roles.ToList()[0].RoleId == 3 select user).ToList();
-
-            List<KeyValuePair<int, string>> list = new List<KeyValuePair<int, string>>();
-
-            foreach (var agent in agents)
-                list.Add(new KeyValuePair<int, string>(agent.id, agent.UserFN));
-
-
-            return JsonConvert.SerializeObject(list, Formatting.Indented,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
-        }
 
         public string GetCustomersJSON(string term)
         {
@@ -141,30 +125,30 @@ namespace RPS.Controllers
             
         //}
 
-        public IEnumerable<SelectListItem> GetAgents()
-        {
-            List<User> us = (from user in db.User where user.webpages_Roles.Count != 0 select user).ToList();
+        //public IEnumerable<SelectListItem> GetAgents()
+        //{
+        //    List<User> us = (from user in db.User where user.webpages_Roles.Count != 0 select user).ToList();
            
-            var agents = from user in us
-                    where user.webpages_Roles.ToList()[0].RoleId == 3
-                    select new SelectListItem() { Value = user.id.ToString(), Text = user.UserFN  };
+        //    var agents = from user in us
+        //            where user.webpages_Roles.ToList()[0].RoleId == 3
+        //            select new SelectListItem() { Value = user.id.ToString(), Text = user.UserFN  };
 
-            return agents;
-        }
+        //    return agents;
+        //}
 
-        public IEnumerable<SelectListItem> GetCustomers()
-        {
-            var customers = from user in db.User
-                            where user.webpages_Roles.Count == 0
-                            select new SelectListItem() { Value = user.id.ToString(), Text = user.UserFN };
+        //public IEnumerable<SelectListItem> GetCustomers()
+        //{
+        //    var customers = from user in db.User
+        //                    where user.webpages_Roles.Count == 0
+        //                    select new SelectListItem() { Value = user.id.ToString(), Text = user.UserFN };
 
-            return customers;
-        }
+        //    return customers;
+        //}
 
         [HttpGet]
         public PartialViewResult AttachAgent(string id)
         {
-            ViewData["AgentsList"] = GetAgents();
+            //ViewData["AgentsList"] = GetAgents();
             return PartialView(new CallValidation());
         }
 
@@ -183,15 +167,22 @@ namespace RPS.Controllers
 
         public PartialViewResult AddCall()
         {
-            ViewData["AgentsList"]      = GetAgents();
-            ViewData["CustomerList"] = GetCustomers();
+            //ViewData["AgentsList"]      = GetAgents();
+            //ViewData["CustomerList"] = GetCustomers();
             return PartialView(new CallValidation());
         }
 
         [HttpPost]
         public string AddCall(CallValidation call, string d)
         {
-            call.AddCall();
+            try
+            {
+                call.AddCall();
+            }
+            catch(Exception)
+            {
+                return "<p>Error</p>";
+            }
             return "<p>Succes</p>";
         }
 
