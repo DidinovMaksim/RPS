@@ -60,8 +60,13 @@ namespace RPS.Controllers
             return "Deleted";
         }
 
-        public string AttachCall(CallValidation call) => "";
-
-
+        public PartialViewResult ActiveCall(String id)
+        {
+            return PartialView(new CallValidation());
+        }
+        public PartialViewResult ArchivedCall(String id)
+        {
+            return PartialView(new CallValidation());
+        }
     }
 }

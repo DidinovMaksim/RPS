@@ -373,6 +373,8 @@
     <Content Include="Views\Agent\_ReplyCall.cshtml" />
     <Content Include="Views\Dispatcher\AttachAgent.cshtml" />
     <Content Include="Views\Dispatcher\AddCall.cshtml" />
+    <Content Include="Views\Archivist\ActiveCall.cshtml" />
+    <Content Include="Views\Archivist\ArchivedCall.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

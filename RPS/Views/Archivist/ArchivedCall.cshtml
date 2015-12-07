@@ -1,0 +1,35 @@
+﻿@model RPS.ValidationModels.CallValidation
+
+
+<div id="archivedCall" >
+    @using (@Ajax.BeginForm("ArchivedCall", "Archivist", new AjaxOptions()
+    {
+        //OnBegin = "reloadJQGrid()",
+       // OnFailure = "reloadJQGrid()",
+        OnSuccess = "reloadJQGridArchived()",
+        UpdateTargetId = "archivedCall",
+        InsertionMode = InsertionMode.Replace
+    }))
+    {
+        <h1 class="text" id="adding-form-header">Archived call to arhivist</h1>
+        //<p id="product-validation-string">@Model.ModelError</p>
+        <table>
+            <tr>
+                <td>
+                    <p class="text">Reason</p>
+                </td>
+                <td height="50">
+                    @Html.TextAreaFor(m => m.Reason, new { id = "Reason" })
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <input type="submit" id="add-button" value="Submit" />
+                </td>
+            </tr>
+        </table>
+
+    }
+</div>

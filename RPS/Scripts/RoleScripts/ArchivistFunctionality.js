@@ -38,11 +38,46 @@ function reloadJQGridActive() {
 }
 
 function Archived() {
-    jQuery("#archivedCall").dialog("open");
+    
+    var rowId = $("#jqgArchivist").jqGrid('getGridParam', 'selrow');
+    var rowData = $("#jqgArchivist").getRowData(rowId);
+    //jQuery("#archivedCall").dialog("open");
+    $.ajax({
+        url: 'Archivist/ArchivedCall',
+        data: {
+            id: rowId
+        },
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET',
+        success: function (result) {
+            $('#popup').html(result);
+            $('#popup').dialog({
+                width: 350,
+                height: 350
+            });
+        }
+    });
 }
 
 function Active() {
-    jQuery("#activeCall").dialog("open");
+    var rowId = $("#jqgArchivistActive").jqGrid('getGridParam', 'selrow');
+    var rowData = $("#jqgArchivistActive").getRowData(rowId);
+  //  jQuery("#activeCall").dialog("open");
+    $.ajax({
+        url: 'Archivist/ActiveCall',
+        data: {
+            id: rowId
+        },
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET',
+        success: function (result) {
+            $('#popup').html(result);
+            $('#popup').dialog({
+                width: 350,
+                height: 350
+            });
+        }
+    });
 }
 (function ($) {
 
@@ -55,14 +90,7 @@ function Active() {
             width: 400
         });
 
-        jQuery("#archivedCall").dialog({
-            autoOpen: false,
-            width: 400
-        });
-        jQuery("#activeCall").dialog({
-            autoOpen: false,
-            width: 400
-        });
+       
     });
 
 
@@ -86,7 +114,7 @@ function Active() {
 
                 $("#jqgArchivistActive").jqGrid({
                     datatype: "local",
-                    colNames: ['id', 'Status', 'Data create', 'Customer', 'Qestion', 'Agent', 'Active'],
+                    colNames: ['id', 'Status', 'Data create', 'Date closed', 'Customer', 'Question', 'Agent', 'Active'],
                     colModel: [
                         {
                             name: 'id',
@@ -110,6 +138,13 @@ function Active() {
                             sorttype: "date",
                         },
                         {
+                            name: 'Date closed',
+                            index: 'DataSolved',
+                            width: 50,
+                            sortable: true,
+                            sorttype: "date",
+                        },
+                        {
                             name: 'User1.UserFN',
                             index: 'User1.UserFN',
                             width: 50,
@@ -120,7 +155,7 @@ function Active() {
                         {
                             name: 'Question',
                             index: 'Question',
-                            width: 100,
+                            width: 50,
                             sortable: true,
                             search: false,
 
@@ -154,20 +189,6 @@ function Active() {
                     rowList: [10, 20, 30, 40],
                     viewrecords: true,
                     caption: "RPS",
-                    //onSelectRow: function () {
-                    //    var rowId = $("#jqgDispatcher").jqGrid('getGridParam', 'selrow');
-                    //    var rowData = $("#jqgDispatcher").getRowData(rowId);
-
-                    //    document.getElementById("callText").value = rowData['CallText'];
-                    //    document.getElementById("callDateCreated").value = rowData['DateCreated'];
-
-                    //    //alert(JSON.parse(result)[]["User1"]["UserFN"]);
-                    //    //document.getElementById("callCustName").value = rowData['User.Login'];
-                    //    document.getElementById("callCustName").value = rowData['User1.UserFN'];
-                    //    document.getElementById("callCustSur").value = rowData['User1.UserLN'];
-
-
-                    //},
                     ondblClickRow: function (rowid, iRow, iCol, e) {
                         var callData = $("#jqgArchivistActive").getGridParam('data')[iRow - 1];
 
@@ -281,7 +302,7 @@ function Active() {
 
                 $("#jqgArchivist").jqGrid({
                     datatype: "local",
-                    colNames: ['id', 'Status', 'Data create', 'Data close', 'Customer', 'Qestion', 'Agent', 'Archived'],
+                    colNames: ['id', 'Status', 'Data create', 'Data close', 'Customer', 'Question', 'Agent', 'Archived'],
                     colModel: [
                         {
                             name: 'id',
@@ -306,7 +327,7 @@ function Active() {
                         },
                         {
                             name: 'Date closed',
-                            index: 'DateClosed',
+                            index: 'DataSolved',
                             width: 50,
                             sortable: true,
                             sorttype: "date",
@@ -322,7 +343,7 @@ function Active() {
                         {
                             name: 'Question',
                             index: 'Question',
-                            width: 100,
+                            width: 50,
                             sortable: true,
                             search: false,
 
@@ -377,7 +398,7 @@ function Active() {
                         var ids = jQuery("#jqgArchivist").jqGrid('getDataIDs');
                         for (var i = 0; i < ids.length; i++) {
                             var cl = ids[i];
-                            reply = '<input  type="button" id = "replyBtn" onclick="TestButtonClick()" />'
+                            //reply = '<input  type="button" id = "replyBtn" onclick="TestButtonClick()" />'
 
                             jQuery("#jqgArchivist").jqGrid('setRowData', ids[i], { Actions: reply });
                         }

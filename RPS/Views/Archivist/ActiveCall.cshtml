@@ -1,0 +1,54 @@
+﻿@model RPS.ValidationModels.CallValidation
+
+<div id="activeCall" >
+    @using (@Ajax.BeginForm("ActiveCall", "Archivist", new AjaxOptions()
+    {
+       // OnBegin = "reloadJQGrid()",
+      //  OnFailure = "reloadJQGrid()",
+        OnSuccess = "reloadJQGridActive()",
+        UpdateTargetId = "activeCall",
+        InsertionMode = InsertionMode.Replace
+    }))
+    {
+        <h1 class="text" id="adding-form-header">Active call to arhivist</h1>
+       
+        <table>
+            <tr>
+                <td>
+                    <p class="text">Status: </p>
+                </td>
+                <td>
+
+                    @Html.HiddenFor(m => m.id, new { id = "id" })
+
+                    @{
+                        string[] status =  {
+                                "Visitor",
+                                "Dispatcher",
+                                "Agent",
+                                "Archivist",
+                                "Administrator"
+                            };
+                    }
+
+                    <datalist id="status">
+                        @foreach (var s in status)
+                        {
+                            <option value="@s">123</option>
+                        }
+                    </datalist>
+                    <input type="text" list="status" />
+
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <input type="submit" id="add-button" value="Active call" />
+                </td>
+            </tr>
+        </table>
+
+                        }
+</div>
