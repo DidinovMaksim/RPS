@@ -19,8 +19,6 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/smoothness/jquery-ui.css">
 
     <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" type="text/css" />
-    
-    @*<script src="~/Scripts/RoleScripts/TestPageFunctionality.js"></script>*@
 </head>
 <body>
 
@@ -37,7 +35,6 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home page", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Test page", "Index", "Test")</li>
 
                     @{
                         if(User.Identity.IsAuthenticated)

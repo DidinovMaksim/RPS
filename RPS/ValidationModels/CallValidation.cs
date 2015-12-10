@@ -21,12 +21,18 @@ namespace RPS.ValidationModels
 
         public void AddAnswer()
         {
-            DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities();
-            var upd = from call in db.Call where call.id == id select call;
-            upd.ToList()[0].Reason = Reason;
-            upd.ToList()[0].Status = 1;
-            upd.ToList()[0].DateSolved = DateTime.Now;
-            db.SaveChanges();
+            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
+            { 
+                var upd = from call in db.Call where call.id == id select call;
+                if(upd.ToList().Count >0)
+                {
+                    upd.ToList()[0].Reason = Reason;
+                    upd.ToList()[0].Status = 1;
+                    upd.ToList()[0].DateSolved = DateTime.Now;
+                    db.SaveChanges();
+                }
+            }
+            
         }
 
         public void AddCall()

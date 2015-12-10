@@ -6,10 +6,25 @@
 }
 <script src="~/Scripts/RoleScripts/AgentFunctionality.js"></script>
 
+<link href="Content/Loader.css" rel="stylesheet">
+
+
+
+
+<div id="cssload-thecube">
+    <div class="cssload-cube cssload-c1"></div>
+    <div class="cssload-cube cssload-c2"></div>
+    <div class="cssload-cube cssload-c4"></div>
+    <div class="cssload-cube cssload-c3"></div>
+</div>
 <table id="jqgAgent"></table>
 <div id="pager"></div>
 
-<div class="callInfo" >
+
+<div id="popup"></div>
+
+
+<div id="callInfo" style="display: none;">
     <table>
         <tr>
             <td>
@@ -46,30 +61,14 @@
         </tr>
 
         @*<input id="callDateCreated" type="text" readonly />
-        <br />
+            <br />
 
-        <label for="callCustName">Customer name: </label>
-        <input id="callCustName" type="text" readonly />
-        <br />
+            <label for="callCustName">Customer name: </label>
+            <input id="callCustName" type="text" readonly />
+            <br />
 
-        <label for="callCustSur">Customer surname: </label>
-        <input id="callCustSur" type="text" readonly />
-        <br />*@
+            <label for="callCustSur">Customer surname: </label>
+            <input id="callCustSur" type="text" readonly />
+            <br />*@
     </table>
 </div>
-<div id="popup"></div>
-<datalist id="languages">
-    <option value="HTML">
-    <option value="CSS">
-    <option value="JavaScript">
-    <option value="Java">
-    <option value="Ruby">
-    <option value="PHP">
-    <option value="Go">
-    <option value="Erlang">
-    <option value="Python">
-    <option value="C">
-    <option value="C#">
-    <option value="C++">
-</datalist>
-<input type="text" list="languages" />

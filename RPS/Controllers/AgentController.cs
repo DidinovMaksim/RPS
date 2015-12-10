@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using RPS.Models;
 using RPS.ValidationModels;
 using Newtonsoft.Json;
-
+using RPS.Services;
 using System.Data.Entity;
 
 namespace RPS.Controllers
@@ -30,9 +30,8 @@ namespace RPS.Controllers
                 new JsonSerializerSettings
                 {ReferenceLoopHandling = ReferenceLoopHandling.Serialize});*/
 
-            int id = (from users in db.User where users.Login == User.Identity.Name select users).ToList()[0].id;
 
-            List<Call> calls = (from call in db.Call where call.Agent == id && call.Status == 1 select call).ToList();
+            List<object> calls = AgentServices.GetCalls();
 
             /*
             Int32 totalRows = db.Call.Count();
@@ -40,13 +39,13 @@ namespace RPS.Controllers
             List<Call> calls =  db.Call.Where(c => c.Agent == id && c.Status == 1).Skip((page - 1) * rows).Take(rows).ToList();
             */
 
-            return JsonConvert.SerializeObject(calls, Formatting.None,
+            /*return JsonConvert.SerializeObject(calls, Formatting.None,
                         new JsonSerializerSettings()
                         {
                             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
+                        });*/
 
-            //return JsonConvert.SerializeObject(db.User.ToList());
+            return JsonConvert.SerializeObject(calls);
         }
 
         public string EditGridData(Call call)
@@ -71,12 +70,30 @@ namespace RPS.Controllers
         [HttpPost]
         public JsonResult _ReplyCall(CallValidation call)
         {
-            //call.AddAnswer();
+            call.AddAnswer();
             //return Json(new CallValidation());
             return Json(new
             {
-                State = "Win!"
+                State = "Call replied successfully!"
             }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetCall(int id)
+        {
+
+            object RCall;
+            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
+            {
+                Call call = (from Call in db.Call where Call.id == id select Call).ToList()[0];
+                RCall = new
+                {
+                    CallText = call.CallText,
+                    DateCreated = call.DateCreated.ToLongDateString(),
+                    UserFN = call.User1.UserFN,
+                    UserLN = call.User1.UserLN
+
+                };
+            }
+            return Json(RCall, JsonRequestBehavior.AllowGet);
         }
     }
 }
