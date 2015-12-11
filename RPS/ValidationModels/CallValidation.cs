@@ -10,7 +10,7 @@ namespace RPS.ValidationModels
     {
         public int id { get; set; }
         public int Customer { get; set; }
-        public int Agent { get; set; }
+        public int? Agent { get; set; }
         public string CallText { get; set; }
         public System.DateTime DateCreated { get; set; }
         public int Status { get; set; }

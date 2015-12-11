@@ -34,13 +34,13 @@
 </style>
 
 <script>
-    $("#autocomplete").autocomplete({
-        source: '/Dispatcher/GetAgentsJSON',
-        //data: { term: request.term   },
-        select: function (event, ui) {
-          // alert('You selected: ' + ui.item.value + ', ' + ui.item.data);
-        }
-    });
+    //$("#autocomplete").autocomplete({
+    //    source: '/Dispatcher/GetAgentsJSON',
+    //    //data: { term: request.term   },
+    //    select: function (event, ui) {
+    //      // alert('You selected: ' + ui.item.value + ', ' + ui.item.data);
+    //    }
+    //});
 </script>
 
 
@@ -50,7 +50,7 @@
 
     @using (@Ajax.BeginForm("AttachAgent", "Dispatcher", new AjaxOptions()
     {
-        OnSuccess = "reloadJQGrid()",
+        OnSuccess = "AgentAttached",
         UpdateTargetId = "attachCall",
         InsertionMode = InsertionMode.Replace,
     }))
@@ -66,9 +66,9 @@
 
                     @Html.HiddenFor(m => m.id, new { id = "id" })
                     
-                    @*Html.DropDownListFor(m => m.Agent, (IEnumerable<SelectListItem>)ViewData["AgentsList"], new { id = "Agent" })*@
+                    @Html.DropDownListFor(m => m.Agent, (IEnumerable<SelectListItem>)ViewData["AgentsList"], new { id = "Agent" })
 
-                    <input type="text" name="Agent" id="autocomplete" />
+                    
 
                 </td>
             </tr>

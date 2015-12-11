@@ -33,33 +33,49 @@
 </style>
 
 <script>
+
+    //var selected = 0;
+
     $("#autocompleteCustomer").autocomplete({
         source: '/Dispatcher/GetCustomersJSON',
+        select: function (event, ui) {
+            //alert('You selected: ' + ui.item.value + ', ' + ui.item.data);
+            document.getElementById('Customer').value = ui.item.value;
+            $("#autocompleteCustomer").val(ui.item.label);
+            return false;
+            //selected = ui.item.value;
+        }
     });
-    $("#autocompleteAgent").autocomplete({
-        source: '/Dispatcher/GetAgentsJSON',
-    });
+
+    function CheckIfSelected(data)
+    {
+        if (document.getElementById('Customer').value == '0') {
+            alert('Please choose customer from the list!');
+            return false;
+        }
+    }
 </script>
 
 <div id="createCall" >
     @using (@Ajax.BeginForm("AddCall", "Dispatcher", new AjaxOptions()
     {
-       // OnBegin = "reloadJQGrid()",
-       // OnFailure = "reloadJQGrid()",
-        OnSuccess = "reloadJQGrid()",
+        OnBegin = "CheckIfSelected",
+        // OnFailure = "reloadJQGrid()",
+        OnSuccess = "CallAdded",
         UpdateTargetId = "createCall",
         InsertionMode = InsertionMode.Replace
     }))
     {
         <h1 class="text" id="adding-form-header">Add new call</h1>
-        
+
         <table>
             <tr>
                 <td>
                     <p class="text">Choose customer name: </p>
                 </td>
                 <td>
-                    <input type="text" name="Customer" id="autocompleteCustomer" />
+                    @Html.HiddenFor(m => m.Customer, new { id = "Customer" })
+                    <input type="text" name="Customer1" id="autocompleteCustomer" />
                 </td>
             </tr>
             <tr>
@@ -76,9 +92,8 @@
                     <p class="text">Choose agent(not required): </p>
                 </td>
                 <td>
-                    @*Html.DropDownListFor(m => m.Agent,
-    (IEnumerable<SelectListItem>)ViewData["AgentsList"], new { id = "Agent" })*@
-                    <input type="text" name="Agent" id="autocompleteAgent" />
+                    @Html.DropDownListFor(m => m.Agent,
+                        (IEnumerable<SelectListItem>)ViewData["AgentsList"], new { id = "Agent" })
                 </td>
             </tr>
             <tr>

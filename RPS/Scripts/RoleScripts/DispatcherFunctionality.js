@@ -17,49 +17,7 @@
     });
 }
 
-function HandleError(data) {
-    alert("error");
-    console.log(data);
-}
-
 function Attach(rowid) {
-    //alert(rowid);
-    ////Reading agents list
-    //$.ajax({
-    //    //url: 'Dispatcher/GetAgentsList',
-    //    url: 'Dispatcher/GetDict',
-    //    contentType: 'application/json; charset=utf-8',
-    //    type: 'GET',
-    //    success: function (result) {
-    //        result = JSON.parse(result);
-
-    //        console.log(result);
-
-    //        $('#attachAgentID').empty();
-    //        $(result).each(function (index, item) {
-
-    //            var option = $('<option data-value="' + item.Key + '" value="' + item.Value + '"></option>')
-    //            $('#attachAgentID').append(option);
-    //        })
-
-    //        jQuery("#attachCall").dialog("open");
-
-
-
-    //        //$('#popup').html(result);
-    //        //$('#popup').dialog({
-    //        //    width: 350,
-    //        //    height: 350
-    //        //});
-    //    }
-    //});
-
-
-
-    //var rowId = $("#jqgDispatcher").jqGrid('getGridParam', 'selrow');
-    //var rowData = $("#jqgDispatcher").getRowData(rowId);
-
-
     $.ajax({
         url: 'Dispatcher/AttachAgent',
         data: {
@@ -70,11 +28,35 @@ function Attach(rowid) {
         success: function (result) {
             $('#popup').html(result);
             $('#popup').dialog({
-                width: 350
-               // height: 350
+                width: 400,
+                height: 200
             });
         }
     });
+}
+
+function AgentAttached(data) {
+    reloadJQGrid();
+    //$('#popup').html(data.State);
+    $('#popup').dialog({
+        height: 100,
+    });
+    setTimeout(function () {
+        $('#popup').dialog('close')
+    }, 2000);
+
+}
+
+function CallAdded(data) {
+    reloadJQGrid();
+    //$('#popup').html(data.State);
+    $('#popup').dialog({
+        height: 100,
+    });
+    setTimeout(function () {
+        $('#popup').dialog('close')
+    }, 2000);
+
 }
 
 function CreateNewCall() {
@@ -87,13 +69,48 @@ function CreateNewCall() {
         success: function (result) {
             $('#popup').html(result);
             $('#popup').dialog({
-                width: 400
-               // height: 350
+                width: 400,
+                height: 400
             });
         }
     });
 }
 
+function CallInfo(rowid)
+{
+    $.ajax({
+        url: 'Dispatcher/CallInfo',
+
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET',
+        success: function (result) {
+
+            $.ajax({
+                url: 'Dispatcher/GetCallInfo',
+                data: {
+                    id : rowid
+                },
+                contentType: 'application/json; charset=utf-8',
+                type: 'GET',
+                success: function (result) {
+                    
+                    result = JSON.parse(result);
+
+                    document.getElementById("callInfoCustName").innerHTML = result['CustomerFN'] + ' ' + result['CustomerLN'];
+                    document.getElementById("callInfoCustEmail").innerHTML = result['Email'];
+                    document.getElementById("callInfoCustPhone").innerHTML = result['Phone'];
+                    document.getElementById("callInfoCallText").innerHTML = result['CallText'];
+                }
+            });
+
+            $('#popup').html(result);
+            $('#popup').dialog({
+                width: 400,
+                height: 400
+            });
+        }
+    });
+}
 
 (function ($) {
 
@@ -102,10 +119,10 @@ function CreateNewCall() {
 
         
 
-        jQuery("#callInfo").dialog({
-            autoOpen: false,
-            width: 400
-        });
+        //jQuery("#callInfo").dialog({
+        //    autoOpen: false,
+        //    width: 400
+        //});
     });
 
     function loadTable() {
@@ -123,7 +140,7 @@ function CreateNewCall() {
 
                 $("#jqgDispatcher").jqGrid({
                     datatype: "local",
-                    colNames: ['id', 'Status', 'Call date', 'Attach', 'Customer', 'Agent', 'CustomerLN', 'CustomerEmail', 'CustomerPhone', 'CallText'],
+                    colNames: ['id', 'Status', 'Call date', 'Attach', 'Customer', 'Agent'],
                     colModel: [
                         {
                             name: 'id',
@@ -132,8 +149,8 @@ function CreateNewCall() {
                             hidden: true
                         },
                         {
-                            name: 'CallStatus.Status',
-                            index: 'CallStatus.Status',
+                            name: 'CallStatus',
+                            index: 'CallStatus',
                             width: 150,
                             sortable: true,
 
@@ -153,43 +170,33 @@ function CreateNewCall() {
                             index: "Attach",
                             width:50,
                             formatter: function (cellvalue, options, rowobject) {
-                                
                                 return '<button id="openbtn" onclick="Attach(' + rowobject.id + ')" >Attach</button>';
                             },
                             search: false,
 
                         },
                         {
-                            name: 'User1.UserFN',
-                            index: 'User1.UserFN',
-                           // width: 80,
+                            name: 'CustomerFN',
+                            index: 'CustomerFN',
                             sortable: true,
 
                             formatter: function (cellvalue, options, rowobject) { 
-                                return cellvalue + ' ' + rowobject.User1.UserLN;
+                                return cellvalue + ' ' + rowobject.CustomerLN;
                             },
 
                             search: false,
                         },
                         {
-                            name: 'User.UserFN',
-                            index: 'User.UserFN',
-                          //  width: 80,
+                            name: 'AgentFN',
+                            index: 'AgentFN',
                             sortable: true,
 
                             formatter: function (cellvalue, options, rowobject) {
-                                return cellvalue + ' ' + rowobject.User.UserLN;
+                                return cellvalue? (cellvalue + ' ' + rowobject.AgentLN) : '';
                             },
 
                             search: false,
                         },
-
-                        { name: 'User1.UserLN', index: 'User1.UserLN', hidden: true },
-                        { name: 'User1.Email', index: 'User1.Email', hidden: true },
-                        { name: 'User1.MPhone', index: 'User1.MPhone', hidden: true },
-                        { name: 'CallText', index: 'CallText', hidden: true },
-
-
 
                     ],
                     data: JSON.parse(result),
@@ -199,38 +206,26 @@ function CreateNewCall() {
                     rowList: [10, 20, 30, 40],
                     viewrecords: true,
                     caption: "RPS",
-                    //onSelectRow: function () {
-                    //    var rowId = $("#jqgDispatcher").jqGrid('getGridParam', 'selrow');
-                    //    var rowData = $("#jqgDispatcher").getRowData(rowId);
 
-                    //    document.getElementById("callText").value = rowData['CallText'];
-                    //    document.getElementById("callDateCreated").value = rowData['DateCreated'];
-
-                    //    //alert(JSON.parse(result)[]["User1"]["UserFN"]);
-                    //    //document.getElementById("callCustName").value = rowData['User.Login'];
-                    //    document.getElementById("callCustName").value = rowData['User1.UserFN'];
-                    //    document.getElementById("callCustSur").value = rowData['User1.UserLN'];
-
-
-                    //},
                     ondblClickRow: function (rowid, iRow, iCol, e) {
 
 
+                        CallInfo(rowid);
                         //var callData = $("#jqgDispatcher").getGridParam('data')[iRow - 1];
 
-                        var callData = $("#jqgDispatcher").getRowData(rowid);
+                        //var callData = $("#jqgDispatcher").getRowData(rowid);
 
-                        document.getElementById("callInfoCustName").innerHTML = callData['User1.UserFN'];// + ' ' + callData['User1.UserLN'];
-                        document.getElementById("callInfoCustEmail").innerHTML = callData['User1.Email'];
-                        document.getElementById("callInfoCustPhone").innerHTML = callData['User1.MPhone'];
-                        document.getElementById("callInfoCallText").innerHTML = callData['CallText'];
+                        //document.getElementById("callInfoCustName").innerHTML = callData['User1.UserFN'];// + ' ' + callData['User1.UserLN'];
+                        //document.getElementById("callInfoCustEmail").innerHTML = callData['User1.Email'];
+                        //document.getElementById("callInfoCustPhone").innerHTML = callData['User1.MPhone'];
+                        //document.getElementById("callInfoCallText").innerHTML = callData['CallText'];
 
-                        //document.getElementById("callInfoCustName").innerHTML = callData.User1.UserFN + ' ' + callData.User1.UserLN;
-                        //document.getElementById("callInfoCustEmail").innerHTML = callData.User1.Email;
-                        //document.getElementById("callInfoCustPhone").innerHTML = callData.User1.MPhone;
-                        //document.getElementById("callInfoCallText").innerHTML = callData.CallText;
+                        ////document.getElementById("callInfoCustName").innerHTML = callData.User1.UserFN + ' ' + callData.User1.UserLN;
+                        ////document.getElementById("callInfoCustEmail").innerHTML = callData.User1.Email;
+                        ////document.getElementById("callInfoCustPhone").innerHTML = callData.User1.MPhone;
+                        ////document.getElementById("callInfoCallText").innerHTML = callData.CallText;
 
-                        jQuery("#callInfo").dialog("open");
+                        //jQuery("#callInfo").dialog("open");
                     },
                     jsonReader: {
                         root: "rows",
