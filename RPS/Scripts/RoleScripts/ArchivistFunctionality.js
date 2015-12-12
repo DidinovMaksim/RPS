@@ -37,8 +37,9 @@ function reloadJQGridActive() {
     });
 }
 
+
 function Archived() {
-    
+
     var rowId = $("#jqgArchivist").jqGrid('getGridParam', 'selrow');
     var rowData = $("#jqgArchivist").getRowData(rowId);
     //jQuery("#archivedCall").dialog("open");
@@ -59,10 +60,11 @@ function Archived() {
     });
 }
 
+
 function Active() {
     var rowId = $("#jqgArchivistActive").jqGrid('getGridParam', 'selrow');
     var rowData = $("#jqgArchivistActive").getRowData(rowId);
-  //  jQuery("#activeCall").dialog("open");
+    //  jQuery("#activeCall").dialog("open");
     $.ajax({
         url: 'Archivist/ActiveCall',
         data: {
@@ -90,7 +92,7 @@ function Active() {
             width: 400
         });
 
-       
+
     });
 
 
@@ -247,39 +249,8 @@ function Active() {
                         $(gridSelector).jqGrid("setCaption", newCapture);
                         $(this).triggerHandler("jqGridLoadComplete", data);
                     },
-                }).navGrid("#pagerActive", { edit: false, add: false, del: true },
-                {
-                    //edit options
-                    zIndex: 100,
-                    url: 'Archivist/EditGridData',
-                    closeOnEscape: true,
-                    closeAfterEdit: true,
-                    recreateForm: true,
-                    afterComplete: function (result) {
-                    }
-                },
+                }).navGrid("#pagerActive", { edit: false, add: false, del: false }
 
-               // add options
-                {
-                    zIndex: 100,
-                    url: 'Archivist/AddGridData',
-                    closeOnEscape: true,
-                    closeAfterEdit: true,
-                    afterComplete: function (result) {
-
-                    }
-                },
-                //delete
-                {
-                    zIndex: 100,
-                    url: 'Archivist/DeleteGridData',
-                    closeOnEscape: true,
-                    closeAfterEdit: true,
-                    recreateForm: true,
-                    msg: "Are you sure ?",
-                    afterComplete: function (result) {
-                    }
-                }
                 );
                 $("#jqgArchivistActive").jqGrid('filterToolbar', { searchOnEnter: false });
             }
@@ -361,7 +332,7 @@ function Active() {
                             index: 'Archived',
                             width: 50,
                             formatter: function (cellvalue, options, rowobject) {
-                                return '<button id="openbtn" onclick="Archived()" >Archived</button>';
+                                return '<button id="ArchivedButton" onclick="Archived()" >Archived</button>';
                             },
                             search: false,
                         },
@@ -434,39 +405,7 @@ function Active() {
                         $(gridSelector).jqGrid("setCaption", newCapture);
                         $(this).triggerHandler("jqGridLoadComplete", data);
                     },
-                }).navGrid("#pagerArchived", { edit: false, add: false, del: true },
-                {
-                    //edit options
-                    zIndex: 100,
-                    url: 'Archivist/EditGridData',
-                    closeOnEscape: true,
-                    closeAfterEdit: true,
-                    recreateForm: true,
-                    afterComplete: function (result) {
-                    }
-                },
-
-                //add options
-                {
-                    zIndex: 100,
-                    url: 'Archivist/AddGridData',
-                    closeOnEscape: true,
-                    closeAfterEdit: true,
-                    afterComplete: function (result) {
-
-                    }
-                },
-                //delete
-                {
-                    zIndex: 100,
-                    url: 'Archivist/DeleteGridData',
-                    closeOnEscape: true,
-                    closeAfterEdit: true,
-                    recreateForm: true,
-                    msg: "Are you sure ?",
-                    afterComplete: function (result) {
-                    }
-                }
+                }).navGrid("#pagerArchived", { edit: false, add: false, del: false }
                 );
                 $("#jqgArchivist").jqGrid('filterToolbar', { searchOnEnter: false });
             }

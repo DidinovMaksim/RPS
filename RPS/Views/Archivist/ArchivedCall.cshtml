@@ -1,11 +1,46 @@
 ﻿@model RPS.ValidationModels.CallValidation
 
+<style>
+    .autocomplete-suggestions {
+        border: 1px solid #999;
+        background: #FFF;
+        overflow: auto;
+    }
 
-<div id="archivedCall" >
+    .autocomplete-suggestion {
+        padding: 2px 5px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .autocomplete-selected {
+        background: #F0F0F0;
+    }
+
+    .autocomplete-suggestions strong {
+        font-weight: normal;
+        color: #3399FF;
+    }
+
+    .autocomplete-group {
+        padding: 2px 5px;
+    }
+
+        .autocomplete-group strong {
+            display: block;
+            border-bottom: 1px solid #000;
+        }
+</style>
+<script>
+$("#Reason").autocomplete({
+    source: '/Archivist/GetReasonsJSON',
+})
+</script>
+<div id="archivedCall">
     @using (@Ajax.BeginForm("ArchivedCall", "Archivist", new AjaxOptions()
     {
         //OnBegin = "reloadJQGrid()",
-       // OnFailure = "reloadJQGrid()",
+        // OnFailure = "reloadJQGrid()",
         OnSuccess = "reloadJQGridArchived()",
         UpdateTargetId = "archivedCall",
         InsertionMode = InsertionMode.Replace
@@ -18,8 +53,9 @@
                 <td>
                     <p class="text">Reason</p>
                 </td>
-                <td height="50">
-                    @Html.TextAreaFor(m => m.Reason, new { id = "Reason" })
+                <td height="25">
+                    @Html.HiddenFor(m => m.id, new { id = "id" })
+                    @Html.TextBoxFor(m => m.Reason, new { id = "Reason" })
                 </td>
             </tr>
 
@@ -33,3 +69,5 @@
 
     }
 </div>
+
+
