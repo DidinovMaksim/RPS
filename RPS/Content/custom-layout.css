@@ -1,0 +1,75 @@
+﻿/*jqgrid redesign*/
+div#gbox_jqgAdmin {
+    width: 100%!important;
+}
+.ui-widget-header {
+    background: white;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: white;
+}
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-hover .ui-state-hover {
+    background: #EFF4F7;
+    transition: all 0.3s ease;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    background: #EFF4F7;
+    border: 1px solid #aaaaaa;
+}
+
+.ui-jqgrid tr.ui-row-ltr td {
+    padding: 5px;
+}
+.ui-jqgrid .ui-jqgrid-htable th div {
+    font-weight:700;
+}
+.ui-jqgrid .ui-jqgrid-pager .ui-pg-button{
+    border:none;
+    background:none;
+    margin:0;
+    padding:0;
+}
+.ui-jqgrid .ui-pg-button span {
+    border:none;
+    margin:0;
+    padding:0;
+}
+.ui-jqgrid .ui-pg-input {
+    width: 30px;
+    height: 18px;
+    text-align: center;
+}
+.ui-jqgrid .ui-jqgrid-titlebar-close span {
+    margin:0;
+}
+div#gbox_jqgAdmin {
+    border-radius:0;
+}
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-hover .ui-state-hover {
+    //background: none;
+    //border:none;
+}
+tr:nth-child(even) {
+    background:#f9f9f9;
+}
+
+/*input*/
+input.form-control {
+    width: 215px;
+    float: right;
+}
+/*dialog window*/
+.ui-draggable .ui-dialog-titlebar {
+    background: #367fa9;
+}
+.ui-dialog .ui-dialog-title {
+    color:white;
+}
+button.edit {
+    background: none;
+    border: none;
+    color: #367fa9;
+}

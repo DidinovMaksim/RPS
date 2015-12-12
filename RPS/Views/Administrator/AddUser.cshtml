@@ -1,0 +1,61 @@
+﻿@using RPS.ValidationModels
+@using RPS.Controllers
+@using RPS.Models
+@model UserValidation
+
+<script src="~/Scripts/RoleScripts/AdministratorFunctionality.js"></script>
+
+@{
+    ViewBag.Title = "AddUser";
+}
+
+<div id="add-user-window-form">
+    @using (@Ajax.BeginForm("AddUser", "Administrator", new AjaxOptions()
+    {
+        //OnBegin = "checkLogin",
+        OnSuccess = "reloadJQGrid()",
+        UpdateTargetId = "add-user-window-form",
+    }))
+    {
+        <form role="form">
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="login">Login:</label>
+                    @Html.TextBoxFor(m => m.Login, new { id = "login", @class = "form-control", @placeholder = "Enter login:" })
+                </div>
+                <div class="form-group">
+                    <label for="phone">Mobile phone:</label>
+                    @Html.TextBoxFor(m => m.MPhone, new { id = "phone", @class = "form-control", @placeholder = "Phone number:" })
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    @Html.TextBoxFor(m => m.Email, new { id = "email", @class = "form-control", @placeholder = "Email:" })
+                </div>
+                <div class="form-group">
+                    <label for="fname">User first name:</label>
+                    @Html.TextBoxFor(m => m.UserFN, new { id = "fname", @class = "form-control", @placeholder = "First name:" })
+                </div>
+                <div class="form-group">
+                    <label for="lname">User last name:</label>
+                    @Html.TextBoxFor(m => m.UserLN, new { id = "lname", @class = "form-control", @placeholder = "Last name:" })
+                </div>
+                <div class="form-group">
+                    <label for="lname"> User role:</label>
+                    @Html.DropDownList("userRole", (IEnumerable<SelectListItem>)ViewData["RoleList"], new { id = "Role" })
+                </div>
+                <div class="form-group">
+                    <label for="datepicker">Birthday:</label>
+                    @Html.TextBoxFor(m => m.Birthday, new { id = "datepicker", @class = "form-control" })
+                </div>
+                <div class="checkbox">
+                    <label for="IsActive">IsActive:</label>
+                    @Html.CheckBoxFor(m => m.IsActive, new { id = "IsActive" })
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" id="edit-button" class="btn btn-primary">Add user</button>
+            </div>
+        </form>
+
+    }
+</div>

@@ -5,20 +5,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title – приложение ASP.NET</title>
+    
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jqueryajax")
-
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" type="text/css" />
     
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    @*<script src="~/Scripts/modernizr-2.6.2.js"></script>*@
-    <!--<link href="~/Content/ui.jqgrid.css" rel="stylesheet" /> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/smoothness/jquery-ui.css">
-
     <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+
 </head>
 <body>
 
@@ -41,7 +44,8 @@
                         {
                             switch(Roles.GetRolesForUser()[0])
                             {
-                                case "Administrator": <li>@Html.ActionLink("Administrator page", "Index", "Administrator")</li>
+                                case "Administrator": <li>@Html.ActionLink("Administrator users", "Administrator_Users", "Administrator")</li>
+                                                      <li>@Html.ActionLink("Administrator customers", "Administrator_customers", "Administrator")</li>
                                     break;
                                 case "Agent": <li>@Html.ActionLink("Agent page", "Index", "Agent")</li> 
                                     break;
@@ -55,12 +59,12 @@
                     @{
                         if (User.Identity.IsAuthenticated)
                         {
-                            <li style="color:white;">Welcome, @User.Identity.Name (@Roles.GetRolesForUser()[0])</li>
-                            <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
+                            <li class="user">Welcome, @User.Identity.Name (@Roles.GetRolesForUser()[0])</li>
+                            <li class="login"><span class="btn btn-danger">@Html.ActionLink("Logout", "Logout", "Account")</span></li>
                         }
                         else
                         {
-                            <li>@Html.ActionLink("Login", "Login", "Account")</li>
+                            <li class="login"><span class="btn btn-danger">@Html.ActionLink("Login", "Login", "Account")</span></li>
                         }
                     }
                 </ul>

@@ -1,0 +1,20 @@
+﻿@using RPS.ValidationModels
+@using RPS.Controllers
+@using RPS.Models
+@model UserValidation
+
+@{
+    ViewBag.Title = "Administrator page";
+}
+<link href="~/Content/custom-layout.css" rel="stylesheet" />
+<script src="~/Scripts/RoleScripts/AdministratorFunctionality.js"></script>
+@*<link href="~/Content/layout-jqgrid.css" rel="stylesheet" />*@
+
+
+<h1>Administrator user</h1>
+<table id="jqgAdmin" title="Add new user"></table>
+<div id="pager"></div>
+<button class="btn btn-primary" onclick="addUser()">Add user</button>
+
+<div id="addUserWindow"></div>
+<div id="editUserWindow"></div>

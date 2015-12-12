@@ -1,0 +1,58 @@
+﻿@using RPS.ValidationModels
+@using RPS.Controllers
+@using RPS.Models
+@model UserValidation
+
+<script src="~/Scripts/RoleScripts/AdministratorFunctionality.js"></script>
+
+@{
+    ViewBag.Title = "EditUser";
+}
+
+<h2>EditUser</h2>
+
+<div id="edit-user-window-form">
+    @using (@Ajax.BeginForm("EditUser", "Administrator", new AjaxOptions()
+    {
+        OnSuccess = "EditStatus()",
+        UpdateTargetId = "edit-user-window-form",
+    }))
+    {
+        <form role="form">
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="fname">User first name:</label>
+                    @Html.TextBoxFor(m => m.UserFN, new { id = "fname", @class = "form-control", @placeholder = "First name:" })
+                </div>
+                <div class="form-group">
+                    <label for="lname">User last name:</label>
+                    @Html.TextBoxFor(m => m.UserLN, new { id = "lname", @class = "form-control", @placeholder = "Last name:" })
+                </div>
+                <div class="form-group">
+                    <label for="phone">Mobile phone:</label>
+                    @Html.TextBoxFor(m => m.MPhone, new { id = "phone", @class = "form-control", @placeholder = "Phone number:" })
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    @Html.TextBoxFor(m => m.Email, new { id = "email", @class = "form-control", @placeholder = "Email:" })
+                </div>
+                @Html.HiddenFor(m => m.id, new { id = "id" })
+                <div class="form-group">
+                    <label for="lname">User role:</label>
+                    @*@{
+        AdministratorController adControl = new AdministratorController();
+        List<SelectListItem> roleList = adControl.getRoles();
+    }
+    <td>@Html.DropDownListFor(m => m.IsActive, roleList, "--Select status--", new { id = "role" })*@
+                </div>
+                <div class="checkbox">
+                    <label for="IsActive">IsActive:</label>
+                    @Html.CheckBoxFor(m => m.IsActive, new { id = "IsActive" })
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" id="edit-button" class="btn btn-primary">Edd user</button>
+            </div>
+        </form>
+    }
+</div>

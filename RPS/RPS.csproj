@@ -183,6 +183,7 @@
       <DependentUpon>RpsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AdministratorServices.cs" />
     <Compile Include="Services\AgentServices.cs" />
     <Compile Include="Services\ArchivistServices.cs" />
     <Compile Include="Services\DispatcherServices.cs" />

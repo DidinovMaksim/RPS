@@ -5,60 +5,99 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using RPS.Models;
+using RPS.ValidationModels;
 using System.Data.Entity;
+using RPS.Services;
 
 namespace RPS.Controllers
 {
     public class AdministratorController : Controller
     {
         private DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities();
-        // GET: Test
+   
         [Authorize(Roles = "Administrator")]
-        public ActionResult Index()
+        public ActionResult Administrator_Users()
         {
             return View();
         }
+
+        public ActionResult Administrator_Customers()
+        {
+            return View();
+        }
+
         [HttpGet]
         public string getGridData()
         {
-
-
-            return JsonConvert.SerializeObject(db.User.ToList(), Formatting.None,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
-
+            List<object> users = AdministratorServices.GetUsers();
+            return JsonConvert.SerializeObject(users);
         }
-        public List<SelectListItem> getRoles()
+
+        [HttpGet]
+        public string getGridDataCustomers()
         {
-            List<webpages_Roles> webpagesRolesList = db.webpages_Roles.ToList();
-            List<SelectListItem> roleList = new List<SelectListItem>();
-            foreach (webpages_Roles role in webpagesRolesList)
+            List<object> users = AdministratorServices.GetCustomers();
+            return JsonConvert.SerializeObject(users);
+        }
+
+        public void GetRoles()
+        {
+            ViewData["RoleList"] = AdministratorServices.GetRoles();
+        }
+
+        [HttpGet]
+        public PartialViewResult EditUser(string id)
+        {
+            return PartialView(new UserValidation());
+        }
+
+        [HttpPost]
+        public JsonResult EditUser(UserValidation user, string role)
+        {
+            user.EditUser();
+            return Json(new
             {
-                roleList.Add(new SelectListItem { Text = role.RoleName, Value = role.RoleName });
-            }
-            return roleList;
-        }
-        public string EditGridData(User usr)
-        {
-            db.User.Attach(usr);
-            db.Entry(usr).State = EntityState.Modified;
-            db.SaveChanges();
-            return "Edited";
+                State = "Call replied successfully!"
+            }, JsonRequestBehavior.AllowGet);
         }
 
-        public string DeleteGridData(User usr)
+        public JsonResult GetUser(int id)
         {
-            db.User.Remove(db.User.Find(usr.id));
-            db.SaveChanges();
-            return "Deleted";
+            object EUser;
+            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
+            {
+                User user = (from User in db.User where User.id == id select User).ToList()[0];
+                EUser = new
+                {
+                    UserFN = user.UserFN,
+                    UserLN = user.UserLN,
+                    MPhone = user.MPhone,
+                    Email = user.Email,
+
+                };
+            }
+            return Json(EUser, JsonRequestBehavior.AllowGet);
         }
-        public string AddGridData([Bind(Exclude = "id")] User usr)
+
+        [HttpGet]
+        public PartialViewResult AddUser()
         {
-            db.User.Add(usr);
-            db.SaveChanges();
-            return "added";
+            GetRoles();
+            return PartialView(new UserValidation());
+        }
+
+        [HttpPost]
+        public string AddUser(UserValidation user, string userRole)
+        {
+            try
+            {
+                user.AddUser();
+            }
+            catch (Exception)
+            {
+                return "<p>Error</p>";
+            }
+            return "<p>Succes</p>";
         }
     }
 }

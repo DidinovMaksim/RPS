@@ -43,3 +43,26 @@ textarea {
 .Reply{
     width:300px;
 }
+/*buttons styles */
+#add-user-window-form .btn-primary {
+    width:100px;
+    margin-top: 0;
+}
+.btn-primary{
+    width:85;
+    margin-top: 12px;
+}
+.navbar-nav > li.login span a {
+    color:white;
+}
+.navbar-nav > li.login{
+    position: absolute;
+    right: 13px;
+    top: 7px;
+}
+.navbar-nav > li.user{
+    color: white;
+    position: absolute;
+    right: 92px;
+    top: 12px;
+}

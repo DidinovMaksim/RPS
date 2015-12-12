@@ -1,17 +1,4 @@
-﻿function addUser() {
-    jQuery("#addUserWindow").dialog("open");
-    $.ajax({
-        url: 'AddUser',
-        data: {},
-        contentType: 'application/json; charset=utf-8',
-        type: 'GET',
-        success: function (result) {
-            $('#addUserWindow').html(result);
-        }
-    });
-}
-
-function EditStatus(data) {
+﻿function EditStatus(data) {
     reloadJQGrid();
     $('#editUserWindow').html(data.State);
     $('#editUserWindow').dialog({
@@ -36,7 +23,7 @@ function FillEditCustomerPopup(customer) {
     document.getElementById("birthday").value = user.Birthday;
 }
 
-function GetUser(callback) {
+function GetCustomer(callback) {
     var rowId = $("#jqgAdmin").jqGrid('getGridParam', 'selrow');
     $.ajax({
         url: 'GetUser',
@@ -78,7 +65,7 @@ function EditUser() {
 function reloadJQGrid() {
     alert('reload');
     $.ajax({
-        url: 'getGridData',
+        url: 'getGridDataCustomers',
         datatype: "json",
         data: "{}",
         contentType: "application/json; charset=utf-8",
@@ -98,171 +85,12 @@ function reloadJQGrid() {
 
 (function ($) {
     $(document).ready(function () {
-        loadTable();
-        loadTableCustomers()
+        loadTableCustomers();
         $("#addUserWindow").dialog({ autoOpen: false, width: 500, height: 415, title: "Add user" });
         $("#editUserWindow").dialog({ autoOpen: false, width: 500, height: 415, title: "Edit user" });
         $("#datepicker").datepicker();
     });
-    function loadTable() {
-
-        var gridSelector = '#jqgAdmin';
-        var arOps = ["eq", "ne", "lt", "le", "gt", "ge", "bw", "bn", "in", "ni", "ew", "en", "cn", "nc"];
-
-        $.ajax({
-            url: 'getGridData',
-            datatype: "json",
-            data: "{}",
-            contentType: "application/json; charset=utf-8",
-            method: "GET",
-            success: function (result) {
-                $("#jqgAdmin").jqGrid({
-                    datatype: "local",
-                    colNames: ['id', 'Login', 'User name', 'User role', 'User last name', 'Email', 'Phone', 'Birthday', 'Status', 'Edit user'],
-                    colModel: [
-                        {
-                            name: 'id',
-                            index: 'id',
-                            key: true,
-                            hidden: true,
-                            sortable: false,
-                        },
-                        {
-                            name: 'Login',
-                            index: 'Login',
-                            width: 150,
-                            search: true,
-                            sorttype: "text",
-                            editable: true
-                        },
-                        {
-                            name: 'UserFN',
-                            index: 'UserFN',
-                            width: 80,
-                            search: false,
-                            sortable: false,
-                            editable: true
-                        },
-                        {
-                            name: 'webpages_Roles.0.RoleName',
-                            index: 'webpages_Roles.0.RoleName',
-                            width: 80,
-                            search: false,
-                            sortable: false,
-                        },
-                        {
-                            name: 'UserLN',
-                            index: 'UserLN',
-                            width: 80,
-                            hidden: false,
-                            search: false,
-                            sortable: false,
-                            editable: true
-                        },
-                        {
-                            name: 'Email',
-                            index: 'Email',
-                            width: 80,
-                            sortable: true,
-                            sorttype: "text",
-                            search: true,
-                            sortable: false,
-                            editable: true
-                        },
-                        {
-                            name: 'MPhone',
-                            index: 'MPhone',
-                            width: 80,
-                            sortable: true,
-                            sorttype: "text",
-                            search: true,
-                            sortable: false,
-                            editable: true
-                        },
-                        {
-                            name: 'Birthday',
-                            index: 'Birthday',
-                            width: 80,
-                            hidden: true,
-                            sortable: false,
-                            search: false,
-                            editable: true
-                        },
-                        {
-                            name: 'Status',
-                            index: 'Status',
-                            width: 80,
-                            sortable: false,
-                            search: false,
-                            editable: true
-                        },
-                        {
-                            name: "EditUser",
-                            index: "EditUser",
-                            formatter: function (cellvalue, options, rowobject) {
-                                return '<button class="edit" id="openedit" onclick="EditUser()" ><i class="fa fa-pencil"></i></button>';
-                            },
-                            search: false,
-                            align: 'center'
-                        },
-                    ],
-                    onSelectRow: function () {
-                        GetUser(FillEditPopup);
-                    },
-                    data: JSON.parse(result),
-                    rowNum: 15,
-                    autowidth: true,
-                    pager: jQuery("#pager"),
-                    rowList: [15, 30, 45, 60],
-                    viewrecords: true,
-                    caption: "RPS",
-                    search: true,
-                    height: 350,
-                    jsonReader: {
-                        cell: ""
-                    },
-                    jsonReader: {
-                        root: "rows",
-                        page: "pages",
-                        total: "total",
-                        repeatitems: false,
-                        id: "0"
-                    },
-                    loadComplete: function (data) {
-                        var newCapture = "RPS",
-                            filters, rules, rule, op, i, iOp, s
-                        postData = $('#jqgAdmin').jqGrid("getGridParam", "postData"),
-                        isFiltering = $('#jqgAdmin').jqGrid("getGridParam", "search");
-
-                        if (isFiltering === true && typeof postData.filters !== "undefined") {
-                            filters = $.parseJSON(postData.filters);
-                            newCapture = "Filter: [";
-                            rules = filters.rules;
-                            for (i = 0; i < rules.length; i++) {
-                                rule = rules[i];
-                                op = rule.op;
-                                iOp = $.inArray(op, arOps);
-                                if (iOp >= 0 && typeof $.jgrid.search.odata[iOp] !== "undefined") {
-                                    op = $.jgrid.search.odata[iOp].text;
-                                }
-                                newCapture += rule.field + " " + op + " '" + rule.data + "'";
-                                if (i + 1 !== rules.length) {
-                                    newCapture += ", ";
-                                }
-                            }
-                            newCapture += "]";
-                        }
-                        $(gridSelector).jqGrid("setCaption", newCapture);
-                        $(this).triggerHandler("jqGridLoadComplete", data);
-                    },
-                    onSelectRow: function () {
-
-                    }
-                }).navGrid();
-                $("#jqgAdmin").jqGrid('filterToolbar', { searchOnEnter: false });
-            }
-        })
-    }
+    
     function loadTableCustomers() {
 
         var gridSelector = '#jqgAdminCustomers';
@@ -307,6 +135,7 @@ function reloadJQGrid() {
                             name: 'MPhone',
                             index: 'MPhone',
                             width: 80,
+                            sortable: true,
                             sorttype: "text",
                             search: false,
                             sortable: false,
@@ -333,7 +162,7 @@ function reloadJQGrid() {
                         },
                     ],
                     ondblClickRow: function (rowid, iRow, iCol, e) {
-                        GetUser(FillEditPopup);
+                        GetCustomer(FillEditCustomerPopup);
                     },
                     data: JSON.parse(result),
                     rowNum: 15,
