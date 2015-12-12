@@ -24,6 +24,7 @@ namespace RPS.Models
         public Nullable<System.DateTime> DateArchived { get; set; }
         public string Reason { get; set; }
         public bool IsDeleted { get; set; }
+        public string Answer { get; set; }
     
         public virtual CallStatus CallStatus { get; set; }
         public virtual User User { get; set; }

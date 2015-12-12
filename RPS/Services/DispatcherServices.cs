@@ -134,7 +134,7 @@ namespace RPS.Services
 
                 var Tagents = from user in us
                              where user.webpages_Roles.ToList()[0].RoleId == 3
-                             select new SelectListItem() { Value = user.id.ToString(), Text = user.UserLN };
+                             select new SelectListItem() { Value = user.id.ToString(), Text = user.UserLN.ToString() + " " + user.UserFN.ToString() };
 
                 foreach (var call in Tagents)
                     agents.Add(call);

@@ -7,6 +7,7 @@ using RPS.Models;
 using System.Web.Mvc;
 using System.Data.Entity;
 
+using Newtonsoft.Json;
 
 namespace RPS.Services
 {
@@ -17,7 +18,7 @@ namespace RPS.Services
             object Usr;
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
-                User tmp = (from usr in db.User where usr.id == id select usr).ToList()[0];
+                User tmp = (from usr in db.User where usr.id == id select usr).First();
                 Usr = new 
                 {
                     UserFN = tmp.UserFN,
@@ -27,35 +28,72 @@ namespace RPS.Services
 
             return Usr;
         }
-        //public static object GetCalls()
-        //{
+        public static void AddAnswer(Call Call)
+        {
+            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
+            {
+                var upd = (from call in db.Call where call.id == Call.id select call).First();
+                upd.Answer = Call.Answer;
+                upd.Status = 2;
+                upd.DateSolved = DateTime.Now;
+                db.SaveChanges();
+            }
 
-        //    //List<object> calls = new List<object>();
+        }
+        static public object GetCall(int id)
+        {
 
-        //    object calls = new object();
+            object RCall = new object();
+            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
+            {
 
-        //    using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
-        //    {
-        //        var callss = from call in db.Call
-        //                     where call.Status != 3
-        //                     select new
-        //                     {
-        //                         id = call.id,
-        //                         CallText = call.CallText,
-        //                         DateCreated = call.DateCreated,
-        //                         Status = call.CallStatus.Status,
-        //                         DateSolved = call.DateSolved,
-        //                         CustomerName = call.User1.UserFN,
-        //                         CustomerSurname = call.User1.UserLN
+                var call = (from Call in db.Call where Call.id == id select Call).First();
+                /*new
+                {
+                    CallText = Call.CallText,
+                    DateCreated = Call.DateCreated,
+                    UserFN = Call.User1.UserFN,
+                    UserLN = Call.User1.UserLN
 
-        //                     };
+                });*/
 
+                RCall = new
+                {
+                    CallText = call.CallText,
+                    DateCreated = call.DateCreated.ToLongDateString(),
+                    UserFN = call.User1.UserFN,
+                    UserLN = call.User1.UserLN,
+                    Answer = call.Answer
+                };
 
+                /*foreach (var tmp in call)
+                {
 
-        //    }
-        //    return calls;
+                    RCall = new 
+                    {
+                        CallText = tmp.CallText,
+                        DateCreated = tmp.DateCreated.ToLongDateString(),
+                        UserFN = tmp.User1.UserFN,
+                        UserLN = tmp.User1.UserLN
+                    };
+                    
+                }*/
 
-        //}
+                
+
+                //Call call = (from Call in db.Call where Call.id == id select Call).ToList()[0];
+                /*RCall = new
+                {
+                    CallText = call.CallText,
+                    DateCreated = call.DateCreated.ToLongDateString(),
+                    UserFN = call.User1.UserFN,
+                    UserLN = call.User1.UserLN
+
+                };*/
+                
+            }
+            return RCall;
+        }
 
         public static List<object> GetCalls()
         {
@@ -63,166 +101,43 @@ namespace RPS.Services
             List<object> calls = new List<object>();
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
+
                 int id = GetAgentId();
-                List<Call> Tcalls = (from call in db.Call where call.Agent == id && call.Status != 3 select call).ToList();
-                foreach (Call tmp in Tcalls)
+                var TCalls = from call in db.Call
+                         where call.Agent == id && call.Status != 3
+                         select new
+                         {
+                             id = call.id,
+                             CustomerName = call.User1.UserFN,
+                             CustomerSurname = call.User1.UserFN,
+
+                             DateCreated = call.DateCreated,
+                             Status = call.CallStatus.Status,
+                             DateSolved = call.DateSolved,
+                         };
+                foreach(var tmp in TCalls)
                 {
-                    /*calls.Add(new Call()
-                    {
-                        id = tmp.id,
-
-                    });*/
-
-                    /*tmp.CallStatus.Call.Clear();
-                    tmp.User.Call.Clear();
-                    tmp.User.Call1.Clear();
-                    tmp.User.webpages_Roles.Clear();
-
-                    tmp.User1.Call.Clear();
-                    tmp.User1.Call1.Clear();
-                    tmp.User1.webpages_Roles.Clear();
-
-                    calls.Add(tmp);*/
-
-                    object newCall = new 
-                    {
-                        id = tmp.id,
-                        CustomerName = tmp.User1.UserFN,
-                        CustomerSurname = tmp.User1.UserFN,
-                        
-                        DateCreated = tmp.DateCreated,
-                        Status = tmp.CallStatus.Status,
-                        DateSolved = tmp.DateSolved,
-
-                    };
-                    //newCall.User =  tmp.User;
-                    calls.Add(newCall);
-
+                    calls.Add(tmp);
                 }
+
+               
             }
             return calls;
 
         }
 
-        //public static List<Call> GetCalls()
-        //{
-
-        //    List<Call> calls = new List<Call>();
-        //    using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
-        //    {
-        //        int id = GetAgentId();
-        //        List<Call> Tcalls = (from call in db.Call where call.Agent == id && call.Status != 3 select call).ToList();
-        //        foreach (Call tmp in Tcalls)
-        //        {
-        //            /*calls.Add(new Call()
-        //            {
-        //                id = tmp.id,
-
-        //            });*/
-
-        //            /*tmp.CallStatus.Call.Clear();
-        //            tmp.User.Call.Clear();
-        //            tmp.User.Call1.Clear();
-        //            tmp.User.webpages_Roles.Clear();
-
-        //            tmp.User1.Call.Clear();
-        //            tmp.User1.Call1.Clear();
-        //            tmp.User1.webpages_Roles.Clear();
-
-        //            calls.Add(tmp);*/
-
-        //            Call newCall = new Call()
-        //            {
-        //                id = tmp.id,
-        //                Customer = tmp.Customer,
-        //                Agent = tmp.Agent,
-        //                CallText = tmp.CallText,
-        //                DateCreated = tmp.DateCreated,
-        //                Status = tmp.Status,
-        //                DateSolved = tmp.DateSolved,
-        //                DateArchived = tmp.DateArchived,
-        //                Reason = tmp.Reason,
-        //                IsDeleted = tmp.IsDeleted
-
-
-        //            };
-        //            //newCall.User =  tmp.User;
-        //            calls.Add(newCall);
-
-        //        }
-        //    }
-        //    return calls;
-
-        //}
         static int GetAgentId()
         {
             string userName = HttpContext.Current.User.Identity.Name;
             int id;
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
-                id = (from users in db.User where users.Login == userName select users).ToList()[0].id;
+                id = (from users in db.User where users.Login == userName select users).First().id;
             }
                 
             return id;
         }
-        public static List<Call> GetActiveCalls()
-        {
-            List<Call> calls = new List<Call>();
-            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
-            {
-                int id = GetAgentId();
-                List<Call> Tcalls = (from call in db.Call where call.Agent == id && call.Status == 1 select call).ToList();
-                foreach(Call tmp in Tcalls)
-                {
-                    /*calls.Add(new Call()
-                    {
-                        id = tmp.id,
-
-                    });*/
-
-                    tmp.CallStatus.Call.Clear();
-                    tmp.User.Call.Clear();
-                    tmp.User.Call1.Clear();
-                    tmp.User.webpages_Roles.Clear();
-
-                    tmp.User1.Call.Clear();
-                    tmp.User1.Call1.Clear();
-                    tmp.User1.webpages_Roles.Clear();
-
-                    calls.Add(tmp);
-
-                    /*Call newCall = new Call()
-                    {
-                        id = tmp.id,
-                        Customer = tmp.Customer,
-                        Agent = tmp.Agent,
-                        CallText = tmp.CallText,
-                        DateCreated = tmp.DateCreated,
-                        Status = tmp.Status,
-                        DateSolved = tmp.DateSolved,
-                        DateArchived = tmp.DateArchived,
-                        Reason = tmp.Reason,
-                        IsDeleted = tmp.IsDeleted
-
-
-                    };
-                    newCall.User =  tmp.User;
-                    calls.Add(newCall);*/
-
-                }
-            }
-            return calls;
-        }
-        public static List<Call> GetClosedCalls()
-        {
-            List<Call> calls;
-            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
-            {
-                int id = GetAgentId();
-                calls = (from call in db.Call where call.Agent == id && call.Status == 2 select call).ToList();
-            }
-            return calls;
-        }
+       
 
     }
 }

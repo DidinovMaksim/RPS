@@ -13,7 +13,7 @@
                     <p class="text">Customer name: </p>
                 </td>
                 <td>
-                    <input type="text" id="CustName" />
+                    <p id="CustNamePop"></p>
                     @Html.HiddenFor(m => m.id, new { id = "id" })
                 </td>
             </tr>
@@ -22,7 +22,7 @@
                     <p class="text">Call text:</p>
                 </td>
                 <td>
-                    @Html.TextAreaFor(m => m.CallText, new { id = "CallText" })
+                    <p id="CallText"></p>
 
                 </td>
             </tr>
@@ -31,7 +31,7 @@
                     <p class="text">Answer: </p>
                 </td>
                 <td>
-                    @Html.TextAreaFor(m => m.Reason, new { id = "Reason" })
+                    @Html.TextAreaFor(m => m.Answer, new { id = "Answer" })
 
 
                 </td>

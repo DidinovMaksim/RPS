@@ -26,33 +26,38 @@ function GetCall(callback) {
     });
 }
 function FillCallInfo(call) {
-    document.getElementById("callText").value = call.CallText;
-    document.getElementById("callDateCreated").value = call.DateCreated;
+    if (call.Answer != null) {
+        document.getElementById("cAnswer").innerHTML = call.Answer;
+        document.getElementById("CallAnswer").style.display = 'table-row';
+    }
+    else
+        document.getElementById("CallAnswer").style.display = 'none';
 
-    document.getElementById("callCustName").value = call.UserFN;
-    document.getElementById("callCustSur").value = call.UserLN;
+    document.getElementById("CustName").innerHTML = call.UserLN + " "+ call.UserFN;
+
+    document.getElementById("callText").innerHTML = call.CallText;
+    document.getElementById("callDateCreated").innerHTML = call.DateCreated;
+
+
+    
 
 }
 function FillPopup(call) {
-    document.getElementById("CustName").value = call.UserFN + " " + call.UserLN;
-    document.getElementById("CallText").value = call.CallText;
+    document.getElementById("CustNamePop").innerHTML = call.UserFN + " " + call.UserLN;
+    document.getElementById("CallText").innerHTML = call.CallText;
 
 }
-function Reply() {
+function Reply(idCall) {
 
 
     var rowId = $("#jqgAgent").jqGrid('getGridParam', 'selrow');
     var rowData = $("#jqgAgent").getRowData(rowId);
-    /*
-    jQuery("#Reply").dialog("open");
-    document.getElementById("id").value = rowData['id'];
-    
-    */
+   
 
     $.ajax({
         url: 'Agent/_ReplyCall',
         data: {
-            id: rowId
+            id: idCall
         },
         contentType: 'application/json; charset=utf-8',
         type: 'GET',
@@ -102,11 +107,13 @@ function reloadJQGrid() {
             autoOpen: false,
             width: 400,
         });
+
     });
     function loadTable() {
 
         var gridSelector = '#jqgAgent';
         var arOps = ["eq", "ne", "lt", "le", "gt", "ge", "bw", "bn", "in", "ni", "ew", "en", "cn", "nc"];
+        var pageWidth = $("#jqgAgent").parent().width() - 100;
 
         $.ajax({
             url: 'Agent/getGridData',
@@ -129,7 +136,7 @@ function reloadJQGrid() {
                         {
                             name: 'Status',
                             index: 'Status',
-                            width: 150,
+                            width: (pageWidth * (10 / 100)),
                             sortable: true,
 
                             search: false,
@@ -137,9 +144,12 @@ function reloadJQGrid() {
                         {
                             name: 'DateCreated',
                             index: 'DateCreated',
-                            width: 80,
+                            width: (pageWidth * (20 / 100)),
                             sortable: true,
                             sorttype: "date",
+                            //formatoptions: {srcformat: "ISO8601Long", newformat: "d/m/Y"},
+                            //formatter: 'date',
+                            //formatoptions: { newformat: 'Y.m.d ' },
                             searchoptions: {
                                 sopt: ['eq', 'lt', 'le', 'gt', 'ge'],
                                 dataInit: function (elem) {
@@ -148,7 +158,7 @@ function reloadJQGrid() {
                                         dateFormat: 'yy-mm-dd'
                                     });
                                 }
-                            }
+                            },
                             /*searchoptions: {
                                 sopt: ['xxxx'],
                                 searchOnEnter: false,
@@ -159,7 +169,7 @@ function reloadJQGrid() {
                         {
                             name: 'DateSolved',
                             index: 'DateSolved',
-                            width: 80,
+                            width: (pageWidth * (20 / 100)),
                             sortable: true,
                             search: false,
 
@@ -167,7 +177,7 @@ function reloadJQGrid() {
                         {
                             name: 'CustomerName',
                             index: 'CustomerName',
-                            width: 80,
+                            width: (pageWidth * (30 / 100)),
                             sortable: true,
                             formatter: function (cellvalue, options, rowobject) {
                                 return rowobject.CustomerName + " " + rowobject.CustomerSurname;
@@ -177,9 +187,10 @@ function reloadJQGrid() {
                         {
                             name: "Reply",
                             index: "Reply",
+                            width:(pageWidth * (20 / 100)),
                             formatter: function (cellvalue, options, rowobject) {
                                 if (rowobject.Status == "Active")
-                                    return '<button id="openbtn" onclick="Reply()" >Reply</button>';
+                                    return '<button id="openbtn" onclick="Reply(' + rowobject.id + ')" >Reply</button>';
                                 else return "Call already replied!";
                             },
                             search: false,
@@ -192,8 +203,12 @@ function reloadJQGrid() {
                     pager: jQuery("#pager"),
                     rowList: [10, 20, 30, 40],
                     viewrecords: true,
-                    caption: "Active calls",
+                    caption: "RPS",
+                    
                     onSelectRow: function () {
+
+                        
+
                         document.getElementById("callInfo").style.display = 'inline';
 
                         GetCall(FillCallInfo);
@@ -215,12 +230,15 @@ function reloadJQGrid() {
 
                             jQuery("#jqgAgent").jqGrid('setRowData', ids[i], { Actions: reply });
                         }
+
+
+                        
                     },
                     loadComplete: function (data) {
 
                         document.getElementById("cssload-thecube").style.display = 'none';
 
-                        var newCapture = "",
+                        var newCapture = "RPS",
                             filters, rules, rule, op, i, iOp, s
                         postData = $('#jqgAgent').jqGrid("getGridParam", "postData"),
                         isFiltering = $('#jqgAgent').jqGrid("getGridParam", "search");
@@ -246,14 +264,15 @@ function reloadJQGrid() {
                         $(gridSelector).jqGrid("setCaption", newCapture);
                         $(this).triggerHandler("jqGridLoadComplete", data);
 
-                        $("#jqgAgent").jqGrid('sortGrid', 'Status', false, 'asc');
+                        //$("#jqgAgent").jqGrid('sortGrid', 'Status', false, 'asc');
                     },
-                }).navGrid("#jqgAgent", { edit: false, add: false, del: false });
+                }).navGrid("#jqgAgent", { edit: false, add: false, del: false, search: false });
                 $("#jqgAgent").jqGrid('filterToolbar', { searchOnEnter: false });
+                $("#jqgAgent").sortGrid('Status', false, 'asc');
             }
         })
     }
-    
+
 
 
 }(jQuery));

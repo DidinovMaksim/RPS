@@ -26,10 +26,6 @@ namespace RPS.Controllers
         //public string getGridData(int page, int rows, string sidx, string sord)
         {
 
-            /*return JsonConvert.SerializeObject(db.User.ToList(), Formatting.Indented, 
-                new JsonSerializerSettings
-                {ReferenceLoopHandling = ReferenceLoopHandling.Serialize});*/
-
 
             List<object> calls = AgentServices.GetCalls();
 
@@ -39,29 +35,10 @@ namespace RPS.Controllers
             List<Call> calls =  db.Call.Where(c => c.Agent == id && c.Status == 1).Skip((page - 1) * rows).Take(rows).ToList();
             */
 
-            /*return JsonConvert.SerializeObject(calls, Formatting.None,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });*/
 
             return JsonConvert.SerializeObject(calls);
         }
 
-        public string EditGridData(Call call)
-        {
-            db.Call.Attach(call);
-            db.Entry(call).State = EntityState.Modified;
-            db.SaveChanges();
-            return "Edited";
-        }
-
-        public string DeleteGridData(Call call)
-        {
-            db.Call.Remove(db.Call.Find(call.id));
-            db.SaveChanges();
-            return "Deleted";
-        }
         [HttpGet]
         public PartialViewResult _ReplyCall(String id)
         {
@@ -70,29 +47,29 @@ namespace RPS.Controllers
         [HttpPost]
         public JsonResult _ReplyCall(CallValidation call)
         {
-            call.AddAnswer();
-            //return Json(new CallValidation());
-            return Json(new
+            if (ValidateAnswer(call))
             {
-                State = "Call replied successfully!"
-            }, JsonRequestBehavior.AllowGet);
+                AgentServices.AddAnswer(new Call { id = call.id, Answer = call.Answer });
+                return Json(new
+                {
+                    State = "Call replied successfully!"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+                return Json(new
+                {
+                    State = "Call not replied! Try again!"
+                }, JsonRequestBehavior.AllowGet);
+        }
+        bool ValidateAnswer(CallValidation call)
+        {
+            if (call.Answer != "" && call.Answer != null && call.id != 0) return true;
+            else return false;
         }
         public JsonResult GetCall(int id)
         {
 
-            object RCall;
-            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
-            {
-                Call call = (from Call in db.Call where Call.id == id select Call).ToList()[0];
-                RCall = new
-                {
-                    CallText = call.CallText,
-                    DateCreated = call.DateCreated.ToLongDateString(),
-                    UserFN = call.User1.UserFN,
-                    UserLN = call.User1.UserLN
-
-                };
-            }
+            object RCall = AgentServices.GetCall(id);
             return Json(RCall, JsonRequestBehavior.AllowGet);
         }
     }

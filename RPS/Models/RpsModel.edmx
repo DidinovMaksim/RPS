@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище DB_9DF713_RPSModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище DB_9DF713_RPSModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Call">
           <Key>
             <PropertyRef Name="id" />
@@ -17,6 +17,7 @@
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateSolved" Type="datetime" />
           <Property Name="DateArchived" Type="datetime" />
+          <Property Name="Answer" Type="text" />
           <Property Name="Reason" Type="text" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
@@ -150,8 +151,7 @@
             <End Role="webpages_UsersInRoles" EntitySet="webpages_UsersInRoles" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_9DF713_RPSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -172,6 +172,7 @@
           <NavigationProperty Name="CallStatus" Relationship="Self.FK_Call_CallStatus" FromRole="Call" ToRole="CallStatus" />
           <NavigationProperty Name="User" Relationship="Self.FK_Call_User_Agent" FromRole="Call" ToRole="User" />
           <NavigationProperty Name="User1" Relationship="Self.FK_Call_User_Customer" FromRole="Call" ToRole="User" />
+          <Property Name="Answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CallArchivedReason">
           <Key>
@@ -284,6 +285,7 @@
           <EntitySetMapping Name="Call">
             <EntityTypeMapping TypeName="DB_9DF713_RPSModel.Call">
               <MappingFragment StoreEntitySet="Call">
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Customer" ColumnName="Customer" />
                 <ScalarProperty Name="Agent" ColumnName="Agent" />

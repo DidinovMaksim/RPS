@@ -10,7 +10,7 @@ namespace RPS.ValidationModels
     {
         public int id { get; set; }
         public int Customer { get; set; }
-        public int? Agent { get; set; }
+        public Nullable<int> Agent { get; set; }
         public string CallText { get; set; }
         public System.DateTime DateCreated { get; set; }
         public int Status { get; set; }
@@ -18,6 +18,7 @@ namespace RPS.ValidationModels
         public Nullable<System.DateTime> DateArchived { get; set; }
         public string Reason { get; set; }
         public bool IsDeleted { get; set; }
+        public string Answer { get; set; }
 
         public void AddAnswer()
         {
