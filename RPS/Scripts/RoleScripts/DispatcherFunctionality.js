@@ -28,8 +28,14 @@ function Attach(rowid) {
         success: function (result) {
             $('#popup').html(result);
             $('#popup').dialog({
-                width: 400,
-                height: 200
+                show: {
+                    effect: "blind",
+                    duration: 1000
+                },
+
+                hide: "fadeOut",
+                width: 450,
+                height: 250
             });
         }
     });
@@ -69,7 +75,14 @@ function CreateNewCall() {
         success: function (result) {
             $('#popup').html(result);
             $('#popup').dialog({
-                width: 400,
+                show: {
+                    effect: "blind",
+                    duration: 1000
+                },
+
+                hide: "fadeOut",
+
+                width: 450,
                 height: 400
             });
         }
@@ -105,6 +118,12 @@ function CallInfo(rowid)
 
             $('#popup').html(result);
             $('#popup').dialog({
+                show: {
+                    effect: "blind",
+                    duration: 1000
+                },
+
+                hide: "fadeOut",
                 width: 400,
                 height: 400
             });
@@ -170,7 +189,7 @@ function CallInfo(rowid)
                             index: "Attach",
                             width:50,
                             formatter: function (cellvalue, options, rowobject) {
-                                return '<button id="openbtn" onclick="Attach(' + rowobject.id + ')" >Attach</button>';
+                                return '<button id="openbtn" class="btn btn-default" onclick="Attach(' + rowobject.id + ')" >Attach</button>';
                             },
                             search: false,
 
@@ -211,21 +230,6 @@ function CallInfo(rowid)
 
 
                         CallInfo(rowid);
-                        //var callData = $("#jqgDispatcher").getGridParam('data')[iRow - 1];
-
-                        //var callData = $("#jqgDispatcher").getRowData(rowid);
-
-                        //document.getElementById("callInfoCustName").innerHTML = callData['User1.UserFN'];// + ' ' + callData['User1.UserLN'];
-                        //document.getElementById("callInfoCustEmail").innerHTML = callData['User1.Email'];
-                        //document.getElementById("callInfoCustPhone").innerHTML = callData['User1.MPhone'];
-                        //document.getElementById("callInfoCallText").innerHTML = callData['CallText'];
-
-                        ////document.getElementById("callInfoCustName").innerHTML = callData.User1.UserFN + ' ' + callData.User1.UserLN;
-                        ////document.getElementById("callInfoCustEmail").innerHTML = callData.User1.Email;
-                        ////document.getElementById("callInfoCustPhone").innerHTML = callData.User1.MPhone;
-                        ////document.getElementById("callInfoCallText").innerHTML = callData.CallText;
-
-                        //jQuery("#callInfo").dialog("open");
                     },
                     jsonReader: {
                         root: "rows",
@@ -234,19 +238,19 @@ function CallInfo(rowid)
                         repeatitems: false,
                         id: "0"
                     },
-                    gridComplete: function () {
-                        var ids = jQuery("#jqgDispatcher").jqGrid('getDataIDs');
-                        for (var i = 0; i < ids.length; i++) {
-                            var cl = ids[i];
-                            reply = '<input  type="button" id = "replyBtn" onclick="TestButtonClick()" />'
+                    //gridComplete: function () {
+                    //    var ids = jQuery("#jqgDispatcher").jqGrid('getDataIDs');
+                    //    for (var i = 0; i < ids.length; i++) {
+                    //        var cl = ids[i];
+                    //        reply = '<input  type="button" id = "replyBtn" onclick="TestButtonClick()" />'
 
-                            jQuery("#jqgDispatcher").jqGrid('setRowData', ids[i], { Actions: reply });
-                        }
-                    },
+                    //        jQuery("#jqgDispatcher").jqGrid('setRowData', ids[i], { Actions: reply });
+                    //    }
+                    //},
                     loadComplete: function (data) {
 
                         document.getElementById("cssload-thecube").style.display = 'none';
-
+                        document.getElementById("createCallBtn").style.display = 'block';
 
                         var newCapture = "",
                             filters, rules, rule, op, i, iOp, s
@@ -304,6 +308,7 @@ function CallInfo(rowid)
                     recreateForm: true,
                     msg: "Are you sure ?",
                     afterComplete: function (result) {
+                        reloadJQGrid();
                     }
                 }
                 );

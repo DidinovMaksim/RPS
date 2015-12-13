@@ -5,84 +5,12 @@ using System.Web;
 
 using RPS.Models;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace RPS.Services
 {
     public class DispatcherServices
     {
-        public static object GetUser(int id)
-        {
-            object Usr;
-            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
-            {
-                User tmp = (from usr in db.User where usr.id == id select usr).ToList()[0];
-                Usr = new
-                {
-                    UserFN = tmp.UserFN,
-                    UserLN = tmp.UserLN
-                };
-            }
-
-            return Usr;
-        }
-
-        //public static List<object> GetCalls()
-        //{
-
-        //    List<object> calls = new List<object>();
-        //    using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
-        //    {
-        //        int id = GetAgentId();
-        //        List<Call> Tcalls = (from call in db.Call where call.Agent == id && call.Status != 3 select call).ToList();
-        //        foreach (Call tmp in Tcalls)
-        //        {
-
-
-        //            object newCall = new
-        //            {
-        //                id = tmp.id,
-        //                CustomerName = tmp.User1.UserFN,
-        //                CustomerSurname = tmp.User1.UserFN,
-
-        //                DateCreated = tmp.DateCreated,
-        //                Status = tmp.CallStatus.Status,
-        //                DateSolved = tmp.DateSolved,
-
-        //            };
-        //            //newCall.User =  tmp.User;
-        //            calls.Add(newCall);
-
-        //        }
-        //    }
-        //    return calls;
-
-        //}
-
-
-        //public static List<Call> GetActiveCalls()
-        //{
-        //    List<Call> calls = new List<Call>();
-        //    using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
-        //    {
-
-        //        List<Call> Tcalls = (from call in db.Call where call.Status == 1 select call).ToList();
-        //        foreach (Call tmp in Tcalls)
-        //        {
-        //            tmp.CallStatus.Call.Clear();
-        //            tmp.User.Call.Clear();
-        //            tmp.User.Call1.Clear();
-        //            tmp.User.webpages_Roles.Clear();
-
-        //            tmp.User1.Call.Clear();
-        //            tmp.User1.Call1.Clear();
-        //            tmp.User1.webpages_Roles.Clear();
-
-        //            calls.Add(tmp);
-
-        //        }
-        //    }
-        //    return calls;
-        //}
 
         public static object GetCallInfo(int id)
         {
@@ -101,7 +29,8 @@ namespace RPS.Services
                                CallText = call.CallText
                            };
 
-                callInfo = (TcallInfo.ToArray())[0];
+                callInfo = TcallInfo.First();
+                
 
             }
 
@@ -115,8 +44,12 @@ namespace RPS.Services
             {
                 var list = from user in db.User
                            where (user.webpages_Roles.Count == 0)
-                           && (user.UserFN != null && user.UserFN.Contains(term))
-                           select new { value = user.id, label = user.UserFN };
+                           && ( (user.UserFN.ToString() + " " + user.UserLN.ToString()).Contains(term) )
+                           select new
+                           {
+                               value = user.id,
+                               label = user.UserFN.ToString() + " " + user.UserLN.ToString() 
+                           }; 
 
                 foreach (var call in list)
                     customers.Add(call);
@@ -134,7 +67,11 @@ namespace RPS.Services
 
                 var Tagents = from user in us
                              where user.webpages_Roles.ToList()[0].RoleId == 3
-                             select new SelectListItem() { Value = user.id.ToString(), Text = user.UserLN.ToString() + " " + user.UserFN.ToString() };
+                             select new SelectListItem()
+                             {
+                                 Value = user.id.ToString(),
+                                 Text = user.UserLN.ToString() + " " + user.UserFN.ToString()
+                             };
 
                 foreach (var call in Tagents)
                     agents.Add(call);
@@ -149,7 +86,7 @@ namespace RPS.Services
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
                 var agIdList = from call in db.Call where call.id == callId select new { agentId = call.Agent };
-                int? agId = agIdList.ToArray()[0].agentId;
+                int? agId = agIdList.First().agentId;
                 if (agId != null) id = Int32.Parse(agId.ToString());
             }
 
@@ -190,6 +127,44 @@ namespace RPS.Services
             {
                 var upd = from call in db.Call where call.id == id select call;
                 upd.ToList()[0].Agent = Agent;
+                db.SaveChanges();
+            }
+        }
+
+        public static bool AddCall(Call call)
+        {
+            bool result = true;
+            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
+            {
+                try
+                {
+                    db.Call.Add(call);
+                    db.SaveChanges();
+                }
+                catch(Exception)
+                {
+                    result = false;
+                }
+            }
+            return result;
+
+        }
+
+        public static void EditData(Call call)
+        {
+            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
+            {
+                db.Call.Attach(call);
+                db.Entry(call).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        public static void DeleteCall(Call call)
+        {
+            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
+            {
+                db.Call.Remove(db.Call.Find(call.id));
                 db.SaveChanges();
             }
         }

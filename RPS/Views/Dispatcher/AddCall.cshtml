@@ -34,29 +34,60 @@
 
 <script>
 
-    //var selected = 0;
+    var selected = false;
 
     $("#autocompleteCustomer").autocomplete({
         source: '/Dispatcher/GetCustomersJSON',
         select: function (event, ui) {
-            //alert('You selected: ' + ui.item.value + ', ' + ui.item.data);
+
             document.getElementById('Customer').value = ui.item.value;
             $("#autocompleteCustomer").val(ui.item.label);
             return false;
-            //selected = ui.item.value;
+
+        },
+        change: function (event, ui) {
+          //  console.log(ui.item);
+            selected = (ui.item == null) ? false : true;
+           // console.log('Changed ' + selected);
         }
     });
 
     function CheckIfSelected(data)
     {
-        if (document.getElementById('Customer').value == '0') {
-            alert('Please choose customer from the list!');
+     //   console.log('check before ' + selected);
+       
+        
+
+        if (!selected) {
+            $('#errorMessage').dialog({
+                modal: true,
+                buttons: {
+                    Ok: function () {
+                        $(this).dialog('close');
+                    }
+                }
+            });
+            //alert('Please choose customer from the list!');
             return false;
         }
+
+        //return false;
     }
+
+
+    
+
+
 </script>
 
+<div id="errorMessage" title="Error" style="display:none">
+    <p>Please, choose customer from the list!</p>
+</div>
+
 <div id="createCall" >
+
+
+
     @using (@Ajax.BeginForm("AddCall", "Dispatcher", new AjaxOptions()
     {
         OnBegin = "CheckIfSelected",
@@ -66,6 +97,8 @@
         InsertionMode = InsertionMode.Replace
     }))
     {
+
+
         <h1 class="text" id="adding-form-header">Add new call</h1>
 
         <table>
@@ -98,7 +131,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" id="add-button" value="Add new call" />
+                    <input type="submit" id="add-button" class ="btn btn-primary" value="Add new call" />
                 </td>
             </tr>
         </table>
