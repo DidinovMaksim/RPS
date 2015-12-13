@@ -1,4 +1,4 @@
-﻿function addUser() {
+﻿function AddUser() {
     jQuery("#addUserWindow").dialog("open");
     $.ajax({
         url: 'AddUser',
@@ -6,6 +6,7 @@
         contentType: 'application/json; charset=utf-8',
         type: 'GET',
         success: function (result) {
+            reloadJQGrid();
             $('#addUserWindow').html(result);
         }
     });
@@ -27,13 +28,8 @@ function FillEditPopup(user) {
     document.getElementById("lname").value = user.UserLN;
     document.getElementById("phone").value = user.MPhone;
     document.getElementById("email").value = user.Email;
-}
-
-function FillEditCustomerPopup(customer) {
-    document.getElementById("fname").value = user.UserFN;
-    document.getElementById("lname").value = user.UserLN;
-    document.getElementById("phone").value = user.MPhone;
-    document.getElementById("birthday").value = user.Birthday;
+    document.getElementById("login").value = user.Login;
+    document.getElementById("id").value = user.id;
 }
 
 function GetUser(callback) {
@@ -52,15 +48,12 @@ function GetUser(callback) {
     });
 }
 
-function EditUser() {
+function EditUser(userId) {
 
-    var rowId = $("#jqgAdmin").jqGrid('getGridParam', 'selrow');
-    var rowData = $("#jqgAdmin").getRowData(rowId);
-    console.log(rowId);
     $.ajax({
         url: 'EditUser',
         data: {
-            id: rowId
+            id: userId
         },
         contentType: 'application/json; charset=utf-8',
         type: 'GET',
@@ -76,9 +69,8 @@ function EditUser() {
 }
 
 function reloadJQGrid() {
-    alert('reload');
     $.ajax({
-        url: 'getGridData',
+        url: 'getGridDataUsers',
         datatype: "json",
         data: "{}",
         contentType: "application/json; charset=utf-8",
@@ -93,15 +85,14 @@ function reloadJQGrid() {
         .trigger("reloadGrid");
         }
     });
-    alert('reload2');
 }
 
 (function ($) {
     $(document).ready(function () {
         loadTable();
         loadTableCustomers()
-        $("#addUserWindow").dialog({ autoOpen: false, width: 500, height: 415, title: "Add user" });
-        $("#editUserWindow").dialog({ autoOpen: false, width: 500, height: 415, title: "Edit user" });
+        $("#addUserWindow").dialog({ autoOpen: false, width: 500, height: 500, title: "Add user" });
+        $("#editUserWindow").dialog({ autoOpen: false, width: 500, height: 460, title: "Edit user" });
         $("#datepicker").datepicker();
     });
     function loadTable() {
@@ -110,7 +101,7 @@ function reloadJQGrid() {
         var arOps = ["eq", "ne", "lt", "le", "gt", "ge", "bw", "bn", "in", "ni", "ew", "en", "cn", "nc"];
 
         $.ajax({
-            url: 'getGridData',
+            url: 'getGridDataUsers',
             datatype: "json",
             data: "{}",
             contentType: "application/json; charset=utf-8",
@@ -144,8 +135,8 @@ function reloadJQGrid() {
                             editable: true
                         },
                         {
-                            name: 'webpages_Roles.0.RoleName',
-                            index: 'webpages_Roles.0.RoleName',
+                            name: 'Role',
+                            index: 'Role',
                             width: 80,
                             search: false,
                             sortable: false,
@@ -164,18 +155,16 @@ function reloadJQGrid() {
                             index: 'Email',
                             width: 80,
                             sortable: true,
-                            sorttype: "text",
+                            sorttype: "date",
                             search: true,
-                            sortable: false,
                             editable: true
                         },
                         {
                             name: 'MPhone',
                             index: 'MPhone',
                             width: 80,
-                            sortable: true,
                             sorttype: "text",
-                            search: true,
+                            search: false,
                             sortable: false,
                             editable: true
                         },
@@ -189,18 +178,24 @@ function reloadJQGrid() {
                             editable: true
                         },
                         {
-                            name: 'Status',
-                            index: 'Status',
+                            name: 'IsActive',
+                            index: 'IsActives',
                             width: 80,
                             sortable: false,
                             search: false,
-                            editable: true
+                            editable: true,
+                            formatter: function (cellvalue, options, rowobject) {
+                                if (rowobject.IsActive == true) 
+                                    return 'Active';
+                                else
+                                    return 'Disabled';
+                            }
                         },
                         {
                             name: "EditUser",
                             index: "EditUser",
                             formatter: function (cellvalue, options, rowobject) {
-                                return '<button class="edit" id="openedit" onclick="EditUser()" ><i class="fa fa-pencil"></i></button>';
+                                return '<button class="edit" id="openedit" onclick="EditUser('+rowobject.id+')" ><i class="fa fa-pencil"></i></button>';
                             },
                             search: false,
                             align: 'center'
@@ -258,7 +253,18 @@ function reloadJQGrid() {
                     onSelectRow: function () {
 
                     }
-                }).navGrid();
+                }).navGrid("#pager", { del: true },
+                //delete
+                {
+                    zIndex: 100,
+                    url: 'Dispatcher/DeleteGridData',
+                    closeOnEscape: true,
+                    closeAfterEdit: true,
+                    recreateForm: true,
+                    msg: "Are you sure ?",
+                    afterComplete: function (result) {
+                    }
+                });
                 $("#jqgAdmin").jqGrid('filterToolbar', { searchOnEnter: false });
             }
         })

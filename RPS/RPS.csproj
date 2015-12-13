@@ -191,8 +191,10 @@
     <Compile Include="ValidationModels\UserValidation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\AdminLTE.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\custom-layout.css" />
     <Content Include="Content\jquery.jqGrid\ellipsis-xbl.xml" />
     <Content Include="Content\jquery.jqGrid\ui.jqgrid.css" />
     <Content Include="Content\Loader.css" />
@@ -275,6 +277,7 @@
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\RoleScripts\AdministratorFunctionality.js" />
+    <Content Include="Scripts\RoleScripts\AdministratorCustomerFunctionality.js" />
     <Content Include="Scripts\RoleScripts\AgentFunctionality.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -364,15 +367,25 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Dispatcher\Index.cshtml" />
-    <Content Include="Views\Administrator\Index.cshtml" />
     <Content Include="Views\Archivist\Index.cshtml" />
     <Content Include="Views\Agent\Index.cshtml" />
     <Content Include="Views\Agent\_ReplyCall.cshtml" />
     <Content Include="Views\Dispatcher\AttachAgent.cshtml" />
     <Content Include="Views\Dispatcher\AddCall.cshtml" />
     <Content Include="Views\Dispatcher\CallInfo.cshtml" />
+<<<<<<< Updated upstream
     <Content Include="Views\Archivist\ArchiveCall.cshtml" />
     <Content Include="Views\Archivist\ActivateCall.cshtml" />
+=======
+    <Content Include="Views\Archivist\ActiveCall.cshtml" />
+    <Content Include="Views\Archivist\ArchivedCall.cshtml" />
+    <Content Include="Views\Administrator\AddUser.cshtml" />
+    <Content Include="Views\Administrator\Administrator_Customers.cshtml" />
+    <Content Include="Views\Administrator\EditUser.cshtml" />
+    <Content Include="Views\Administrator\Administrator_Users.cshtml" />
+    <Content Include="Views\Administrator\EditCustomer.cshtml" />
+    <Content Include="Views\Administrator\AddCustomer.cshtml" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

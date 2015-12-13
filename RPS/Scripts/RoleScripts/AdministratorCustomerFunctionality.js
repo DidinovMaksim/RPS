@@ -1,30 +1,55 @@
-﻿function EditStatus(data) {
-    reloadJQGrid();
-    $('#editUserWindow').html(data.State);
-    $('#editUserWindow').dialog({
+﻿function DeleteCustomer(rowId)
+{
+    $.ajax({
+        url: 'DeleteCustomer',
+        data: {
+            id: rowId
+        },
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET',
+        success: function (result) {
+            ReloadJQGrid();
+            $('#deleteCustomerWindow').dialog("open");
+            $('#deleteCustomerWindow').html(result.State);
+        }
+    });
+}
+
+function AddCustomer() {
+    jQuery("#addCustomerWindow").dialog("open");
+    $.ajax({
+        url: 'AddCustomer',
+        data: {},
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET',
+        success: function (result) {
+            $('#addCustomerWindow').html(result);
+        }
+    });
+}
+
+function EditStatus(data) {
+    console.log(data);
+    ReloadJQGrid();
+    $('#editCustomerWindow').html(data.State);
+    $('#editCustomerWindow').dialog({
         height: 100,
     });
     setTimeout(function () {
-        $('#editUserWindow').dialog('close')
+        $('#editCustomerWindow').dialog('close')
     }, 2000);
 }
 
-function FillEditPopup(user) {
-    document.getElementById("fname").value = user.UserFN;
-    document.getElementById("lname").value = user.UserLN;
-    document.getElementById("phone").value = user.MPhone;
-    document.getElementById("email").value = user.Email;
-}
-
 function FillEditCustomerPopup(customer) {
-    document.getElementById("fname").value = user.UserFN;
-    document.getElementById("lname").value = user.UserLN;
-    document.getElementById("phone").value = user.MPhone;
-    document.getElementById("birthday").value = user.Birthday;
+    document.getElementById("login").value = customer.UserFN;
+    document.getElementById("fname").value = customer.UserFN;
+    document.getElementById("lname").value = customer.UserLN;
+    document.getElementById("phone").value = customer.MPhone;
+    document.getElementById("datepicker").value = customer.Birthday;
 }
 
 function GetCustomer(callback) {
-    var rowId = $("#jqgAdmin").jqGrid('getGridParam', 'selrow');
+    var rowId = $("#jqgAdminCustomers").jqGrid('getGridParam', 'selrow');
     $.ajax({
         url: 'GetUser',
         datatype: "json",
@@ -39,39 +64,33 @@ function GetCustomer(callback) {
     });
 }
 
-function EditUser() {
+function EditUser(userId) {
 
-    var rowId = $("#jqgAdmin").jqGrid('getGridParam', 'selrow');
-    var rowData = $("#jqgAdmin").getRowData(rowId);
-    console.log(rowId);
     $.ajax({
-        url: 'EditUser',
+        url: 'EditCustomer',
         data: {
-            id: rowId
+            id: userId
         },
         contentType: 'application/json; charset=utf-8',
         type: 'GET',
         success: function (result) {
-            console.log("зашел в вызов попапап");
-            console.log(result);
-
-            $('#editUserWindow').html(result);
-            $('#editUserWindow').dialog('open');
-            GetUser(FillEditPopup);
+            $('#editCustomerWindow').html(result);
+            $('#editCustomerWindow').dialog('open');
+            GetCustomer(FillEditCustomerPopup);
         }
     });
 }
 
-function reloadJQGrid() {
-    alert('reload');
+function ReloadJQGrid() {
     $.ajax({
         url: 'getGridDataCustomers',
         datatype: "json",
         data: "{}",
         contentType: "application/json; charset=utf-8",
         mathod: 'GET',
+        async: true,
         success: function (result) {
-            jQuery("#jqgAdmin")
+            jQuery("#jqgAdminCustomers")
             .jqGrid('setGridParam',
                 {
                     datatype: 'local',
@@ -80,18 +99,18 @@ function reloadJQGrid() {
         .trigger("reloadGrid");
         }
     });
-    alert('reload2');
 }
 
 (function ($) {
     $(document).ready(function () {
-        loadTableCustomers();
-        $("#addUserWindow").dialog({ autoOpen: false, width: 500, height: 415, title: "Add user" });
-        $("#editUserWindow").dialog({ autoOpen: false, width: 500, height: 415, title: "Edit user" });
+        LoadTableCustomers();
+        $("#deleteCustomerWindow").dialog({ autoOpen: false, width: 300, height: 250, title: "Delete customer" });
+        $("#addCustomerWindow").dialog({ autoOpen: false, width: 500, height: 415, title: "Add customer" });
+        $("#editCustomerWindow").dialog({ autoOpen: false, width: 500, height: 415, title: "Edit customer" });
         $("#datepicker").datepicker();
     });
-    
-    function loadTableCustomers() {
+
+    function LoadTableCustomers() {
 
         var gridSelector = '#jqgAdminCustomers';
         var arOps = ["eq", "ne", "lt", "le", "gt", "ge", "bw", "bn", "in", "ni", "ew", "en", "cn", "nc"];
@@ -147,7 +166,7 @@ function reloadJQGrid() {
                             width: 80,
                             hidden: true,
                             sortable: false,
-                            sorttype: "date",
+                            sorttype: "text",
                             search: true,
                             editable: true
                         },
@@ -155,14 +174,15 @@ function reloadJQGrid() {
                             name: "EditUser",
                             index: "EditUser",
                             formatter: function (cellvalue, options, rowobject) {
-                                return '<button class="edit" id="openedit" onclick="EditUser()" ><i class="fa fa-pencil"></i></button>';
+                                
+                                return '<button class="edit" id="openedit" onclick="DeleteCustomer(' + rowobject.id + ')" ><i class="fa fa-trash"></i></button>';
                             },
                             search: false,
                             align: 'center'
                         },
                     ],
                     ondblClickRow: function (rowid, iRow, iCol, e) {
-                        GetCustomer(FillEditCustomerPopup);
+                        EditUser(rowid);
                     },
                     data: JSON.parse(result),
                     rowNum: 15,
@@ -213,7 +233,18 @@ function reloadJQGrid() {
                     onSelectRow: function () {
 
                     }
-                }).navGrid();
+                }).navGrid("#pager", { del: true },
+                //delete
+                {
+                    zIndex: 100,
+                    url: 'Dispatcher/DeleteGridData',
+                    closeOnEscape: true,
+                    closeAfterEdit: true,
+                    recreateForm: true,
+                    msg: "Are you sure ?",
+                    afterComplete: function (result) {
+                    }
+                });
                 $("#jqgAdminCustomers").jqGrid('filterToolbar', { searchOnEnter: false });
             }
         })

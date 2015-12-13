@@ -7,13 +7,15 @@
     ViewBag.Title = "Administrator_Customers";
 }
 <script src="~/Scripts/RoleScripts/AdministratorCustomerFunctionality.js"></script>
-@*<link href="~/Content/layout-jqgrid.css" rel="stylesheet" />*@
-
 
 <h1>Administrator customers</h1>
 <table id="jqgAdminCustomers" title="Add new user"></table>
 <div id="pager"></div>
-<button class="btn btn-primary" onclick="addUser()">Add user</button>
-<div class="editUserWindow"></div>
+
+<button class="btn btn-primary" onclick="AddCustomer()">Add user</button>
+
+<div id="deleteCustomerWindow"></div>
+<div id="addCustomerWindow"></div>
+<div id="editCustomerWindow"></div>
 
 
