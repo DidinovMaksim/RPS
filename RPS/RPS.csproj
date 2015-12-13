@@ -371,8 +371,8 @@
     <Content Include="Views\Dispatcher\AttachAgent.cshtml" />
     <Content Include="Views\Dispatcher\AddCall.cshtml" />
     <Content Include="Views\Dispatcher\CallInfo.cshtml" />
-    <Content Include="Views\Archivist\ActiveCall.cshtml" />
-    <Content Include="Views\Archivist\ArchivedCall.cshtml" />
+    <Content Include="Views\Archivist\ArchiveCall.cshtml" />
+    <Content Include="Views\Archivist\ActivateCall.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

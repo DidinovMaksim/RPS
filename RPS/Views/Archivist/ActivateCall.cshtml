@@ -1,0 +1,113 @@
+﻿@model RPS.ValidationModels.CallValidation
+
+<style>
+    .autocomplete-suggestions {
+        border: 1px solid #999;
+        background: #FFF;
+        overflow: auto;
+    }
+
+    .autocomplete-suggestion {
+        padding: 2px 5px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .autocomplete-selected {
+        background: #F0F0F0;
+    }
+
+    .autocomplete-suggestions strong {
+        font-weight: normal;
+        color: #3399FF;
+    }
+
+    .autocomplete-group {
+        padding: 2px 5px;
+    }
+
+        .autocomplete-group strong {
+            display: block;
+            border-bottom: 1px solid #000;
+        }
+</style>
+<script>
+$("#ReasonAct").autocomplete({
+    source: '/Archivist/GetReasonsJSON',
+})
+</script>
+<div id="activateCall">
+    @using (@Ajax.BeginForm("ActivateCall", "Archivist", new AjaxOptions()
+    {
+        //OnBegin = "reloadJQGrid()",
+        // OnFailure = "reloadJQGrid()",
+        OnSuccess = "CallActivated",
+        UpdateTargetId = "activateCall",
+        InsertionMode = InsertionMode.Replace
+    }))
+    {
+        <h1 class="text" id="activate-form-header">Archive call</h1>
+        //<p id="product-validation-string">@Model.ModelError</p>
+        <table>
+            <tr>
+                <td>
+                    <p class="text">Customer name: </p>
+                </td>
+                <td>
+                    <p id="CustNamePop"></p>
+                    @Html.HiddenFor(m => m.id, new { id = "id" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="text">Call text:</p>
+                </td>
+                <td>
+                    <p id="CallText"></p>
+
+                </td>
+            </tr>
+            <tr id="AnswerTr">
+                <td>
+                    <p class="text">Answer: </p>
+                </td>
+                <td>
+                    <p id="Answer"></p>
+
+
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <p class="text">Reason</p>
+                </td>
+                <td height="25">
+                    @Html.HiddenFor(m => m.id, new { id = "id" })
+                    @Html.TextBoxFor(m => m.Reason, new { id = "ReasonAct" })
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="text">Reason</p>
+                </td>
+                <td height="25">
+                    @Html.DropDownList("Status", (IEnumerable<SelectListItem>)ViewData["StatusList"])
+
+                </td>
+            </tr>
+
+            
+
+            <tr>
+                <td>
+                    <input type="submit" id="activate-button" value="Submit" />
+                </td>
+            </tr>
+        </table>
+
+    }
+</div>
+
+

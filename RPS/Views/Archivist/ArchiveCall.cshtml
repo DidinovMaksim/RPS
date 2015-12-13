@@ -32,37 +32,65 @@
         }
 </style>
 <script>
-$("#Reason").autocomplete({
+$("#ReasonArch").autocomplete({
     source: '/Archivist/GetReasonsJSON',
 })
 </script>
-<div id="archivedCall">
-    @using (@Ajax.BeginForm("ArchivedCall", "Archivist", new AjaxOptions()
+<div id="archiveCall">
+    @using (@Ajax.BeginForm("ArchiveCall", "Archivist", new AjaxOptions()
     {
         //OnBegin = "reloadJQGrid()",
         // OnFailure = "reloadJQGrid()",
-        OnSuccess = "reloadJQGridArchived()",
-        UpdateTargetId = "archivedCall",
+        OnSuccess = "CallArchived",
+        UpdateTargetId = "archiveCall",
         InsertionMode = InsertionMode.Replace
     }))
     {
-        <h1 class="text" id="adding-form-header">Archived call to arhivist</h1>
+        <h1 class="text" id="archive-form-header">Archive call</h1>
         //<p id="product-validation-string">@Model.ModelError</p>
         <table>
+            <tr>
+                <td>
+                    <p class="text">Customer name: </p>
+                </td>
+                <td>
+                    <p id="CustNamePop"></p>
+                    @Html.HiddenFor(m => m.id, new { id = "id" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="text">Call text:</p>
+                </td>
+                <td>
+                    <p id="CallText"></p>
+
+                </td>
+            </tr>
+            <tr id="AnswerTr">
+                <td>
+                    <p class="text">Answer: </p>
+                </td>
+                <td>
+                    <p id="Answer"></p>
+
+
+                </td>
+            </tr>
             <tr>
                 <td>
                     <p class="text">Reason</p>
                 </td>
                 <td height="25">
                     @Html.HiddenFor(m => m.id, new { id = "id" })
-                    @Html.TextBoxFor(m => m.Reason, new { id = "Reason" })
+                    @Html.TextBoxFor(m => m.Reason, new { id = "ReasonArch" })
                 </td>
             </tr>
 
 
             <tr>
                 <td>
-                    <input type="submit" id="add-button" value="Submit" />
+                    <input type="submit" id="archive-button" value="Submit" />
                 </td>
             </tr>
         </table>

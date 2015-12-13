@@ -9,6 +9,8 @@ using RPS.ValidationModels;
 using Newtonsoft.Json;
 using System.Data.Entity;
 
+using RPS.Services;
+
 namespace RPS.Controllers
 {
 
@@ -24,84 +26,91 @@ namespace RPS.Controllers
 
         public string getGridDataActive()
         {
-            List<Call> calls = (from call in db.Call where call.Status == 1 select call).ToList();
+            List<object> calls = ArchivistServices.GetCallsNotArchived();
 
-            return JsonConvert.SerializeObject(calls, Formatting.None,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
+            return JsonConvert.SerializeObject(calls);
         }
 
         public string getGridDataArchived()
         {
-            List<Call> calls = (from call in db.Call where call.Status == 3 select call).ToList();
+            List<object> calls = ArchivistServices.GetCallsArchived();
 
-            return JsonConvert.SerializeObject(calls, Formatting.None,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
+            return JsonConvert.SerializeObject(calls);
         }
 
         public string GetReasonsJSON(string term)
-        {
-            var list = from user in db.CallArchivedReason
-                       where (user.Reason != null)
-                       && (user.Reason.Contains(term))
-                       select new { value = user.Reason, label = user.Reason };
-
-            return JsonConvert.SerializeObject(list, Formatting.Indented,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
+        {         
+            return JsonConvert.SerializeObject(ArchivistServices.GetReasons(term));
         }
-
-
-
         [HttpGet]
-        public PartialViewResult ActiveCall(int id)
-        {
-            ViewData["AgentsList"] = Services.ArchivistServices.GetStatus();
-            return PartialView(new CallValidation());
-            //    return PartialView(new CallValidation { Agent = Services.ArchivistServices.GetAgentIdByCall(id) });
-        }
-
-        //[HttpPost]
-        //public string ActiveCall(int id, int? Agent)
-        //{
-        //    Services.ArchivistServices.AttachAgent(id, Agent);
-        //    return "<p>Succes</p>";
-        //}
-
-        public PartialViewResult ArchivedCall(String id)
+        public PartialViewResult ArchiveCall(String id)
         {
             return PartialView(new CallValidation());
         }
-        public string AttachAgent(int? id, int? Agent, int? country)
-        {
-            if (id == null) return "<p>Error</p>";
 
-            var upd = from call in db.Call where call.id == id select call;
-
-            upd.ToList()[0].Agent = Agent;
-            db.SaveChanges();
-
-            return "<p>Succes</p>";
-        }
 
         [HttpPost]
-        public string ArchivedCall(int? id, string Reason)
+        public JsonResult ArchiveCall(CallValidation call)
         {
-            if (id == null) return "<p>Error</p>";
+            if (ValidateArchive(call))
+            {
+                ArchivistServices.ArchiveCall(new Call() { id = call.id, Reason = call.Reason });
+                return Json(new
+                {
+                    State = "Call archived successfully!"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+                return Json(new
+                {
+                    State = "Call not archived! Try again!"
+                }, JsonRequestBehavior.AllowGet);
 
-            var upd = from call in db.Call where call.id == id select call;
 
-            upd.ToList()[0].Reason = Reason;
-            db.SaveChanges();
-
-            return "<p>Succes</p>";
         }
+        [HttpGet]
+        public PartialViewResult ActivateCall(String id)
+        {
+            ViewData["StatusList"] = ArchivistServices.GetStatusList();
+            return PartialView(new CallValidation());
+        }
+
+
+        [HttpPost]
+        public JsonResult ActivateCall(CallValidation call, int Status)
+        {
+            if (ValidateArchive(call) && (Status == 1 || Status == 2))
+            {
+                ArchivistServices.ActivateCall(new Call() { id = call.id, Reason = call.Reason }, Status);
+                return Json(new
+                {
+                    State = "Call activated successfully!"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+                return Json(new
+                {
+                    State = "Call not activated! Try again!"
+                }, JsonRequestBehavior.AllowGet);
+
+
+        }
+        bool ValidateArchive(CallValidation call)
+        {
+            if (call.id != 0 && call.Reason != null && call.Reason != "") return true;
+            else return false;
+        }
+
+
+        public JsonResult GetCall(int id)
+        {
+
+            object RCall = ArchivistServices.GetCall(id);
+            return Json(RCall, JsonRequestBehavior.AllowGet);
+        }
+        
+
+
+
     }
 }

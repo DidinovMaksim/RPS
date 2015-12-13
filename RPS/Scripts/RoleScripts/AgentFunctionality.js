@@ -33,17 +33,15 @@ function FillCallInfo(call) {
     else
         document.getElementById("CallAnswer").style.display = 'none';
 
-    document.getElementById("CustName").innerHTML = call.UserLN + " "+ call.UserFN;
+    document.getElementById("CustName").innerHTML = call.CustomerNameN;
 
     document.getElementById("callText").innerHTML = call.CallText;
     document.getElementById("callDateCreated").innerHTML = call.DateCreated;
-
-
-    
+  
 
 }
 function FillPopup(call) {
-    document.getElementById("CustNamePop").innerHTML = call.UserFN + " " + call.UserLN;
+    document.getElementById("CustNamePop").innerHTML = call.CustomerName;
     document.getElementById("CallText").innerHTML = call.CallText;
 
 }
@@ -140,6 +138,13 @@ function reloadJQGrid() {
                             sortable: true,
 
                             search: false,
+                            formatter: function (cellvalue, options, rowobject) {
+                                if (rowobject.Status == "Active")
+                                    return '<img src = "http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/simple-red-square-icons-alphanumeric/128239-simple-red-square-icon-alphanumeric-question-mark.png" width = "20" height = "20">';
+                                    else return '<img src = "https://livelovely.com/static/images/full-listing/icon-modal-success@2x.png" width = "18" height = "18">'; 
+                                
+                            },
+                            
                         },
                         {
                             name: 'DateCreated',
@@ -179,9 +184,9 @@ function reloadJQGrid() {
                             index: 'CustomerName',
                             width: (pageWidth * (30 / 100)),
                             sortable: true,
-                            formatter: function (cellvalue, options, rowobject) {
+                            /*formatter: function (cellvalue, options, rowobject) {
                                 return rowobject.CustomerName + " " + rowobject.CustomerSurname;
-                            },
+                            },*/
                             search: false,
                         },
                         {

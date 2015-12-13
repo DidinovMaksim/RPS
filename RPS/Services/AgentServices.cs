@@ -21,8 +21,7 @@ namespace RPS.Services
                 User tmp = (from usr in db.User where usr.id == id select usr).First();
                 Usr = new 
                 {
-                    UserFN = tmp.UserFN,
-                    UserLN = tmp.UserLN
+                    CustomerName = tmp.UserLN.ToString() + " " + tmp.UserFN.ToString(),
                 };
             }
 
@@ -42,55 +41,17 @@ namespace RPS.Services
         }
         static public object GetCall(int id)
         {
-
             object RCall = new object();
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
-
                 var call = (from Call in db.Call where Call.id == id select Call).First();
-                /*new
-                {
-                    CallText = Call.CallText,
-                    DateCreated = Call.DateCreated,
-                    UserFN = Call.User1.UserFN,
-                    UserLN = Call.User1.UserLN
-
-                });*/
-
                 RCall = new
                 {
                     CallText = call.CallText,
                     DateCreated = call.DateCreated.ToLongDateString(),
-                    UserFN = call.User1.UserFN,
-                    UserLN = call.User1.UserLN,
+                    CustomerName = call.User1.UserLN.ToString() + " " + call.User1.UserFN.ToString(),
                     Answer = call.Answer
                 };
-
-                /*foreach (var tmp in call)
-                {
-
-                    RCall = new 
-                    {
-                        CallText = tmp.CallText,
-                        DateCreated = tmp.DateCreated.ToLongDateString(),
-                        UserFN = tmp.User1.UserFN,
-                        UserLN = tmp.User1.UserLN
-                    };
-                    
-                }*/
-
-                
-
-                //Call call = (from Call in db.Call where Call.id == id select Call).ToList()[0];
-                /*RCall = new
-                {
-                    CallText = call.CallText,
-                    DateCreated = call.DateCreated.ToLongDateString(),
-                    UserFN = call.User1.UserFN,
-                    UserLN = call.User1.UserLN
-
-                };*/
-                
             }
             return RCall;
         }
@@ -108,8 +69,8 @@ namespace RPS.Services
                          select new
                          {
                              id = call.id,
-                             CustomerName = call.User1.UserFN,
-                             CustomerSurname = call.User1.UserFN,
+                             CustomerName = call.User1.UserLN.ToString() + " " + call.User1.UserFN.ToString(),
+                             
 
                              DateCreated = call.DateCreated,
                              Status = call.CallStatus.Status,
