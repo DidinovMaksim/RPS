@@ -12,16 +12,16 @@
 <div id="add-user-window-form">
     @using (@Ajax.BeginForm("AddUser", "Administrator", new AjaxOptions()
     {
-        //OnBegin = "checkLogin",
-        OnSuccess = "reloadJQGrid()",
+        OnSuccess = "EditStatus()",
         UpdateTargetId = "add-user-window-form",
+        OnBegin = ""
     }))
     {
         <form role="form">
             <div class="box-body">
                 <div class="form-group">
                     <label for="login">Login:</label>
-                    @Html.TextBoxFor(m => m.Login, new { id = "login", @class = "form-control", @placeholder = "Enter login:" })
+                    @Html.TextBoxFor(m => m.Login, new { id = "login", @class = "form-control", @placeholder = "Enter login:", required = "required" })
                 </div>
                 <div class="form-group">
                     <label for="phone">Mobile phone:</label>
@@ -29,19 +29,27 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    @Html.TextBoxFor(m => m.Email, new { id = "email", @class = "form-control", @placeholder = "Email:" })
+                    @Html.TextBoxFor(m => m.Email, new { id = "email", @class = "form-control", @placeholder = "Email:", required = "required" })
                 </div>
                 <div class="form-group">
                     <label for="fname">User first name:</label>
-                    @Html.TextBoxFor(m => m.UserFN, new { id = "fname", @class = "form-control", @placeholder = "First name:" })
+                    @Html.TextBoxFor(m => m.UserFN, new { id = "fname", @class = "form-control", @placeholder = "First name:", required = "required" })
                 </div>
                 <div class="form-group">
                     <label for="lname">User last name:</label>
-                    @Html.TextBoxFor(m => m.UserLN, new { id = "lname", @class = "form-control", @placeholder = "Last name:" })
+                    @Html.TextBoxFor(m => m.UserLN, new { id = "lname", @class = "form-control", @placeholder = "Last name:", required = "required" })
                 </div>
                 <div class="form-group">
                     <label for="lname"> User role:</label>
-                    @Html.DropDownList("userRole", (IEnumerable<SelectListItem>)ViewData["RoleList"], new { id = "Role" })
+                    @Html.DropDownList("userRole", (IEnumerable<SelectListItem>)ViewData["RoleList"], new { id = "Role", required = "required" })
+                </div>
+                <div class="form-group">
+                    <label for="email">Password:</label>
+                    @Html.TextBox("userPassword", "", new { id = "password", @class = "form-control", @placeholder = "Password:", required = "required" })
+                </div>
+                <div class="form-group">
+                    <label for="email">Password second time:</label>
+                    @Html.TextBox("password_second", "", new { id = "password_second", @class = "form-control", @placeholder = "Password second time:", required = "required" })
                 </div>
                 <div class="form-group">
                     <label for="datepicker">Birthday:</label>

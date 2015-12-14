@@ -3,26 +3,33 @@
 @using RPS.Models
 @model UserValidation
 
-<script src="~/Scripts/RoleScripts/AdministratorFunctionality.js"></script>
+<script src="~/Scripts/RoleScripts/AdministratorCustomerFunctionality.js"></script>
 
 @{
-    ViewBag.Title = "EditUser";
+    ViewBag.Title = "AddCustomer";
 }
 
-<h2>EditUser</h2>
-
-<div id="edit-user-window-form">
-    @using (@Ajax.BeginForm("EditUser", "Administrator", new AjaxOptions()
+<div id="add-customer-window-form">
+    @using (@Ajax.BeginForm("AddCutomer", "Administrator", new AjaxOptions()
     {
         OnSuccess = "EditStatus()",
-        UpdateTargetId = "edit-user-window-form",
+        UpdateTargetId = "add-customer-window-form",
+        OnBegin = ""
     }))
     {
         <form role="form">
             <div class="box-body">
-                 <div class="form-group">
-                    <label for="fname">Login:</label>
-                    @Html.TextBoxFor(m => m.Login, new { id = "login", @readonly = "readonly", @class = "form-control", @placeholder = "login:", required = "required" })
+                <div class="form-group">
+                    <label for="login">Login:</label>
+                    @Html.TextBoxFor(m => m.Login, new { id = "login", @class = "form-control", @placeholder = "Enter login:", required = "required" })
+                </div>
+                <div class="form-group">
+                    <label for="phone">Mobile phone:</label>
+                    @Html.TextBoxFor(m => m.MPhone, new { id = "phone", @class = "form-control", @placeholder = "Phone number:" })
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    @Html.TextBoxFor(m => m.Email, new { id = "email", @class = "form-control", @placeholder = "Email:", required = "required" })
                 </div>
                 <div class="form-group">
                     <label for="fname">User first name:</label>
@@ -33,19 +40,6 @@
                     @Html.TextBoxFor(m => m.UserLN, new { id = "lname", @class = "form-control", @placeholder = "Last name:", required = "required" })
                 </div>
                 <div class="form-group">
-                    <label for="phone">Mobile phone:</label>
-                    @Html.TextBoxFor(m => m.MPhone, new { id = "phone", @class = "form-control", @placeholder = "Phone number:" })
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    @Html.TextBoxFor(m => m.Email, new { id = "email", @class = "form-control", @placeholder = "Email:", required = "required" })
-                </div>
-                    @Html.HiddenFor(m => m.id, new { id = "id" })
-                <div class="form-group">
-                    <label for="lname">User role:</label>
-                    @Html.DropDownList("userRole", (IEnumerable<SelectListItem>)ViewData["RoleList"], new { id = "Role", required = "required" })
-                </div>
-                <div class="form-group">
                     <label for="email">Password:</label>
                     @Html.TextBox("userPassword", "", new { id = "password", @class = "form-control", @placeholder = "Password:", required = "required" })
                 </div>
@@ -53,13 +47,17 @@
                     <label for="email">Password second time:</label>
                     @Html.TextBox("password_second", "", new { id = "password_second", @class = "form-control", @placeholder = "Password second time:", required = "required" })
                 </div>
+                <div class="form-group">
+                    <label for="datepicker">Birthday:</label>
+                    @Html.TextBoxFor(m => m.Birthday, new { id = "datepicker", @class = "form-control" })
+                </div>
                 <div class="checkbox">
                     <label for="IsActive">IsActive:</label>
                     @Html.CheckBoxFor(m => m.IsActive, new { id = "IsActive" })
                 </div>
             </div>
             <div class="box-footer">
-                <button type="submit" id="edit-button" class="btn btn-primary">Edd user</button>
+                <button type="submit" id="edit-button" class="btn btn-primary">Add user</button>
             </div>
         </form>
     }
