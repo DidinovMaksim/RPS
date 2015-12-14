@@ -2,6 +2,15 @@
 div#gbox_jqgAdmin {
     width: 100%!important;
 }
+div#gbox_jqgAgent {
+    width: 100%!important;
+}
+div#gbox_jqgArchivistActive {
+    width: 100%!important;
+}
+div#gbox_jqgArchivistArchived {
+    width: 100%!important;
+}
 .ui-widget-header {
     background: white;
 }

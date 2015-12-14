@@ -45,7 +45,7 @@ namespace RPS.Services
                                  DateCreated = call.DateCreated,
                                  Status = call.CallStatus.Status,
                                  DateSolved = call.DateSolved,
-                                 CallText = call.CallText.Substring(0, 50),
+                                 CallText = (call.CallText.Length > 30 ? call.CallText.Substring(0, 30) : call.CallText),
                              };
                 foreach (var tmp in TCalls)
                 {

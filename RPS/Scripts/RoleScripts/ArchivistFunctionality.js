@@ -1,5 +1,7 @@
-﻿function CallArchived(data) {
+﻿
 
+function CallArchived(data) {
+    
     reloadJQGridActive();
     reloadJQGridArchived();
 
@@ -171,329 +173,333 @@ function Archive(idCall) {
         }
     });
 }
+var gridActiveLoaded = false;
+var gridArchivedLoaded = false;
+function loadTableActive() {
+
+    var gridSelector = '#jqgArchivistActive';
+    var arOps = ["eq", "ne", "lt", "le", "gt", "ge", "bw", "bn", "in", "ni", "ew", "en", "cn", "nc"];
+    var pageWidth = $("#jqgArchivistActive").parent().width() - 100;
+
+    $.ajax({
+        url: 'Archivist/getGridDataActive',
+        datatype: "json",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        method: "GET",
+        success: function (result) {
+
+            $("#jqgArchivistActive").jqGrid({
+                datatype: "local",
+                colNames: ['id', 'Status', 'Data created', 'Date closed', 'Customer', 'Question', 'Agent', 'Archivate'],
+                colModel: [
+                    {
+                        name: 'id',
+                        index: 'id',
+                        key: true,
+                        hidden: true
+                    },
+                    {
+                        name: 'Status',
+                        index: 'Status',
+                        width: (pageWidth * (5 / 100)),
+                        sortable: true,
+
+                        search: false,
+                    },
+                    {
+                        name: 'DateCreated',
+                        index: 'DateCreated',
+                        width: (pageWidth * (15 / 100)),
+                        sortable: true,
+                        sorttype: "date",
+                    },
+                    {
+                        name: 'DateSolved',
+                        index: 'DateSolved',
+                        width: (pageWidth * (15 / 100)),
+                        sortable: true,
+                        sorttype: "date",
+                    },
+                    {
+                        name: 'CustomerName',
+                        index: 'CustomerName',
+                        width: (pageWidth * (17 / 100)),
+                        sortable: true,
+                        /*formatter: function (cellvalue, options, rowobject) {
+                            return rowobject.CustomerName + " " + rowobject.CustomerSurname;
+                        },*/
+
+                        search: false,
+                    },
+                    {
+                        name: 'CallText',
+                        index: 'CallText',
+                        width: (pageWidth * (24 / 100)),
+                        sortable: true,
+                        search: false,
+
+                    },
+                    {
+                        name: 'AgentName',
+                        index: 'AgentName',
+                        width: (pageWidth * (17 / 100)),
+                        sortable: true,
+                        /*formatter: function (cellvalue, options, rowobject) {
+                            return rowobject.AgentName + " " + rowobject.AgentSurname;
+                        },*/
+                        search: false,
+                    },
+                    {
+                        name: 'Archive',
+                        index: 'Archive',
+                        width: (pageWidth * (7 / 100)),
+                        formatter: function (cellvalue, options, rowobject) {
+                            return '<button id="openbtn1" onclick="Archive(' + rowobject.id + ')" >Archive</button>';
+                        },
+                        search: false,
+                    },
+
+
+
+
+                ],
+                data: JSON.parse(result),
+                rowNum: 10,
+                autowidth: true,
+                pager: jQuery("#pagerActive"),
+                rowList: [10, 20, 30, 40],
+                height: 350,
+                viewrecords: true,
+
+                caption: "Active calls",
+                jsonReader: {
+                    root: "rows",
+                    page: "pages",
+                    total: "total",
+                    repeatitems: false,
+                    id: "0"
+                },
+                gridComplete: function () {
+                    var ids = jQuery("#jqgArchivistActive").jqGrid('getDataIDs');
+                    for (var i = 0; i < ids.length; i++) {
+                        var cl = ids[i];
+                        reply = '<input  type="button" id = "replyBtn" onclick="TestButtonClick()" />'
+
+                        jQuery("#jqgArchivistActive").jqGrid('setRowData', ids[i], { Actions: reply });
+                    }
+                },
+                loadComplete: function (data) {
+
+                    document.getElementById("cssload-thecube").style.display = 'none';
+
+
+                    var newCapture = "",
+                        filters, rules, rule, op, i, iOp, s
+                    postData = $('#jqgArchivistActive').jqGrid("getGridParam", "postData"),
+                    isFiltering = $('#jqgArchivistActive').jqGrid("getGridParam", "search");
+
+                    if (isFiltering === true && typeof postData.filters !== "undefined") {
+                        filters = $.parseJSON(postData.filters);
+                        newCapture = "Filter: [";
+                        rules = filters.rules;
+                        for (i = 0; i < rules.length; i++) {
+                            rule = rules[i];
+                            op = rule.op; // the code name of the operation
+                            iOp = $.inArray(op, arOps);
+                            if (iOp >= 0 && typeof $.jgrid.search.odata[iOp] !== "undefined") {
+                                op = $.jgrid.search.odata[iOp].text;
+                            }
+                            newCapture += rule.field + " " + op + " '" + rule.data + "'";
+                            if (i + 1 !== rules.length) {
+                                newCapture += ", ";
+                            }
+                        }
+                        newCapture += "]";
+                    }
+                    $(gridSelector).jqGrid("setCaption", newCapture);
+                    $(this).triggerHandler("jqGridLoadComplete", data);
+                },
+            }).navGrid("#pagerActive", { edit: false, add: false, del: false, search: false, refresh: false }
+
+            );
+            $("#jqgArchivistActive").jqGrid('filterToolbar', { searchOnEnter: false });
+        }
+    })
+    gridActiveLoaded = true;
+}
+function loadTableArchived() {
+
+    var gridSelector = '#jqgArchivistArchived';
+    var arOps = ["eq", "ne", "lt", "le", "gt", "ge", "bw", "bn", "in", "ni", "ew", "en", "cn", "nc"];
+    var pageWidth = $("#jqgArchivistArchived").parent().width() - 100;
+
+    $.ajax({
+        url: 'Archivist/getGridDataArchived',
+        datatype: "json",
+        data: "{}",
+        contentType: "application/json; charset=utf-8",
+        method: "GET",
+        success: function (result) {
+
+            $("#jqgArchivistArchived").jqGrid({
+                datatype: "local",
+                colNames: ['id', 'Status', 'Data created', 'Date closed', 'Customer', 'Question', 'Agent', 'Activate'],
+                colModel: [
+                    {
+                        name: 'id',
+                        index: 'id',
+                        key: true,
+                        hidden: true
+                    },
+                    {
+                        name: 'Status',
+                        index: 'Status',
+                        width: (pageWidth * (5 / 100)),
+                        sortable: true,
+
+                        search: false,
+                    },
+                    {
+                        name: 'DateCreated',
+                        index: 'DateCreated',
+                        width: (pageWidth * (15 / 100)),
+                        sortable: true,
+                        sorttype: "date",
+                    },
+                    {
+                        name: 'DateSolved',
+                        index: 'DateSolved',
+                        width: (pageWidth * (15 / 100)),
+                        sortable: true,
+                        sorttype: "date",
+                    },
+                    {
+                        name: 'CustomerName',
+                        index: 'CustomerName',
+                        width: (pageWidth * (17 / 100)),
+                        sortable: true,
+                        /*formatter: function (cellvalue, options, rowobject) {
+                            return rowobject.CustomerName + " " + rowobject.CustomerSurname;
+                        },*/
+
+                        search: false,
+                    },
+                    {
+                        name: 'CallText',
+                        index: 'CallText',
+                        width: (pageWidth * (24 / 100)),
+                        sortable: true,
+                        search: false,
+
+                    },
+                    {
+                        name: 'AgentName',
+                        index: 'AgentName',
+                        width: (pageWidth * (17 / 100)),
+                        sortable: true,
+                        /*formatter: function (cellvalue, options, rowobject) {
+                            return rowobject.AgentName + " " + rowobject.AgentSurname;
+                        },*/
+                        search: false,
+                    },
+                    {
+                        name: 'Activate',
+                        index: 'Activate',
+                        width: (pageWidth * (7 / 100)),
+                        formatter: function (cellvalue, options, rowobject) {
+                            return '<button id="openbtn1" onclick="Activate(' + rowobject.id + ')" >Activate</button>';
+                        },
+                        search: false,
+                    },
+
+
+
+
+                ],
+                data: JSON.parse(result),
+                rowNum: 10,
+                autowidth: true,
+                pager: jQuery("#pagerArchived"),
+                rowList: [10, 20, 30, 40],
+                viewrecords: true,
+                height: 350,
+                caption: "Archived calls",
+                jsonReader: {
+                    root: "rows",
+                    page: "pages",
+                    total: "total",
+                    repeatitems: false,
+                    id: "0"
+                },
+                gridComplete: function () {
+                    var ids = jQuery("#jqgArchivistArchived").jqGrid('getDataIDs');
+                    for (var i = 0; i < ids.length; i++) {
+                        var cl = ids[i];
+                        reply = '<input  type="button" id = "replyBtn" onclick="TestButtonClick()" />'
+
+                        jQuery("#jqgArchivistArchived").jqGrid('setRowData', ids[i], { Actions: reply });
+                    }
+                },
+                loadComplete: function (data) {
+
+                    document.getElementById("cssload-thecube").style.display = 'none';
+
+
+                    var newCapture = "",
+                        filters, rules, rule, op, i, iOp, s
+                    postData = $('#jqgArchivistArchived').jqGrid("getGridParam", "postData"),
+                    isFiltering = $('#jqgArchivistArchived').jqGrid("getGridParam", "search");
+
+                    if (isFiltering === true && typeof postData.filters !== "undefined") {
+                        filters = $.parseJSON(postData.filters);
+                        newCapture = "Filter: [";
+                        rules = filters.rules;
+                        for (i = 0; i < rules.length; i++) {
+                            rule = rules[i];
+                            op = rule.op; // the code name of the operation
+                            iOp = $.inArray(op, arOps);
+                            if (iOp >= 0 && typeof $.jgrid.search.odata[iOp] !== "undefined") {
+                                op = $.jgrid.search.odata[iOp].text;
+                            }
+                            newCapture += rule.field + " " + op + " '" + rule.data + "'";
+                            if (i + 1 !== rules.length) {
+                                newCapture += ", ";
+                            }
+                        }
+                        newCapture += "]";
+                    }
+                    $(gridSelector).jqGrid("setCaption", newCapture);
+                    $(this).triggerHandler("jqGridLoadComplete", data);
+                },
+            }).navGrid("#pagerArchived", { edit: false, add: false, del: false, search: false, refresh: false }
+
+            );
+            $("#jqgArchivistArchived").jqGrid('filterToolbar', { searchOnEnter: false });
+        }
+    })
+
+    gridArchivedLoaded = true;
+}
 (function ($) {
 
     $(document).ready(function () {
         loadTableActive();
-        loadTable();
-
-        jQuery("#callInfo").dialog({
-            autoOpen: false,
-            width: 400
-        });
-
+        //loadTableArchived();
 
     });
-
-
     $(function () {
-        $("#tabs").tabs();
+        $("#tabs").tabs({
+            activate: function (event, ui) {
+                if (ui.newTab.index() == 0 && gridActiveLoaded == false) {
+                    loadTableActive();
+                }
+                if (ui.newTab.index() == 1 && gridArchivedLoaded == false) {
+                    loadTableArchived();
+                }
+                
+            }
+        });
     });
-
-
-    function loadTableActive() {
-
-        var gridSelector = '#jqgArchivistActive';
-        var arOps = ["eq", "ne", "lt", "le", "gt", "ge", "bw", "bn", "in", "ni", "ew", "en", "cn", "nc"];
-        var pageWidth = $("#jqgArchivistActive").parent().width() - 100;
-
-        $.ajax({
-            url: 'Archivist/getGridDataActive',
-            datatype: "json",
-            data: "{}",
-            contentType: "application/json; charset=utf-8",
-            method: "GET",
-            success: function (result) {
-
-                $("#jqgArchivistActive").jqGrid({
-                    datatype: "local",
-                    colNames: ['id', 'Status', 'Data created', 'Date closed', 'Customer', 'Question', 'Agent', 'Archivate'],
-                    colModel: [
-                        {
-                            name: 'id',
-                            index: 'id',
-                            key: true,
-                            hidden: true
-                        },
-                        {
-                            name: 'Status',
-                            index: 'Status',
-                            width: (pageWidth * (5 / 100)),
-                            sortable: true,
-
-                            search: false,
-                        },
-                        {
-                            name: 'DateCreated',
-                            index: 'DateCreated',
-                            width: (pageWidth * (15 / 100)),
-                            sortable: true,
-                            sorttype: "date",
-                        },
-                        {
-                            name: 'DateSolved',
-                            index: 'DateSolved',
-                            width: (pageWidth * (15 / 100)),
-                            sortable: true,
-                            sorttype: "date",
-                        },
-                        {
-                            name: 'CustomerName',
-                            index: 'CustomerName',
-                            width: (pageWidth * (17 / 100)),
-                            sortable: true,
-                            /*formatter: function (cellvalue, options, rowobject) {
-                                return rowobject.CustomerName + " " + rowobject.CustomerSurname;
-                            },*/
-
-                            search: false,
-                        },
-                        {
-                            name: 'CallText',
-                            index: 'CallText',
-                            width: (pageWidth * (24 / 100)),
-                            sortable: true,
-                            search: false,
-
-                        },
-                        {
-                            name: 'AgentName',
-                            index: 'AgentName',
-                            width: (pageWidth * (17 / 100)),
-                            sortable: true,
-                            /*formatter: function (cellvalue, options, rowobject) {
-                                return rowobject.AgentName + " " + rowobject.AgentSurname;
-                            },*/
-                            search: false,
-                        },
-                        {
-                            name: 'Archive',
-                            index: 'Archive',
-                            width: (pageWidth * (7 / 100)),
-                            formatter: function (cellvalue, options, rowobject) {
-                                return '<button id="openbtn1" onclick="Archive(' + rowobject.id + ')" >Archive</button>';
-                            },
-                            search: false,
-                        },
-
-
-
-
-                    ],
-                    data: JSON.parse(result),
-                    rowNum: 10,
-                    autowidth: true,
-                    pager: jQuery("#pagerActive"),
-                    rowList: [10, 20, 30, 40],
-                    viewrecords: true,
-
-                    caption: "Active calls",
-                    jsonReader: {
-                        root: "rows",
-                        page: "pages",
-                        total: "total",
-                        repeatitems: false,
-                        id: "0"
-                    },
-                    gridComplete: function () {
-                        var ids = jQuery("#jqgArchivistActive").jqGrid('getDataIDs');
-                        for (var i = 0; i < ids.length; i++) {
-                            var cl = ids[i];
-                            reply = '<input  type="button" id = "replyBtn" onclick="TestButtonClick()" />'
-
-                            jQuery("#jqgArchivistActive").jqGrid('setRowData', ids[i], { Actions: reply });
-                        }
-                    },
-                    loadComplete: function (data) {
-
-                        document.getElementById("cssload-thecube").style.display = 'none';
-
-
-                        var newCapture = "",
-                            filters, rules, rule, op, i, iOp, s
-                        postData = $('#jqgArchivistActive').jqGrid("getGridParam", "postData"),
-                        isFiltering = $('#jqgArchivistActive').jqGrid("getGridParam", "search");
-
-                        if (isFiltering === true && typeof postData.filters !== "undefined") {
-                            filters = $.parseJSON(postData.filters);
-                            newCapture = "Filter: [";
-                            rules = filters.rules;
-                            for (i = 0; i < rules.length; i++) {
-                                rule = rules[i];
-                                op = rule.op; // the code name of the operation
-                                iOp = $.inArray(op, arOps);
-                                if (iOp >= 0 && typeof $.jgrid.search.odata[iOp] !== "undefined") {
-                                    op = $.jgrid.search.odata[iOp].text;
-                                }
-                                newCapture += rule.field + " " + op + " '" + rule.data + "'";
-                                if (i + 1 !== rules.length) {
-                                    newCapture += ", ";
-                                }
-                            }
-                            newCapture += "]";
-                        }
-                        $(gridSelector).jqGrid("setCaption", newCapture);
-                        $(this).triggerHandler("jqGridLoadComplete", data);
-                    },
-                }).navGrid("#pagerActive", { edit: false, add: false, del: false, search: false, refresh: false }
-
-                );
-                $("#jqgArchivistActive").jqGrid('filterToolbar', { searchOnEnter: false });
-            }
-        })
-    }
-
-
-    function loadTable() {
-
-        var gridSelector = '#jqgArchivistArchived';
-        var arOps = ["eq", "ne", "lt", "le", "gt", "ge", "bw", "bn", "in", "ni", "ew", "en", "cn", "nc"];
-        var pageWidth = $("#jqgArchivistArchived").parent().width() - 100;
-
-        $.ajax({
-            url: 'Archivist/getGridDataArchived',
-            datatype: "json",
-            data: "{}",
-            contentType: "application/json; charset=utf-8",
-            method: "GET",
-            success: function (result) {
-
-                $("#jqgArchivistArchived").jqGrid({
-                    datatype: "local",
-                    colNames: ['id', 'Status', 'Data created', 'Date closed', 'Customer', 'Question', 'Agent', 'Activate'],
-                    colModel: [
-                        {
-                            name: 'id',
-                            index: 'id',
-                            key: true,
-                            hidden: true
-                        },
-                        {
-                            name: 'Status',
-                            index: 'Status',
-                            width: (pageWidth * (5 / 100)),
-                            sortable: true,
-
-                            search: false,
-                        },
-                        {
-                            name: 'DateCreated',
-                            index: 'DateCreated',
-                            width: (pageWidth * (15 / 100)),
-                            sortable: true,
-                            sorttype: "date",
-                        },
-                        {
-                            name: 'DateSolved',
-                            index: 'DateSolved',
-                            width: (pageWidth * (15 / 100)),
-                            sortable: true,
-                            sorttype: "date",
-                        },
-                        {
-                            name: 'CustomerName',
-                            index: 'CustomerName',
-                            width: (pageWidth * (17 / 100)),
-                            sortable: true,
-                            /*formatter: function (cellvalue, options, rowobject) {
-                                return rowobject.CustomerName + " " + rowobject.CustomerSurname;
-                            },*/
-
-                            search: false,
-                        },
-                        {
-                            name: 'CallText',
-                            index: 'CallText',
-                            width: (pageWidth * (24 / 100)),
-                            sortable: true,
-                            search: false,
-
-                        },
-                        {
-                            name: 'AgentName',
-                            index: 'AgentName',
-                            width: (pageWidth * (17 / 100)),
-                            sortable: true,
-                            /*formatter: function (cellvalue, options, rowobject) {
-                                return rowobject.AgentName + " " + rowobject.AgentSurname;
-                            },*/
-                            search: false,
-                        },
-                        {
-                            name: 'Activate',
-                            index: 'Activate',
-                            width: (pageWidth * (7 / 100)),
-                            formatter: function (cellvalue, options, rowobject) {
-                                return '<button id="openbtn1" onclick="Activate(' + rowobject.id + ')" >Archive</button>';
-                            },
-                            search: false,
-                        },
-
-
-
-
-                    ],
-                    data: JSON.parse(result),
-                    rowNum: 10,
-                    autowidth: true,
-                    pager: jQuery("#pagerArchived"),
-                    rowList: [10, 20, 30, 40],
-                    viewrecords: true,
-                    caption: "Archived calls",
-                    jsonReader: {
-                        root: "rows",
-                        page: "pages",
-                        total: "total",
-                        repeatitems: false,
-                        id: "0"
-                    },
-                    gridComplete: function () {
-                        var ids = jQuery("#jqgArchivistArchived").jqGrid('getDataIDs');
-                        for (var i = 0; i < ids.length; i++) {
-                            var cl = ids[i];
-                            reply = '<input  type="button" id = "replyBtn" onclick="TestButtonClick()" />'
-
-                            jQuery("#jqgArchivistArchived").jqGrid('setRowData', ids[i], { Actions: reply });
-                        }
-                    },
-                    loadComplete: function (data) {
-
-                        document.getElementById("cssload-thecube").style.display = 'none';
-
-
-                        var newCapture = "",
-                            filters, rules, rule, op, i, iOp, s
-                        postData = $('#jqgArchivistArchived').jqGrid("getGridParam", "postData"),
-                        isFiltering = $('#jqgArchivistArchived').jqGrid("getGridParam", "search");
-
-                        if (isFiltering === true && typeof postData.filters !== "undefined") {
-                            filters = $.parseJSON(postData.filters);
-                            newCapture = "Filter: [";
-                            rules = filters.rules;
-                            for (i = 0; i < rules.length; i++) {
-                                rule = rules[i];
-                                op = rule.op; // the code name of the operation
-                                iOp = $.inArray(op, arOps);
-                                if (iOp >= 0 && typeof $.jgrid.search.odata[iOp] !== "undefined") {
-                                    op = $.jgrid.search.odata[iOp].text;
-                                }
-                                newCapture += rule.field + " " + op + " '" + rule.data + "'";
-                                if (i + 1 !== rules.length) {
-                                    newCapture += ", ";
-                                }
-                            }
-                            newCapture += "]";
-                        }
-                        $(gridSelector).jqGrid("setCaption", newCapture);
-                        $(this).triggerHandler("jqGridLoadComplete", data);
-                    },
-                }).navGrid("#pagerArchived", { edit: false, add: false, del: false, search: false, refresh: false }
-
-                );
-                $("#jqgArchivistArchived").jqGrid('filterToolbar', { searchOnEnter: false });
-            }
-        })
-    }
-
 }(jQuery));
 //}

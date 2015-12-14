@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using RPS.Models;
-
+using System.Net;
+using System.Net.Mail;
 using System.Web.Mvc;
 using System.Data.Entity;
 
@@ -31,10 +32,38 @@ namespace RPS.Services
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
+                
+
+
+
                 var upd = (from call in db.Call where call.id == Call.id select call).First();
                 upd.Answer = Call.Answer;
                 upd.Status = 2;
                 upd.DateSolved = DateTime.Now;
+
+
+
+                var client = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    Credentials = new NetworkCredential("requestsprocessingsystem@gmail.com", "RPS_IT_craft"),
+                    EnableSsl = true
+                };
+
+                MailMessage msg = new MailMessage(new MailAddress("requestsprocessingsystem@gmail.com", "RPS")
+                    , new MailAddress(upd.User1.Email));
+
+
+                msg.Body = "Hello, " + upd.User1.UserFN + "!\n\n";
+                msg.Body += "You were asking us:\n";
+                msg.Body += upd.CallText + "\n\n";
+                msg.Body += "To solve your problem please try next:\n";
+                msg.Body += upd.Answer + "\n\n";
+                msg.Body += "Thank you for using our system!\nRespectfully,\nRPS team";
+
+                msg.Subject = "Answer for: " + (upd.CallText.Length > 30 ? upd.CallText.Substring(0, 30) : upd.CallText);
+
+                client.Send(msg);
+
                 db.SaveChanges();
             }
 

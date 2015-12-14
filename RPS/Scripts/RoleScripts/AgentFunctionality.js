@@ -33,7 +33,7 @@ function FillCallInfo(call) {
     else
         document.getElementById("CallAnswer").style.display = 'none';
 
-    document.getElementById("CustName").innerHTML = call.CustomerNameN;
+    document.getElementById("CustName").innerHTML = call.CustomerName;
 
     document.getElementById("callText").innerHTML = call.CallText;
     document.getElementById("callDateCreated").innerHTML = call.DateCreated;
@@ -209,6 +209,7 @@ function reloadJQGrid() {
                     rowList: [10, 20, 30, 40],
                     viewrecords: true,
                     caption: "RPS",
+                    height:350,
                     
                     onSelectRow: function () {
 
