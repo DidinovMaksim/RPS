@@ -30,6 +30,7 @@ namespace RPS.Controllers
         [HttpGet]
         public string getGridDataUsers()
         {
+            
             List<object> users = AdministratorServices.GetUsers();
             return JsonConvert.SerializeObject(users);
         }
@@ -61,11 +62,16 @@ namespace RPS.Controllers
 
         public JsonResult DeleteCustomer(UserValidation user)
         {
-            AdministratorServices.DeleteCustomer(new User { id = user.id });
+            if(AdministratorServices.DeleteCustomer(new User { id = user.id , Login = user.Login}))
             return Json(new
             {
                 State = "User deleted successfully!"
             }, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new
+                {
+                    State = "User not deleted! Please, delete all call attached to this customer first!"
+                }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -90,7 +96,7 @@ namespace RPS.Controllers
         [HttpPost]
         public JsonResult EditUser(UserValidation user, string userRole, string userPassword)
         {
-            AdministratorServices.EditUser(new User
+            AdministratorServices.EditCustomer(new User
             {
                 id = user.id,
                 Login = user.Login,
@@ -100,10 +106,10 @@ namespace RPS.Controllers
                 UserLN = user.UserLN,
                 Birthday = user.Birthday,
                 IsActive = user.IsActive
-            }, userRole, userPassword);
+            });
             return Json(new
             {
-                State = "User edit successfully!"
+                State = "User edited successfully!"
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -115,13 +121,13 @@ namespace RPS.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddCustomer(UserValidation user, string userRole, string userPassword)
+        public JsonResult AddCustomer(UserValidation user)
         {
             try
             {
                 if (!CheckLogin(user.Login))
                 {
-                    AdministratorServices.AddUser(new User
+                    AdministratorServices.AddCustomer(new User
                     {
                         MPhone = user.MPhone,
                         Login = user.Login,
@@ -130,7 +136,7 @@ namespace RPS.Controllers
                         UserLN = user.UserLN,
                         Birthday = user.Birthday,
                         IsActive = user.IsActive
-                    }, userRole, userPassword);
+                    });
                     return Json(new
                     {
                         State = "Succes"
@@ -172,7 +178,7 @@ namespace RPS.Controllers
                     }, userRole, userPassword);
                     return Json(new
                     {
-                        State = "Succes"
+                        State = "User added succesfully!"
                     }, JsonRequestBehavior.AllowGet);
                 }
                 else

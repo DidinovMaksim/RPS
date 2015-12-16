@@ -1,4 +1,6 @@
-﻿function DeleteCustomer(rowId)
+﻿
+
+function DeleteCustomer(rowId)
 {
     $.ajax({
         url: 'DeleteCustomer',
@@ -41,11 +43,14 @@ function EditStatus(data) {
 }
 
 function FillEditCustomerPopup(customer) {
-    document.getElementById("login").value = customer.UserFN;
+    console.log(customer);
+    document.getElementById("login").value = customer.Login;
     document.getElementById("fname").value = customer.UserFN;
     document.getElementById("lname").value = customer.UserLN;
     document.getElementById("phone").value = customer.MPhone;
     document.getElementById("datepicker").value = customer.Birthday;
+    document.getElementById("email").value = customer.Email;
+
 }
 
 function GetCustomer(callback) {
@@ -82,6 +87,9 @@ function EditUser(userId) {
 }
 
 function ReloadJQGrid() {
+    //alert("reload working");
+    //jQuery("#jqgAdminCustomers").setGridParam({ url: 'Administrator/getGridDataCustomers' }).trigger("reloadGrid");
+
     $.ajax({
         url: 'getGridDataCustomers',
         datatype: "json",
@@ -90,6 +98,8 @@ function ReloadJQGrid() {
         mathod: 'GET',
         async: true,
         success: function (result) {
+            
+
             jQuery("#jqgAdminCustomers")
             .jqGrid('setGridParam',
                 {
@@ -107,7 +117,7 @@ function ReloadJQGrid() {
         $("#deleteCustomerWindow").dialog({ autoOpen: false, width: 300, height: 250, title: "Delete customer" });
         $("#addCustomerWindow").dialog({ autoOpen: false, width: 500, height: 415, title: "Add customer" });
         $("#editCustomerWindow").dialog({ autoOpen: false, width: 500, height: 415, title: "Edit customer" });
-        $("#datepicker").datepicker();
+        $("#datepicker").datepicker({ dateFormat: 'dd.mm.yy' });
     });
 
     function LoadTableCustomers() {
@@ -123,8 +133,10 @@ function ReloadJQGrid() {
             method: "GET",
             success: function (result) {
                 $("#jqgAdminCustomers").jqGrid({
+                    
+            url: 'getGridDataCustomers',
                     datatype: "local",
-                    colNames: ['id', 'User name', 'User last name', 'Phone', 'Birthday', 'Edit user'],
+                    colNames: ['id', 'User name', 'User last name', 'Phone', 'Birthday', 'Delete user'],
                     colModel: [
                         {
                             name: 'id',
@@ -164,11 +176,12 @@ function ReloadJQGrid() {
                             name: 'Birthday',
                             index: 'Birthday',
                             width: 80,
-                            hidden: true,
+                            hidden: false,
                             sortable: false,
                             sorttype: "text",
                             search: true,
-                            editable: true
+                            editable: true,
+                            formatoptions: { newformat: 'Y.m.d ' },
                         },
                         {
                             name: "EditUser",

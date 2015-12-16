@@ -12,7 +12,7 @@
 <div id="add-user-window-form">
     @using (@Ajax.BeginForm("AddUser", "Administrator", new AjaxOptions()
     {
-        OnSuccess = "EditStatus()",
+        OnSuccess = "AddStatus",
         UpdateTargetId = "add-user-window-form",
         OnBegin = ""
     }))
@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div class="box-footer">
-                <button type="submit" id="edit-button" class="btn btn-primary">Add user</button>
+                <button type="submit" id="submit" class="btn btn-primary">Add user</button>
             </div>
         </form>
 

@@ -63,7 +63,7 @@ namespace RPS.Controllers
         }
         bool ValidateAnswer(CallValidation call)
         {
-            if (call.Answer != "" && call.Answer != null && call.id != 0) return true;
+            if (!String.IsNullOrEmpty(call.Answer) && call.id != 0) return true;
             else return false;
         }
         public JsonResult GetCall(int id)

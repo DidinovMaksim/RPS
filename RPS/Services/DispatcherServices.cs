@@ -42,8 +42,10 @@ namespace RPS.Services
             List<object> customers = new List<object>();
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
-                var list = from user in db.User
-                           where (user.webpages_Roles.Count == 0)
+               List<User> ex = (from user in db.User where user.webpages_Roles.Count != 0 select user).ToList();
+
+                var list = from user in ex
+                           where (user.webpages_Roles.ToList()[0].RoleName == "Customer")
                            && ( (user.UserFN.ToString() + " " + user.UserLN.ToString()).Contains(term) )
                            select new
                            {

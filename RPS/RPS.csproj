@@ -373,26 +373,14 @@
     <Content Include="Views\Dispatcher\AttachAgent.cshtml" />
     <Content Include="Views\Dispatcher\AddCall.cshtml" />
     <Content Include="Views\Dispatcher\CallInfo.cshtml" />
-<<<<<<< Updated upstream
     <Content Include="Views\Archivist\ArchiveCall.cshtml" />
     <Content Include="Views\Archivist\ActivateCall.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Administrator\AddUser.cshtml" />
     <Content Include="Views\Administrator\Administrator_Customers.cshtml" />
     <Content Include="Views\Administrator\Administrator_Users.cshtml" />
     <Content Include="Views\Administrator\EditUser.cshtml" />
-=======
-=======
-    <Content Include="Views\Archivist\ActiveCall.cshtml" />
-    <Content Include="Views\Archivist\ArchivedCall.cshtml" />
-    <Content Include="Views\Administrator\AddUser.cshtml" />
-    <Content Include="Views\Administrator\Administrator_Customers.cshtml" />
-    <Content Include="Views\Administrator\EditUser.cshtml" />
-    <Content Include="Views\Administrator\Administrator_Users.cshtml" />
     <Content Include="Views\Administrator\EditCustomer.cshtml" />
     <Content Include="Views\Administrator\AddCustomer.cshtml" />
->>>>>>> Stashed changes
->>>>>>> 0bc19e2ea93412c6fdc21970b9a2d2e5fce682b5
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

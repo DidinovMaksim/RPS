@@ -18,6 +18,8 @@ namespace RPS
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             WebSecurity.InitializeDatabaseConnection("DefaultConnection", "User", "Id", "Login", true);
+            //System.Web.Security.
+
 
         }
     }

@@ -1,4 +1,67 @@
-﻿function AddUser() {
+﻿
+
+function CheckPasswords(div)
+{
+
+    var p1 = jQuery("#" + div + ' #password').val();
+    var p2 = jQuery("#" + div + ' #password_second').val();
+
+    if (p1 != p2) {
+
+        jQuery('#'+div+' #password').css({ "backgroundColor": "red" });
+        jQuery('#'+div+' #password_second').css({ "backgroundColor": "red" });
+        jQuery('#' + div + '  #submit').prop('disabled', true);
+    }
+    else {
+        jQuery('#'+div+' #password').css({ "backgroundColor": "green" });
+        jQuery('#'+div+' #password_second').css({ "backgroundColor": "green" });
+        jQuery('#' + div + '  #submit').prop('disabled', false);
+    }
+}
+function PasswordCheckEvents()
+{
+    jQuery('#edit-user-window-form #password').on('input', function () {
+        CheckPasswords('edit-user-window-form');
+    });
+    jQuery('#edit-user-window-form #password_second').on('input', function () {
+        CheckPasswords('edit-user-window-form');
+    });
+    jQuery('#add-user-window-form #password').on('input', function () {
+        CheckPasswords('add-user-window-form');
+    });
+    jQuery('#add-user-window-form #password_second').on('input', function () {
+        CheckPasswords('add-user-window-form');
+    });
+}
+
+function CheckLogin()
+{
+    jQuery('#add-user-window-form #login').on('input', function () {
+        var loginForm = jQuery("#add-user-window-form #login").val();
+        $.ajax({
+            url: 'CheckLogin',
+            datatype: "json",
+            data: {
+                login: loginForm
+            },
+            contentType: "application/json; charset=utf-8",
+            mathod: 'GET',
+            success: function (result) {
+                console.log(result);
+                if (result == "True")
+                {
+                    jQuery('#add-user-window-form #login').css({ "backgroundColor": "red" });
+                    jQuery('#add-user-window-form #submit').prop('disabled', true);
+                }
+                else {
+                    jQuery('#add-user-window-form #login').css({ "backgroundColor": "green" });
+                    jQuery('#add-user-window-form #submit').prop('disabled', false);
+                }
+            }
+        });
+    });
+}
+function AddUser() {
     jQuery("#addUserWindow").dialog("open");
     $.ajax({
         url: 'AddUser',
@@ -23,13 +86,33 @@ function EditStatus(data) {
     }, 2000);
 }
 
+function AddStatus(data)
+{
+    reloadJQGrid();
+    $('#addUserWindow').html(data.State);
+    $('#addUserWindow').dialog({
+        height: 100,
+    });
+    setTimeout(function () {
+        $('#addUserWindow').dialog('close')
+    }, 2000);
+}
+
 function FillEditPopup(user) {
-    document.getElementById("fname").value = user.UserFN;
+    jQuery('#edit-user-window-form #fname').val(user.UserFN);
+    jQuery('#edit-user-window-form #lname').val(user.UserLN);
+    jQuery('#edit-user-window-form #phone').val(user.MPhone);
+    jQuery('#edit-user-window-form #email').val(user.Email);
+    jQuery('#edit-user-window-form #login').val(user.Login);
+    jQuery('#edit-user-window-form #id').val(user.id);
+
+
+    /*document.getElementById("fname").value = user.UserFN;
     document.getElementById("lname").value = user.UserLN;
     document.getElementById("phone").value = user.MPhone;
     document.getElementById("email").value = user.Email;
     document.getElementById("login").value = user.Login;
-    document.getElementById("id").value = user.id;
+    document.getElementById("id").value = user.id;*/
 }
 
 function GetUser(callback) {
@@ -58,8 +141,6 @@ function EditUser(userId) {
         contentType: 'application/json; charset=utf-8',
         type: 'GET',
         success: function (result) {
-            console.log("зашел в вызов попапап");
-            console.log(result);
 
             $('#editUserWindow').html(result);
             $('#editUserWindow').dialog('open');
@@ -94,6 +175,9 @@ function reloadJQGrid() {
         $("#addUserWindow").dialog({ autoOpen: false, width: 500, height: 500, title: "Add user" });
         $("#editUserWindow").dialog({ autoOpen: false, width: 500, height: 460, title: "Edit user" });
         $("#datepicker").datepicker();
+        PasswordCheckEvents();
+        CheckLogin();
+        
     });
     function loadTable() {
 

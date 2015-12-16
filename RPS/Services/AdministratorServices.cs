@@ -19,18 +19,16 @@ namespace RPS.Services
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
                 User User = (from user in db.User where user.id == user_.id select user).First();
-                if (User!= null)
+                if (User != null)
                 {
                     Roles.RemoveUserFromRole(user_.Login, User.webpages_Roles.First().RoleName);
                     Roles.AddUserToRole(user_.Login, userRole);
-                    
-                    if (userPassword.Length >0)
+
+                    if (userPassword.Length > 0)
                     {
-                        
-                        MembershipUser mu = Membership.GetUser(user_.Login);
-                        mu.UnlockUser();
-                        mu.ChangePassword(mu.ResetPassword(), userPassword);
-                        
+                        var token = WebSecurity.GeneratePasswordResetToken(user_.Login);
+                        WebSecurity.ResetPassword(token, userPassword);
+
                     }
                     User.MPhone = user_.MPhone;
                     User.Email = user_.Email;
@@ -43,52 +41,79 @@ namespace RPS.Services
                 }
             }
         }
-        public static void AddCustomer(User user_, string userPassword)
+        public static void EditCustomer(User cust)
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
-                //WebSecurity.CreateUserAndAccount(user_.Login, userPassword);
-                //Roles.AddUserToRole(user_.Login, userRole);
+                User User = (from user in db.User where user.id == cust.id select user).First();
+                User.MPhone = cust.MPhone;
+                User.Email = cust.Email;
+                User.UserFN = cust.UserFN;
+                User.UserLN = cust.UserLN;
+                User.Birthday = cust.Birthday;
+                User.IsActive = cust.IsActive;
 
-                //var User = (from user in db.User where user.Login == user_.Login select user).First();
-                db.User.Add(new User
-                {
-                    MPhone = user_.MPhone,
-                    Email = user_.Email,
-                    UserFN = user_.UserFN,
-                    UserLN = user_.UserLN,
-                    Birthday = user_.Birthday,
-                    IsActive = user_.IsActive
-                });
                 db.SaveChanges();
             }
         }
-        public static void AddUser(User user_,string userRole, string userPassword)
+
+        public static void AddCustomer(User user_)
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
-                //WebSecurity.CreateUserAndAccount(user_.Login, userPassword);
-                //Roles.AddUserToRole(user_.Login, userRole);
+                WebSecurity.CreateUserAndAccount(user_.Login, user_.Login);
 
-                //var User = (from user in db.User where user.Login == user_.Login select user).First();
-                db.User.Add(new User
-                {
-                    MPhone = user_.MPhone,
-                    Email = user_.Email,
-                    UserFN = user_.UserFN,
-                    UserLN = user_.UserLN,
-                    Birthday = user_.Birthday,
-                    IsActive = user_.IsActive
-                });
+                Roles.AddUserToRole(user_.Login, "Customer");
+
+                var User = (from user in db.User where user.Login == user_.Login select user).First();
+
+                User.MPhone = user_.MPhone;
+                User.Email = user_.Email;
+                User.UserFN = user_.UserFN;
+                User.UserLN = user_.UserLN;
+                User.Birthday = user_.Birthday;
+                User.IsActive = user_.IsActive;
+
+
                 db.SaveChanges();
             }
         }
-        public static void DeleteCustomer(User user)
+        public static void AddUser(User user_, string userRole, string userPassword)
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
-                db.User.Remove(db.User.Find(user.id));
+                WebSecurity.CreateUserAndAccount(user_.Login, userPassword);
+                Roles.AddUserToRole(user_.Login, userRole);
+
+                var User = (from user in db.User where user.Login == user_.Login select user).First();
+
+                User.MPhone = user_.MPhone;
+                User.Email = user_.Email;
+                User.UserFN = user_.UserFN;
+                User.UserLN = user_.UserLN;
+                User.Birthday = user_.Birthday;
+                User.IsActive = user_.IsActive;
+
                 db.SaveChanges();
+            }
+        }
+        public static bool DeleteCustomer(User user)
+        {
+            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
+            {
+                
+                user = db.User.Find(user.id);
+                if (user.Call.Count == 0 && user.Call1.Count == 0)
+                {
+                    Roles.RemoveUserFromRole(user.Login, user.webpages_Roles.First().RoleName);
+
+                    Membership.DeleteUser(user.Login, true);
+                    //db.User.Remove(db.User.Find(user.id));
+                    db.SaveChanges();
+                    return true;
+                }
+                else return false;
+                
             }
         }
         public static object GetUser(int id)
@@ -105,7 +130,7 @@ namespace RPS.Services
                     UserLN = user.UserLN,
                     MPhone = user.MPhone,
                     Email = user.Email,
-                    Birthday = user.Birthday,
+                    Birthday = (user.Birthday!= null ? user.Birthday.Value.ToShortDateString() : ""),
                     IsActive = user.IsActive
                 };
             }
@@ -143,9 +168,11 @@ namespace RPS.Services
             List<object> users = new List<object>();
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
-                List<User> us = (from user in db.User where user.webpages_Roles.Count == 0 select user).ToList();
+                List<User> us = (from user in db.User where user.webpages_Roles.Count != 0 select user).ToList();
+
 
                 var Tusers = from user in us
+                             where user.webpages_Roles.ToList()[0].RoleId == 5
                              select new
                              {
                                  id = user.id,

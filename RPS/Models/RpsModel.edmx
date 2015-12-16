@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Хранилище DB_9DF713_RPSModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище DB_9DF713_RPSModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Call">
           <Key>
             <PropertyRef Name="id" />
@@ -12,13 +12,13 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Customer" Type="int" Nullable="false" />
           <Property Name="Agent" Type="int" />
-          <Property Name="CallText" Type="text" Nullable="false" />
+          <Property Name="CallText" Type="nvarchar(max)" Nullable="false" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateSolved" Type="datetime" />
           <Property Name="DateArchived" Type="datetime" />
-          <Property Name="Answer" Type="text" />
-          <Property Name="Reason" Type="text" />
+          <Property Name="Answer" Type="nvarchar(max)" />
+          <Property Name="Reason" Type="nvarchar(max)" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="CallArchivedReason">
@@ -26,14 +26,14 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Reason" Type="text" Nullable="false" />
+          <Property Name="Reason" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="CallStatus">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Status" Type="ntext" Nullable="false" />
+          <Property Name="Status" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -41,10 +41,10 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="MPhone" Type="text" />
-          <Property Name="Email" Type="text" />
-          <Property Name="UserFN" Type="text" />
-          <Property Name="UserLN" Type="text" />
+          <Property Name="MPhone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserFN" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserLN" Type="nvarchar" MaxLength="50" />
           <Property Name="Birthday" Type="date" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
@@ -63,6 +63,18 @@
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="RoleId" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Call_Agent">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Call" Type="Self.Call" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Call">
+              <PropertyRef Name="Agent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Call_CallStatus">
           <End Role="CallStatus" Type="Self.CallStatus" Multiplicity="1" />
           <End Role="Call" Type="Self.Call" Multiplicity="*" />
@@ -75,19 +87,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Call_User_Agent">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="Call" Type="Self.Call" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Call">
-              <PropertyRef Name="Agent" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Call_User_Customer">
+        <Association Name="FK_Call_Customer">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="Call" Type="Self.Call" Multiplicity="*" />
           <ReferentialConstraint>
@@ -130,15 +130,15 @@
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="webpages_Roles" EntityType="Self.webpages_Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="webpages_UsersInRoles" EntityType="Self.webpages_UsersInRoles" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Call_Agent" Association="Self.FK_Call_Agent">
+            <End Role="User" EntitySet="User" />
+            <End Role="Call" EntitySet="Call" />
+          </AssociationSet>
           <AssociationSet Name="FK_Call_CallStatus" Association="Self.FK_Call_CallStatus">
             <End Role="CallStatus" EntitySet="CallStatus" />
             <End Role="Call" EntitySet="Call" />
           </AssociationSet>
-          <AssociationSet Name="FK_Call_User_Agent" Association="Self.FK_Call_User_Agent">
-            <End Role="User" EntitySet="User" />
-            <End Role="Call" EntitySet="Call" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Call_User_Customer" Association="Self.FK_Call_User_Customer">
+          <AssociationSet Name="FK_Call_Customer" Association="Self.FK_Call_Customer">
             <End Role="User" EntitySet="User" />
             <End Role="Call" EntitySet="Call" />
           </AssociationSet>
@@ -151,7 +151,8 @@
             <End Role="webpages_UsersInRoles" EntitySet="webpages_UsersInRoles" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_9DF713_RPSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -162,24 +163,24 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Customer" Type="Int32" Nullable="false" />
           <Property Name="Agent" Type="Int32" />
-          <Property Name="CallText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CallText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateSolved" Type="DateTime" Precision="3" />
           <Property Name="DateArchived" Type="DateTime" Precision="3" />
-          <Property Name="Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Call_Agent" FromRole="Call" ToRole="User" />
           <NavigationProperty Name="CallStatus" Relationship="Self.FK_Call_CallStatus" FromRole="Call" ToRole="CallStatus" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Call_User_Agent" FromRole="Call" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="Self.FK_Call_User_Customer" FromRole="Call" ToRole="User" />
-          <Property Name="Answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User1" Relationship="Self.FK_Call_Customer" FromRole="Call" ToRole="User" />
         </EntityType>
         <EntityType Name="CallArchivedReason">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
         <EntityType Name="CallStatus">
           <Key>
@@ -195,14 +196,14 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MPhone" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="UserFN" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="UserLN" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserFN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserLN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Birthday" Type="DateTime" Precision="0" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Call" Relationship="Self.FK_Call_User_Agent" FromRole="User" ToRole="Call" />
-          <NavigationProperty Name="Call1" Relationship="Self.FK_Call_User_Customer" FromRole="User" ToRole="Call" />
+          <NavigationProperty Name="Call" Relationship="Self.FK_Call_Agent" FromRole="User" ToRole="Call" />
+          <NavigationProperty Name="Call1" Relationship="Self.FK_Call_Customer" FromRole="User" ToRole="Call" />
           <NavigationProperty Name="webpages_Roles" Relationship="Self.webpages_UsersInRoles" FromRole="User" ToRole="webpages_Roles" />
         </EntityType>
         <EntityType Name="webpages_Roles">
@@ -213,6 +214,18 @@
           <Property Name="RoleName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Self.webpages_UsersInRoles" FromRole="webpages_Roles" ToRole="User" />
         </EntityType>
+        <Association Name="FK_Call_Agent">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Call" Type="Self.Call" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Call">
+              <PropertyRef Name="Agent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Call_CallStatus">
           <End Role="CallStatus" Type="Self.CallStatus" Multiplicity="1" />
           <End Role="Call" Type="Self.Call" Multiplicity="*" />
@@ -225,19 +238,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Call_User_Agent">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="Call" Type="Self.Call" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Call">
-              <PropertyRef Name="Agent" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Call_User_Customer">
+        <Association Name="FK_Call_Customer">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="Call" Type="Self.Call" Multiplicity="*" />
           <ReferentialConstraint>
@@ -259,15 +260,15 @@
           <EntitySet Name="CallStatus" EntityType="Self.CallStatus" />
           <EntitySet Name="User" EntityType="Self.User" />
           <EntitySet Name="webpages_Roles" EntityType="Self.webpages_Roles" />
+          <AssociationSet Name="FK_Call_Agent" Association="Self.FK_Call_Agent">
+            <End Role="User" EntitySet="User" />
+            <End Role="Call" EntitySet="Call" />
+          </AssociationSet>
           <AssociationSet Name="FK_Call_CallStatus" Association="Self.FK_Call_CallStatus">
             <End Role="CallStatus" EntitySet="CallStatus" />
             <End Role="Call" EntitySet="Call" />
           </AssociationSet>
-          <AssociationSet Name="FK_Call_User_Agent" Association="Self.FK_Call_User_Agent">
-            <End Role="User" EntitySet="User" />
-            <End Role="Call" EntitySet="Call" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Call_User_Customer" Association="Self.FK_Call_User_Customer">
+          <AssociationSet Name="FK_Call_Customer" Association="Self.FK_Call_Customer">
             <End Role="User" EntitySet="User" />
             <End Role="Call" EntitySet="Call" />
           </AssociationSet>
@@ -285,7 +286,6 @@
           <EntitySetMapping Name="Call">
             <EntityTypeMapping TypeName="DB_9DF713_RPSModel.Call">
               <MappingFragment StoreEntitySet="Call">
-                <ScalarProperty Name="Answer" ColumnName="Answer" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Customer" ColumnName="Customer" />
                 <ScalarProperty Name="Agent" ColumnName="Agent" />
@@ -294,6 +294,7 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateSolved" ColumnName="DateSolved" />
                 <ScalarProperty Name="DateArchived" ColumnName="DateArchived" />
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>

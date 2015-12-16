@@ -10,7 +10,7 @@
 }
 
 <div id="add-customer-window-form">
-    @using (@Ajax.BeginForm("AddCutomer", "Administrator", new AjaxOptions()
+    @using (@Ajax.BeginForm("AddCustomer", "Administrator", new AjaxOptions()
     {
         OnSuccess = "EditStatus()",
         UpdateTargetId = "add-customer-window-form",
@@ -39,25 +39,15 @@
                     <label for="lname">User last name:</label>
                     @Html.TextBoxFor(m => m.UserLN, new { id = "lname", @class = "form-control", @placeholder = "Last name:", required = "required" })
                 </div>
-                <div class="form-group">
-                    <label for="email">Password:</label>
-                    @Html.TextBox("userPassword", "", new { id = "password", @class = "form-control", @placeholder = "Password:", required = "required" })
-                </div>
-                <div class="form-group">
-                    <label for="email">Password second time:</label>
-                    @Html.TextBox("password_second", "", new { id = "password_second", @class = "form-control", @placeholder = "Password second time:", required = "required" })
-                </div>
+                
                 <div class="form-group">
                     <label for="datepicker">Birthday:</label>
                     @Html.TextBoxFor(m => m.Birthday, new { id = "datepicker", @class = "form-control" })
                 </div>
-                <div class="checkbox">
-                    <label for="IsActive">IsActive:</label>
-                    @Html.CheckBoxFor(m => m.IsActive, new { id = "IsActive" })
-                </div>
+                
             </div>
             <div class="box-footer">
-                <button type="submit" id="edit-button" class="btn btn-primary">Add user</button>
+                <button type="submit" id="edit-button" class="btn btn-primary">Add customer</button>
             </div>
         </form>
     }
