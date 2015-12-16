@@ -373,12 +373,21 @@
     <Content Include="Views\Dispatcher\AttachAgent.cshtml" />
     <Content Include="Views\Dispatcher\AddCall.cshtml" />
     <Content Include="Views\Dispatcher\CallInfo.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Archivist\ArchiveCall.cshtml" />
     <Content Include="Views\Archivist\ActivateCall.cshtml" />
     <Content Include="Views\Administrator\AddUser.cshtml" />
     <Content Include="Views\Administrator\Administrator_Customers.cshtml" />
     <Content Include="Views\Administrator\Administrator_Users.cshtml" />
     <Content Include="Views\Administrator\EditUser.cshtml" />
+=======
+    <Content Include="Views\Archivist\ActiveCall.cshtml" />
+    <Content Include="Views\Archivist\ArchivedCall.cshtml" />
+    <Content Include="Views\Administrator\AddUser.cshtml" />
+    <Content Include="Views\Administrator\Administrator_Customers.cshtml" />
+    <Content Include="Views\Administrator\EditUser.cshtml" />
+    <Content Include="Views\Administrator\Administrator_Users.cshtml" />
+>>>>>>> 8462994b4d4a83697f353e6dde8ea721b9f39d4d
     <Content Include="Views\Administrator\EditCustomer.cshtml" />
     <Content Include="Views\Administrator\AddCustomer.cshtml" />
   </ItemGroup>
