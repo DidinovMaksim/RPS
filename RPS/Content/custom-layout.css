@@ -2,6 +2,10 @@
 div#gbox_jqgAdmin {
     width: 100%!important;
 }
+div#gbox_jqgAdminCustomers
+ {
+    width: 100%!important;
+}
 div#gbox_jqgAgent {
     width: 100%!important;
 }
@@ -11,6 +15,10 @@ div#gbox_jqgArchivistActive {
 div#gbox_jqgArchivistArchived {
     width: 100%!important;
 }
+div#gbox_jqgDispatcher {
+    width: 100%!important;
+}
+
 .ui-widget-header {
     background: white;
 }

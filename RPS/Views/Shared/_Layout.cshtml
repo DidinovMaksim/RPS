@@ -40,9 +40,9 @@
                     <li>@Html.ActionLink("Home page", "Index", "Home")</li>
 
                     @{
-                        if(User.Identity.IsAuthenticated)
+                        if (User.Identity.IsAuthenticated)
                         {
-                            switch(Roles.GetRolesForUser()[0])
+                            switch (Roles.GetRolesForUser()[0])
                             {
                                 case "Administrator": <li>@Html.ActionLink("Administrator users", "Administrator_Users", "Administrator")</li>
                                                       <li>@Html.ActionLink("Administrator customers", "Administrator_customers", "Administrator")</li>
@@ -55,7 +55,7 @@
                                     break;
                             }
                         }
-                    }
+                        }
                     @{
                         if (User.Identity.IsAuthenticated)
                         {

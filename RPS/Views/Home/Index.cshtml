@@ -1,5 +1,13 @@
-﻿@{
-    ViewBag.Title = "Home page";
+﻿
+@{
+    if (!User.Identity.IsAuthenticated)
+    {
+       Response.Redirect("Account/Login", true);
+    }
+
+}
+@{
+            ViewBag.Title = "Home page";
 }
 
 
