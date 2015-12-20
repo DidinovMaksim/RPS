@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using RPS.Models;
 using WebMatrix.WebData;
-
+using System.Web.Security;
 
 namespace RPS.Controllers
 {
@@ -24,7 +24,11 @@ namespace RPS.Controllers
             if(ModelState.IsValid)
             {
                 if (WebSecurity.Login(logindata.Username, logindata.Password, logindata.RememberMe))
+                {
+                    string role = Roles.GetRolesForUser(logindata.Username).First();
+                    if (role == "Dispatcher") return RedirectToAction("Index", "Dispatcher");
                     return RedirectToAction("Index", "Home");
+                }
                 
 
             }

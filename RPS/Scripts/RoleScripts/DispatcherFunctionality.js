@@ -158,6 +158,8 @@ function CallInfo(rowid)
             success: function (result) {
 
                 $("#jqgDispatcher").jqGrid({
+                    height: "100%",
+                    hidegrid: false,
                     datatype: "local",
                     colNames: ['id', 'Status', 'Call date', 'Attach', 'Customer', 'Agent'],
                     colModel: [
@@ -182,7 +184,8 @@ function CallInfo(rowid)
                             sortable: true,
                             sorttype: "date",
                             formatter: 'date',
-                            formatoptions: { newformat: 'd.m.Y' }
+                            formatoptions: { srcformat: 'Y-m-dTH:i:s', newformat: 'd.m.Y H:i:s' },
+                            search: false,
                         },
                         {
                             name: "Attach",

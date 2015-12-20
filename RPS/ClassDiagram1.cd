@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="RPS.Controllers.DispatcherController">
+    <Position X="0.5" Y="3.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AEQgAAAAAAAAAAAAAAAAAAAAAAgAAAAABAUAAAABAgA=</HashCode>
+      <FileName>Controllers\DispatcherController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RPS.Models.DB_9DF713_RPSEntities">
+    <Position X="3.25" Y="2" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAABQAAAAAAABAAAAAAAAAAAEAIAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Models\RpsModel.Context.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RPS.Models.Call">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEBBACEAAIAAAIAIAEAAAAAAAIAAAAAAAAEAwAAAgA=</HashCode>
+      <FileName>Models\Call.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RPS.Services.DispatcherServices">
+    <Position X="5.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AEAgAQAAAAAABAAAABAAAAAQAAAAAAAAAAAAAAABAgA=</HashCode>
+      <FileName>Services\DispatcherServices.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RPS.ValidationModels.CallValidation">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEgBACEAAIAAAIAAAEAAAAAAAAQAAAAAAAEAwAAAgA=</HashCode>
+      <FileName>ValidationModels\CallValidation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Web.Mvc.Controller" Collapsed="true">
+    <Position X="1" Y="2.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Data.Entity.DbContext" Collapsed="true">
+    <Position X="3.5" Y="1" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
