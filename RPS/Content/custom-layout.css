@@ -18,6 +18,12 @@ div#gbox_jqgArchivistArchived {
 div#gbox_jqgDispatcher {
     width: 100%!important;
 }
+#add-user-window-form select,#edit-user-window-form select {
+    float: right;
+    width: 215px;
+    height: 33px;
+    border-color: #d2d6de;
+}
 
 .ui-widget-header {
     background: white;

@@ -8,13 +8,13 @@ function CheckPasswords(div)
 
     if (p1 != p2) {
 
-        jQuery('#'+div+' #password').css({ "backgroundColor": "red" });
-        jQuery('#'+div+' #password_second').css({ "backgroundColor": "red" });
+        jQuery('#' + div + ' #password').css({ "backgroundColor": "LightCoral" });
+        jQuery('#' + div + ' #password_second').css({ "backgroundColor": "LightCoral" });
         jQuery('#' + div + '  #submit').prop('disabled', true);
     }
     else {
-        jQuery('#'+div+' #password').css({ "backgroundColor": "green" });
-        jQuery('#'+div+' #password_second').css({ "backgroundColor": "green" });
+        jQuery('#' + div + ' #password').css({ "backgroundColor": "LightGreen" });
+        jQuery('#' + div + ' #password_second').css({ "backgroundColor": "LightGreen" });
         jQuery('#' + div + '  #submit').prop('disabled', false);
     }
 }
@@ -50,11 +50,11 @@ function CheckLogin()
                 console.log(result);
                 if (result == "True")
                 {
-                    jQuery('#add-user-window-form #login').css({ "backgroundColor": "red" });
+                    jQuery('#add-user-window-form #login').css({ "backgroundColor": "LightCoral" });
                     jQuery('#add-user-window-form #submit').prop('disabled', true);
                 }
                 else {
-                    jQuery('#add-user-window-form #login').css({ "backgroundColor": "green" });
+                    jQuery('#add-user-window-form #login').css({ "backgroundColor": "LightGreen" });
                     jQuery('#add-user-window-form #submit').prop('disabled', false);
                 }
             }
@@ -172,8 +172,8 @@ function reloadJQGrid() {
     $(document).ready(function () {
         loadTable();
         loadTableCustomers()
-        $("#addUserWindow").dialog({ autoOpen: false, width: 500, height: 500, title: "Add user" });
-        $("#editUserWindow").dialog({ autoOpen: false, width: 500, height: 460, title: "Edit user" });
+        $("#addUserWindow").dialog({ autoOpen: false, width: 500, height: 550, title: "Add user" });
+        $("#editUserWindow").dialog({ autoOpen: false, width: 500, height: 530, title: "Edit user" });
         $("#datepicker").datepicker();
         PasswordCheckEvents();
         CheckLogin();
