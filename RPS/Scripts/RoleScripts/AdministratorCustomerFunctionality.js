@@ -29,7 +29,24 @@ function AddCustomer() {
         }
     });
 }
+function FillCallList(cId)
+{
+    
+    $.ajax({
+        url: 'GetCallList',
+        data: {
+            custId: cId
+        },
+        contentType: 'application/json; charset=utf-8',
+        type: 'GET',
+        success: function (result) {
+            
+            $('#callList').html(result);
+            document.getElementById("callList").style.display = 'inline';
+        }
+    });
 
+}
 function EditStatus(data) {
     console.log(data);
     ReloadJQGrid();
@@ -244,6 +261,8 @@ function ReloadJQGrid() {
                         $(this).triggerHandler("jqGridLoadComplete", data);
                     },
                     onSelectRow: function () {
+                        var rowId = $("#jqgAdminCustomers").jqGrid('getGridParam', 'selrow');
+                        FillCallList(rowId);
 
                     }
                 }).navGrid("#pager", { del: true },

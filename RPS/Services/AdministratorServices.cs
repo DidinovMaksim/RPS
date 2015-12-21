@@ -14,6 +14,23 @@ namespace RPS.Services
 {
     public class AdministratorServices
     {
+        public static string GetCallList(int userId)
+        {
+            string SCalls = "";
+            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
+            {
+                List<Call> calls = (from call in db.Call where call.User1.id == userId select call).ToList();
+                foreach(Call t in calls)
+                {
+                    SCalls += "<option>" + t.CallStatus.Status
+                        + ", " + t.DateCreated.ToShortDateString()
+                        + ", " + (t.User != null ? t.User.UserLN.ToString() + " " + t.User.UserFN.ToString() : "Not assigned!")
+                        + "</option>";
+
+                }
+            }
+            return SCalls;
+        }
         public static void EditUser(User user_, string userRole, string userPassword)
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
@@ -101,7 +118,7 @@ namespace RPS.Services
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
-                
+
                 user = db.User.Find(user.id);
                 if (user.Call.Count == 0 && user.Call1.Count == 0)
                 {
@@ -113,7 +130,7 @@ namespace RPS.Services
                     return true;
                 }
                 else return false;
-                
+
             }
         }
         public static object GetUser(int id)
@@ -130,7 +147,7 @@ namespace RPS.Services
                     UserLN = user.UserLN,
                     MPhone = user.MPhone,
                     Email = user.Email,
-                    Birthday = (user.Birthday!= null ? user.Birthday.Value.ToShortDateString() : ""),
+                    Birthday = (user.Birthday != null ? user.Birthday.Value.ToShortDateString() : ""),
                     IsActive = user.IsActive
                 };
             }

@@ -197,6 +197,13 @@ namespace RPS.Controllers
                     State = ex
                 }, JsonRequestBehavior.AllowGet);
             }
+
+
+        }
+
+        public string GetCallList(int custId)
+        {
+            return AdministratorServices.GetCallList(custId);
         }
     }
 }

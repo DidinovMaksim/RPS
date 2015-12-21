@@ -1,12 +1,10 @@
 ﻿@model RPS.ValidationModels.CallValidation
 
 <div id="reply-call-form">
-    @*@using (Ajax.BeginForm("_ReplyCall", "Agent", new AjaxOptions() { OnBegin = "reloadJQGrid()", OnFailure = "reloadJQGrid()", OnSuccess = "alert('test');", UpdateTargetId = "Reply" }))*@
+    
     @using (Ajax.BeginForm("_ReplyCall", new AjaxOptions() { OnSuccess = "CallReplied", UpdateTargetId = "reply-call-form" }))
     {
-        @*<form id="replyForm" method="post" data-ajax-success="Aler" data-ajax-method="Post" data-ajax="true" action="/Agent/_ReplyCall" novalidate="novalidate">*@
         <h1 class="text" id="adding-form-header">Reply to the client!</h1>
-        @*<p id="product-validation-string">@Model.ModelError</p>*@
         <table>
             <tr>
                 <td>
