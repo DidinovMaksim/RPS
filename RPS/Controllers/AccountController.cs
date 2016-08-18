@@ -10,7 +10,7 @@ using System.Web.Security;
 namespace RPS.Controllers
 {
     /// <summary>
-    /// Класс-контроллер для работе с  учетной записью пользователя
+    /// Класс-контроллер для работы с  учетной записью пользователя
     /// </summary>
     public class AccountController : Controller
     {
@@ -24,9 +24,9 @@ namespace RPS.Controllers
             return View();
         }
         /// <summary>
-        /// Авторизация польователя
+        /// Авторизация пользователя
         /// </summary>
-        /// <param name="logindata">Вовзращает сообщение об ошибке, либо переадресует авторизованного пользователя</param>
+        /// <param name="logindata">Возвращает сообщение об ошибке, либо переадресует авторизованного пользователя</param>
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -49,7 +49,6 @@ namespace RPS.Controllers
                 
 
             }
-            ModelState.AddModelError("", "Wrong account or password. Try again!");
             return View(logindata);
         }
         /// <summary>

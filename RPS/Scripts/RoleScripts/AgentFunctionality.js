@@ -52,7 +52,7 @@ function FillPopup(call) {
 
 }
 function Reply(idCall) {
-    // Метод, вызывающий попап дл ответа на запрос.
+    // Метод, вызывающий попап для ответа на запрос.
 
     var rowId = $("#jqgAgent").jqGrid('getGridParam', 'selrow');
     var rowData = $("#jqgAgent").getRowData(rowId);
@@ -88,6 +88,7 @@ function reloadJQGrid() {
         contentType: "application/json; charset=utf-8",
         mathod: 'GET',
         success: function (result) {
+            console.log(result);
             jQuery("#jqgAgent")
             .jqGrid('setGridParam',
                 {
@@ -111,6 +112,7 @@ function loadTable() {
         contentType: "application/json; charset=utf-8",
         method: "GET",
         success: function (result) {
+
             console.log(result);
             $("#jqgAgent").jqGrid({
                 datatype: "local",

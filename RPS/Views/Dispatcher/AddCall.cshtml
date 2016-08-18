@@ -36,29 +36,28 @@
 
     var selected = false;
 
+    //Ініціалізація поля з автодоповненням
     $("#autocompleteCustomer").autocomplete({
         source: '/Dispatcher/GetCustomersJSON',
         select: function (event, ui) {
-
+	     //Перенесення ідентифікатора в сховане поле
             document.getElementById('Customer').value = ui.item.value;
             $("#autocompleteCustomer").val(ui.item.label);
             return false;
 
         },
         change: function (event, ui) {
-          //  console.log(ui.item);
+            //Перевірка валідності введеного клієнта
             selected = (ui.item == null) ? false : true;
-           // console.log('Changed ' + selected);
         }
     });
 
+    //Перевірка, чи обрав користувач клієнта зі списку
     function CheckIfSelected(data)
     {
-     //   console.log('check before ' + selected);
-       
-        
-
+    
         if (!selected) {
+            //Якщо ні, то виведення вікна з помилкою
             $('#errorMessage').dialog({
                 modal: true,
                 buttons: {
@@ -67,15 +66,11 @@
                     }
                 }
             });
-            //alert('Please choose customer from the list!');
+         
             return false;
         }
 
-        //return false;
     }
-
-
-    
 
 
 </script>
@@ -87,11 +82,9 @@
 <div id="createCall" >
 
 
-
     @using (@Ajax.BeginForm("AddCall", "Dispatcher", new AjaxOptions()
     {
         OnBegin = "CheckIfSelected",
-        // OnFailure = "reloadJQGrid()",
         OnSuccess = "CallAdded",
         UpdateTargetId = "createCall",
         InsertionMode = InsertionMode.Replace
@@ -136,5 +129,5 @@
             </tr>
         </table>
 
-                        }
+    }
 </div>

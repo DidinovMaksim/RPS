@@ -33,6 +33,7 @@ namespace RPS.Controllers
         {
             List<object> calls = AgentServices.GetCalls();
             return JsonConvert.SerializeObject(calls);
+            
         }
         /// <summary>
         /// Частичное представление всплывающего окна 

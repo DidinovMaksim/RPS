@@ -13,16 +13,26 @@ using RPS.Services;
 
 namespace RPS.Controllers
 {
-
+    /// Клас, приймаючий та обробляючий усі HTTP запити зі сторінки архівіста
     public class ArchivistController : Controller
     {
         DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities();
-        // GET: Dispatcher
+        
+        /// <summary>
+        /// Метод, який викликається за замовчуванням
+        /// </summary>
+        /// <returns>Повертає представлення з головною сторінкою архівіста</returns>
+
         [Authorize(Roles = "Archivist")]
         public ActionResult Index()
         {
             return View();
         }
+
+        /// <summary>
+        /// Метод для отримання активних запитів для таблиці
+        /// </summary>
+        /// <returns>Повертає список активних запитів у JSON форматі</returns>
 
         public string getGridDataActive()
         {
@@ -31,6 +41,10 @@ namespace RPS.Controllers
             return JsonConvert.SerializeObject(calls);
         }
 
+        /// <summary>
+        /// Метод для отримання активних запитів для таблиці
+        /// </summary>
+        /// <returns>Повертає список архівних запитів у JSON форматі</returns>
         public string getGridDataArchived()
         {
             List<object> calls = ArchivistServices.GetCallsArchived();
@@ -38,15 +52,29 @@ namespace RPS.Controllers
             return JsonConvert.SerializeObject(calls);
         }
 
+        /// <summary>
+        /// Метод для отримання причин архівації запиту для автодоповнюючого списку
+        /// </summary>
+        /// <param name="term">Підстрока в імені або прізвищі клієнта</param>
+        /// <returns>Список клієнтів у JSON форматі</returns>
         public string GetReasonsJSON(string term)
         {         
             return JsonConvert.SerializeObject(ArchivistServices.GetReasons(term));
         }
+/// <summary>
+        /// Метод для показу спливаючого вікна для архівації запита
+        /// </summary>
+        /// <returns>Часткове представлення для для архівації запита </returns>
         [HttpGet]
         public PartialViewResult ArchiveCall(String id)
         {
             return PartialView(new CallValidation());
         }
+/// <summary>
+        /// Метод для архівації запиту
+        /// </summary>
+        /// <param name="call">Об'єкт зі зчитаними з форми параметрами запита</param>
+        /// <returns>Результат операції</returns>
 
 
         [HttpPost]
@@ -68,6 +96,11 @@ namespace RPS.Controllers
 
 
         }
+/// <summary>
+        /// Метод для показу спливаючого вікна для активації запита
+        /// </summary>
+        /// <returns>Часткове представлення для активіції запита </returns>
+
         [HttpGet]
         public PartialViewResult ActivateCall(String id)
         {
@@ -75,6 +108,12 @@ namespace RPS.Controllers
             return PartialView(new CallValidation());
         }
 
+
+/// <summary>
+        /// Метод для активації запиту
+        /// </summary>
+        /// <param name="call">Об'єкт зі зчитаними з форми параметрами запита</param>
+        /// <returns>Результат операції</returns>
 
         [HttpPost]
         public JsonResult ActivateCall(CallValidation call, int Status)
@@ -95,12 +134,20 @@ namespace RPS.Controllers
 
 
         }
+        /// <summary>
+        /// Метод для перевірки запита
+        /// </summary>
+
         bool ValidateArchive(CallValidation call)
         {
             if (call.id != 0 && call.Reason != null && call.Reason != "") return true;
             else return false;
         }
 
+        /// <summary>
+        /// Метод, який отримує інформацію про запит для вспливаючого вікна
+        /// </summary>
+        /// <param name="id">Ідентифікатор запиту</param>
 
         public JsonResult GetCall(int id)
         {
@@ -113,4 +160,4 @@ namespace RPS.Controllers
 
 
     }
-}
+} 

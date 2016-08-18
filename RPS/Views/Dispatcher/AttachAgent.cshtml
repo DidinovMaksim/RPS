@@ -1,12 +1,6 @@
 ﻿@model RPS.ValidationModels.CallValidation
 
-
-
-
-
 <div id="attachCall">
-
-    
 
     @using (@Ajax.BeginForm("AttachAgent", "Dispatcher", new AjaxOptions()
     {
@@ -27,8 +21,6 @@
                     @Html.HiddenFor(m => m.id, new { id = "id" })
                     
                     @Html.DropDownListFor(m => m.Agent, (IEnumerable<SelectListItem>)ViewData["AgentsList"], new { id = "Agent" })
-
-                    
 
                 </td>
             </tr>

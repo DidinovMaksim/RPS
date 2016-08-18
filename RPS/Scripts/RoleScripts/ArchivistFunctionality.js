@@ -1,11 +1,12 @@
-﻿
+﻿function CallArchived(data) {
 
-function CallArchived(data) {
+    //Оновлюємо дані у таблицях
     
     reloadJQGridActive();
     reloadJQGridArchived();
 
-    $('#popupArchive').html(data.State);
+    $('#popupArchive').html(data.State); 
+   //Налаштування спливаючого вікна
     $('#popupArchive').dialog({
         height: 100,
     });
@@ -65,8 +66,6 @@ function FillPopupActivate(call) {
     jQuery('#activateCall #CustNamePop').html(call.CustomerName);
     jQuery('#activateCall #CallText').html(call.CallText);
 
-    console.log(call.Answer);
-
     if (call.Answer != null) {
         jQuery('#activateCall #AnswerTr').css({ 'display': 'table-row' });
         jQuery('#activateCall #Answer').html(call.Answer);
@@ -76,7 +75,7 @@ function FillPopupActivate(call) {
 
 
 }
-
+//Функція для перезавантаження даних у таблиці архівних запитів
 function reloadJQGridArchived() {
     $.ajax({
         url: 'Archivist/getGridDataArchived',
@@ -96,6 +95,7 @@ function reloadJQGridArchived() {
     });
 }
 
+//Функція для перезавантаження даних у таблиці активних запитів
 function reloadJQGridActive() {
     $.ajax({
         url: 'Archivist/getGridDataActive',
@@ -174,7 +174,8 @@ function Archive(idCall) {
     });
 }
 var gridActiveLoaded = false;
-var gridArchivedLoaded = false;
+var gridArchivedLoaded = false; 
+//Функція для перезавантаження даних у таблиці активних запитів
 function loadTableActive() {
 
     var gridSelector = '#jqgArchivistActive';
@@ -191,14 +192,18 @@ function loadTableActive() {
 
             $("#jqgArchivistActive").jqGrid({
                 datatype: "local",
-                colNames: ['id', 'Status', 'Data created', 'Date closed', 'Customer', 'Question', 'Agent', 'Archivate'],
+                    //Підписи стовпців
+                colNames: ['id', 'Status', 'Data created', 'Date closed', 'Customer', 'Question', 'Agent', 'Archivate'], 
+                    //Налаштування кожного поля
                 colModel: [
+                        //Прихований ідентифікатор запита
                     {
                         name: 'id',
                         index: 'id',
                         key: true,
                         hidden: true
                     },
+                        //Статус запита
                     {
                         name: 'Status',
                         index: 'Status',
@@ -207,6 +212,7 @@ function loadTableActive() {
 
                         search: false,
                     },
+                        //Дата створення запита
                     {
                         name: 'DateCreated',
                         index: 'DateCreated',
@@ -214,6 +220,7 @@ function loadTableActive() {
                         sortable: true,
                         sorttype: "date",
                     },
+                        //Дата вирішення запита
                     {
                         name: 'DateSolved',
                         index: 'DateSolved',
@@ -221,17 +228,16 @@ function loadTableActive() {
                         sortable: true,
                         sorttype: "date",
                     },
+                        //Поле з ім'ям клієнта
                     {
                         name: 'CustomerName',
                         index: 'CustomerName',
                         width: (pageWidth * (17 / 100)),
                         sortable: true,
-                        /*formatter: function (cellvalue, options, rowobject) {
-                            return rowobject.CustomerName + " " + rowobject.CustomerSurname;
-                        },*/
-
                         search: false,
                     },
+                        //Поле з текстом запиту
+
                     {
                         name: 'CallText',
                         index: 'CallText',
@@ -240,14 +246,12 @@ function loadTableActive() {
                         search: false,
 
                     },
+                        //Поле з ім'ям агента
                     {
                         name: 'AgentName',
                         index: 'AgentName',
                         width: (pageWidth * (17 / 100)),
                         sortable: true,
-                        /*formatter: function (cellvalue, options, rowobject) {
-                            return rowobject.AgentName + " " + rowobject.AgentSurname;
-                        },*/
                         search: false,
                     },
                     {
@@ -328,6 +332,7 @@ function loadTableActive() {
     })
     gridActiveLoaded = true;
 }
+//Функція для перезавантаження даних у таблиці архівних запитів
 function loadTableArchived() {
 
     var gridSelector = '#jqgArchivistArchived';
@@ -346,12 +351,14 @@ function loadTableArchived() {
                 datatype: "local",
                 colNames: ['id', 'Status', 'Data created', 'Date closed', 'Customer', 'Question', 'Agent', 'Activate'],
                 colModel: [
+                        //Прихований ідентифікатор запита
                     {
                         name: 'id',
                         index: 'id',
                         key: true,
                         hidden: true
-                    },
+                    },	
+                        //Статус запита
                     {
                         name: 'Status',
                         index: 'Status',
@@ -360,6 +367,7 @@ function loadTableArchived() {
 
                         search: false,
                     },
+                        //Дата створення запита
                     {
                         name: 'DateCreated',
                         index: 'DateCreated',
@@ -367,6 +375,7 @@ function loadTableArchived() {
                         sortable: true,
                         sorttype: "date",
                     },
+                        //Дата вирішення запита
                     {
                         name: 'DateSolved',
                         index: 'DateSolved',
@@ -374,6 +383,7 @@ function loadTableArchived() {
                         sortable: true,
                         sorttype: "date",
                     },
+//Поле з ім`ям клієнта
                     {
                         name: 'CustomerName',
                         index: 'CustomerName',
@@ -385,6 +395,7 @@ function loadTableArchived() {
 
                         search: false,
                     },
+//Поле з текстом запиту
                     {
                         name: 'CallText',
                         index: 'CallText',
@@ -393,6 +404,7 @@ function loadTableArchived() {
                         search: false,
 
                     },
+//Поле з ім`ям агента
                     {
                         name: 'AgentName',
                         index: 'AgentName',
@@ -502,4 +514,3 @@ function loadTableArchived() {
         });
     });
 }(jQuery));
-//}

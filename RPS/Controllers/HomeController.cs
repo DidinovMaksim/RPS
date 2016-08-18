@@ -1,8 +1,11 @@
-﻿using System;
+﻿using RPS.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
+using WebMatrix.WebData;
 
 namespace RPS.Controllers
 {
@@ -10,7 +13,10 @@ namespace RPS.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
+            {
+                return View();
+            }
         }
         [Authorize(Roles ="Administrator")]
         public ActionResult About()

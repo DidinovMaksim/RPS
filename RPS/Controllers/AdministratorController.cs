@@ -12,41 +12,42 @@ using WebMatrix.WebData;
 
 namespace RPS.Controllers
 {
+    //класс для связи моделей и представлений
     public class AdministratorController : Controller
     {
         private DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities();
 
         [Authorize(Roles = "Administrator")]
+        //возвращает представление для грида пользователей
         public ActionResult Administrator_Users()
         {
             return View();
         }
-
+        //возвращает представление для грида кастомеров
         public ActionResult Administrator_Customers()
         {
             return View();
         }
-
+        //заполняет грид юзерами
         [HttpGet]
         public string getGridDataUsers()
         {
-            
             List<object> users = AdministratorServices.GetUsers();
             return JsonConvert.SerializeObject(users);
         }
-
+        //заполняет грид кастомерами
         [HttpGet]
         public string getGridDataCustomers()
         {
             List<object> users = AdministratorServices.GetCustomers();
             return JsonConvert.SerializeObject(users);
         }
-
+        //создает глобальный массив ролей
         public void GetRoles()
         {
             ViewData["RoleList"] = AdministratorServices.GetRoles();
         }
-
+        //проверка логина
         public bool CheckLogin(string login)
         {
             if (WebSecurity.UserExists(login))
@@ -54,12 +55,12 @@ namespace RPS.Controllers
             else
                 return false;
         }
-
+        //возращает одного юзера по id в представление
         public JsonResult GetUser(int id)
         {
             return Json(AdministratorServices.GetUser(id), JsonRequestBehavior.AllowGet);
         }
-
+        //удаляет кастомеров
         public JsonResult DeleteCustomer(UserValidation user)
         {
             if(AdministratorServices.DeleteCustomer(new User { id = user.id , Login = user.Login}))
@@ -73,26 +74,26 @@ namespace RPS.Controllers
                     State = "User not deleted! Please, delete all call attached to this customer first!"
                 }, JsonRequestBehavior.AllowGet);
         }
-
+        //возвращает представление для формы добавления кастомеров
         [HttpGet]
         public PartialViewResult AddCustomer()
         {
             return PartialView(new UserValidation());
         }
-
+        //возвращает представление для формы редактирования кастомеров
         [HttpGet]
         public PartialViewResult EditCustomer(String id)
         {
             return PartialView(new UserValidation());
         }
-
+        //представление для редактирования пользователей
         [HttpGet]
         public PartialViewResult EditUser()
         {
             GetRoles();
             return PartialView(new UserValidation());
         }
-
+        //редактирование пользователей
         [HttpPost]
         public JsonResult EditUser(UserValidation user, string userRole, string userPassword)
         {
@@ -112,14 +113,14 @@ namespace RPS.Controllers
                 State = "User edited successfully!"
             }, JsonRequestBehavior.AllowGet);
         }
-
+        //представление для добавления юзеров
         [HttpGet]
         public PartialViewResult AddUser()
         {
             GetRoles();
             return PartialView(new UserValidation());
         }
-
+        //добавление кастомеров
         [HttpPost]
         public JsonResult AddCustomer(UserValidation user)
         {
@@ -159,6 +160,7 @@ namespace RPS.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
+        //добавление юзеров
         [HttpPost]
         public JsonResult AddUser(UserValidation user, string userRole, string userPassword)
         {
@@ -197,13 +199,6 @@ namespace RPS.Controllers
                     State = ex
                 }, JsonRequestBehavior.AllowGet);
             }
-
-
-        }
-
-        public string GetCallList(int custId)
-        {
-            return AdministratorServices.GetCallList(custId);
         }
     }
 }

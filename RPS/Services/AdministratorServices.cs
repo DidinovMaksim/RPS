@@ -12,25 +12,10 @@ using Newtonsoft.Json;
 
 namespace RPS.Services
 {
+    //класс для осуществление crud операций в базе данных
     public class AdministratorServices
     {
-        public static string GetCallList(int userId)
-        {
-            string SCalls = "";
-            using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
-            {
-                List<Call> calls = (from call in db.Call where call.User1.id == userId select call).ToList();
-                foreach(Call t in calls)
-                {
-                    SCalls += "<option>" + t.CallStatus.Status
-                        + ", " + t.DateCreated.ToShortDateString()
-                        + ", " + (t.User != null ? t.User.UserLN.ToString() + " " + t.User.UserFN.ToString() : "Not assigned!")
-                        + "</option>";
-
-                }
-            }
-            return SCalls;
-        }
+        //редактирует юзеров в базе
         public static void EditUser(User user_, string userRole, string userPassword)
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
@@ -58,6 +43,7 @@ namespace RPS.Services
                 }
             }
         }
+        //редактирует кастомеров в базе
         public static void EditCustomer(User cust)
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
@@ -73,7 +59,7 @@ namespace RPS.Services
                 db.SaveChanges();
             }
         }
-
+        //добавляет кастомеров в базу
         public static void AddCustomer(User user_)
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
@@ -95,12 +81,21 @@ namespace RPS.Services
                 db.SaveChanges();
             }
         }
+        //добавляет юзеров в базу
         public static void AddUser(User user_, string userRole, string userPassword)
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
                 WebSecurity.CreateUserAndAccount(user_.Login, userPassword);
-                Roles.AddUserToRole(user_.Login, userRole);
+                try
+                {
+                    Roles.AddUserToRole(user_.Login, userRole);
+
+                }
+                catch(Exception ex)
+                {
+
+                }
 
                 var User = (from user in db.User where user.Login == user_.Login select user).First();
 
@@ -114,11 +109,12 @@ namespace RPS.Services
                 db.SaveChanges();
             }
         }
+        //удаляет кастомеров
         public static bool DeleteCustomer(User user)
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
             {
-
+                
                 user = db.User.Find(user.id);
                 if (user.Call.Count == 0 && user.Call1.Count == 0)
                 {
@@ -130,9 +126,10 @@ namespace RPS.Services
                     return true;
                 }
                 else return false;
-
+                
             }
         }
+        //делает выборку юзера по id
         public static object GetUser(int id)
         {
             object EUser;
@@ -147,12 +144,13 @@ namespace RPS.Services
                     UserLN = user.UserLN,
                     MPhone = user.MPhone,
                     Email = user.Email,
-                    Birthday = (user.Birthday != null ? user.Birthday.Value.ToShortDateString() : ""),
+                    Birthday = (user.Birthday!= null ? user.Birthday.Value.ToShortDateString() : ""),
                     IsActive = user.IsActive
                 };
             }
             return EUser;
         }
+        //выборка всех юзеров
         public static List<object> GetUsers()
         {
             List<object> users = new List<object>();
@@ -180,6 +178,7 @@ namespace RPS.Services
             }
             return users;
         }
+        //делает выборку всех кастомеров
         public static List<object> GetCustomers()
         {
             List<object> users = new List<object>();
@@ -206,6 +205,7 @@ namespace RPS.Services
             }
             return users;
         }
+        //возвращает список всех ролей
         public static List<SelectListItem> GetRoles()
         {
             List<SelectListItem> roleList = new List<SelectListItem>();
@@ -220,6 +220,7 @@ namespace RPS.Services
             }
             return roleList;
         }
+        //делает выборку кастомеров
         public static List<object> GetCustomers(string term)
         {
             List<object> customers = new List<object>();

@@ -1,23 +1,24 @@
 ﻿
 
+//проверка пароля
 function CheckPasswords(div)
 {
-
     var p1 = jQuery("#" + div + ' #password').val();
     var p2 = jQuery("#" + div + ' #password_second').val();
 
     if (p1 != p2) {
 
-        jQuery('#' + div + ' #password').css({ "backgroundColor": "LightCoral" });
-        jQuery('#' + div + ' #password_second').css({ "backgroundColor": "LightCoral" });
+        jQuery('#'+div+' #password').css({ "backgroundColor": "red" });
+        jQuery('#'+div+' #password_second').css({ "backgroundColor": "red" });
         jQuery('#' + div + '  #submit').prop('disabled', true);
     }
     else {
-        jQuery('#' + div + ' #password').css({ "backgroundColor": "LightGreen" });
-        jQuery('#' + div + ' #password_second').css({ "backgroundColor": "LightGreen" });
+        jQuery('#'+div+' #password').css({ "backgroundColor": "green" });
+        jQuery('#'+div+' #password_second').css({ "backgroundColor": "green" });
         jQuery('#' + div + '  #submit').prop('disabled', false);
     }
 }
+//события проверки пароля
 function PasswordCheckEvents()
 {
     jQuery('#edit-user-window-form #password').on('input', function () {
@@ -33,7 +34,7 @@ function PasswordCheckEvents()
         CheckPasswords('add-user-window-form');
     });
 }
-
+//проверка логина
 function CheckLogin()
 {
     jQuery('#add-user-window-form #login').on('input', function () {
@@ -50,17 +51,18 @@ function CheckLogin()
                 console.log(result);
                 if (result == "True")
                 {
-                    jQuery('#add-user-window-form #login').css({ "backgroundColor": "LightCoral" });
+                    jQuery('#add-user-window-form #login').css({ "backgroundColor": "red" });
                     jQuery('#add-user-window-form #submit').prop('disabled', true);
                 }
                 else {
-                    jQuery('#add-user-window-form #login').css({ "backgroundColor": "LightGreen" });
+                    jQuery('#add-user-window-form #login').css({ "backgroundColor": "green" });
                     jQuery('#add-user-window-form #submit').prop('disabled', false);
                 }
             }
         });
     });
 }
+//добавление юзеров
 function AddUser() {
     jQuery("#addUserWindow").dialog("open");
     $.ajax({
@@ -74,7 +76,7 @@ function AddUser() {
         }
     });
 }
-
+//статус операции
 function EditStatus(data) {
     reloadJQGrid();
     $('#editUserWindow').html(data.State);
@@ -85,7 +87,7 @@ function EditStatus(data) {
         $('#editUserWindow').dialog('close')
     }, 2000);
 }
-
+//добавление статуса
 function AddStatus(data)
 {
     reloadJQGrid();
@@ -97,7 +99,7 @@ function AddStatus(data)
         $('#addUserWindow').dialog('close')
     }, 2000);
 }
-
+//заполнение попапа для редактирования
 function FillEditPopup(user) {
     jQuery('#edit-user-window-form #fname').val(user.UserFN);
     jQuery('#edit-user-window-form #lname').val(user.UserLN);
@@ -105,16 +107,8 @@ function FillEditPopup(user) {
     jQuery('#edit-user-window-form #email').val(user.Email);
     jQuery('#edit-user-window-form #login').val(user.Login);
     jQuery('#edit-user-window-form #id').val(user.id);
-
-
-    /*document.getElementById("fname").value = user.UserFN;
-    document.getElementById("lname").value = user.UserLN;
-    document.getElementById("phone").value = user.MPhone;
-    document.getElementById("email").value = user.Email;
-    document.getElementById("login").value = user.Login;
-    document.getElementById("id").value = user.id;*/
 }
-
+//возвращает юзера
 function GetUser(callback) {
     var rowId = $("#jqgAdmin").jqGrid('getGridParam', 'selrow');
     $.ajax({
@@ -130,7 +124,7 @@ function GetUser(callback) {
         }
     });
 }
-
+//редактирование юзеров
 function EditUser(userId) {
 
     $.ajax({
@@ -148,7 +142,7 @@ function EditUser(userId) {
         }
     });
 }
-
+//перезагрузка таблицы
 function reloadJQGrid() {
     $.ajax({
         url: 'getGridDataUsers',
@@ -173,14 +167,14 @@ function reloadJQGrid() {
         loadTable();
         loadTableCustomers()
         $("#addUserWindow").dialog({ autoOpen: false, width: 500, height: 550, title: "Add user" });
-        $("#editUserWindow").dialog({ autoOpen: false, width: 500, height: 530, title: "Edit user" });
+        $("#editUserWindow").dialog({ autoOpen: false, width: 500, height: 460, title: "Edit user" });
         $("#datepicker").datepicker();
         PasswordCheckEvents();
         CheckLogin();
         
     });
+    //загрузка таблицы
     function loadTable() {
-
         var gridSelector = '#jqgAdmin';
         var arOps = ["eq", "ne", "lt", "le", "gt", "ge", "bw", "bn", "in", "ni", "ew", "en", "cn", "nc"];
 
@@ -337,18 +331,7 @@ function reloadJQGrid() {
                     onSelectRow: function () {
 
                     }
-                }).navGrid("#pager", { del: true },
-                //delete
-                {
-                    zIndex: 100,
-                    url: 'Dispatcher/DeleteGridData',
-                    closeOnEscape: true,
-                    closeAfterEdit: true,
-                    recreateForm: true,
-                    msg: "Are you sure ?",
-                    afterComplete: function (result) {
-                    }
-                });
+                }).navGrid();
                 $("#jqgAdmin").jqGrid('filterToolbar', { searchOnEnter: false });
             }
         })

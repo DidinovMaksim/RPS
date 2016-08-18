@@ -8,8 +8,17 @@ using System.Web.Mvc;
 
 namespace RPS.Services
 {
+/// <summary>
+    /// Клас з сервісами для бази даних для сторінки архівіста
+    /// </summary>
+
     public class ArchivistServices
     {
+
+        /// <summary>
+        /// Метод для отримання статусу запиту
+        /// </summary>
+        /// <returns>Об'єкт з інформацією про статус запиту</returns>
         public static List<object> GetStatus()
         {
             List<object> status = new List<object>();
@@ -27,6 +36,10 @@ namespace RPS.Services
             }
             return status;
         }
+        /// <summary>
+        /// Метод для отримання не архівних запитів
+        /// </summary>
+        /// <returns>Список активних запитів</returns>
         public static List<object> GetCallsNotArchived()
         {
 
@@ -54,6 +67,11 @@ namespace RPS.Services
             }
             return calls;
         }
+        /// <summary>
+        /// Метод для отримання архівних запитів
+        /// </summary>
+        /// <returns>Список архівних запитів</returns>
+
         public static List<object> GetCallsArchived()
         {
 
@@ -81,6 +99,11 @@ namespace RPS.Services
             }
             return calls;
         }
+
+        /// <summary>
+        /// Метод для отримання перевірки причини архівації запита в бд з введеною, та додавання її в бд(якщо збігів немає)
+        /// </summary>
+
         static void CheckReason(string Reason)
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())
@@ -93,6 +116,12 @@ namespace RPS.Services
             }
             
         }
+
+        /// <summary>
+        /// Метод для отримання списку причин архівації запита
+        /// </summary>
+        /// <returns> Список причин архівації запита </returns>
+
         public static List<object> GetReasons(string term)
         {
             List<object> ListReasons = new List<object>();
@@ -109,7 +138,10 @@ namespace RPS.Services
             }
             return ListReasons;
         }
-
+        /// <summary>
+        /// Метод для отримання активних запитів
+        /// </summary>
+        /// <returns>Активні запити</returns>
 
         public static void ActivateCall(Call ACall, int Status )
         {
@@ -139,6 +171,11 @@ namespace RPS.Services
             }
             return RCall;
         }
+        /// <summary>
+        /// Метод для отримання архівних запитів
+        /// </summary>
+        /// <returns>Архівні запити</returns>
+
         public static void ArchiveCall(Call callArch)
         {
             using (DB_9DF713_RPSEntities db = new DB_9DF713_RPSEntities())

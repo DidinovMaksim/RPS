@@ -7,12 +7,18 @@
 
 <div class="loginPage">
     <h2>Login</h2>
-
+    
+    Std accs:<br />
+    admin:admin<br />
+    agent:agent<br />
+    archivist:archivis<br />
+    dispatcher:dispatcher<br /><br />
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
-
+        
+        
 
 
         <div class="box box-primary">

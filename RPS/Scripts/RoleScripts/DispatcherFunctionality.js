@@ -1,4 +1,5 @@
-﻿function reloadJQGrid() {
+﻿//Функція для перезавантаження даних у таблиці
+function reloadJQGrid() {
     $.ajax({
         url: 'Dispatcher/getGridData',
         datatype: "json",
@@ -17,6 +18,8 @@
     });
 }
 
+//Функція для призначення агенту запита
+//rowid - ідентифікатор запита
 function Attach(rowid) {
     $.ajax({
         url: 'Dispatcher/AttachAgent',
@@ -27,6 +30,7 @@ function Attach(rowid) {
         type: 'GET',
         success: function (result) {
             $('#popup').html(result);
+            //Налаштування спливаючого вікна
             $('#popup').dialog({
                 show: {
                     effect: "blind",
@@ -41,9 +45,12 @@ function Attach(rowid) {
     });
 }
 
+//Функція-колбек по призначенню агента запиту
 function AgentAttached(data) {
+    //Оновлюємо дані у таблиці
     reloadJQGrid();
-    //$('#popup').html(data.State);
+
+    //Закриваємо вікно
     $('#popup').dialog({
         height: 100,
     });
@@ -53,9 +60,12 @@ function AgentAttached(data) {
 
 }
 
+//Функція-колбек по додаванню нового запита
 function CallAdded(data) {
+    //Оновлюємо дані в таблиці
     reloadJQGrid();
-    //$('#popup').html(data.State);
+
+    //Закриваємо вікно
     $('#popup').dialog({
         height: 100,
     });
@@ -65,6 +75,7 @@ function CallAdded(data) {
 
 }
 
+//Функція для додавання нового запита
 function CreateNewCall() {
 
     $.ajax({
@@ -74,6 +85,7 @@ function CreateNewCall() {
         type: 'GET',
         success: function (result) {
             $('#popup').html(result);
+            //Налаштування вікна
             $('#popup').dialog({
                 show: {
                     effect: "blind",
@@ -89,6 +101,8 @@ function CreateNewCall() {
     });
 }
 
+//Функція для виведення інформацію по запиту
+//rowid - ідентифікатор запита
 function CallInfo(rowid)
 {
     $.ajax({
@@ -106,7 +120,7 @@ function CallInfo(rowid)
                 contentType: 'application/json; charset=utf-8',
                 type: 'GET',
                 success: function (result) {
-                    
+                    //Заповнюємо вікно отриманою інформацією
                     result = JSON.parse(result);
 
                     document.getElementById("callInfoCustName").innerHTML = result['CustomerFN'] + ' ' + result['CustomerLN'];
@@ -117,6 +131,7 @@ function CallInfo(rowid)
             });
 
             $('#popup').html(result);
+            //Налаштування вікна
             $('#popup').dialog({
                 show: {
                     effect: "blind",
@@ -132,18 +147,12 @@ function CallInfo(rowid)
 }
 
 (function ($) {
-
+    //Функція по завантаженню сторінки
     $(document).ready(function () {
         loadTable();
-
-        
-
-        //jQuery("#callInfo").dialog({
-        //    autoOpen: false,
-        //    width: 400
-        //});
     });
 
+    //Функція для ініціалізації таблиці
     function loadTable() {
 
         var gridSelector = '#jqgDispatcher';
@@ -161,22 +170,26 @@ function CallInfo(rowid)
                     height: "100%",
                     hidegrid: false,
                     datatype: "local",
+                    //Підписи стовпців
                     colNames: ['id', 'Status', 'Call date', 'Attach', 'Customer', 'Agent'],
+                    //Налаштування кожного поля
                     colModel: [
+                        //Прихований ідентифікатор запита
                         {
                             name: 'id',
                             index: 'id',
                             key: true,
                             hidden: true
                         },
+                        //Статус запита
                         {
                             name: 'CallStatus',
                             index: 'CallStatus',
                             width: 150,
                             sortable: true,
-
                             search: false,
                         },
+                        //Дата створення запита
                         {
                             name: 'DateCreated',
                             index: 'DateCreated',
@@ -187,6 +200,7 @@ function CallInfo(rowid)
                             formatoptions: { srcformat: 'Y-m-dTH:i:s', newformat: 'd.m.Y H:i:s' },
                             search: false,
                         },
+                        //Поле з кнопкою "Призначити"
                         {
                             name: "Attach",
                             index: "Attach",
@@ -195,28 +209,26 @@ function CallInfo(rowid)
                                 return '<button id="openbtn" class="btn btn-default" onclick="Attach(' + rowobject.id + ')" >Attach</button>';
                             },
                             search: false,
-
                         },
+                        //Поле з ім'ям клієнта
                         {
                             name: 'CustomerFN',
                             index: 'CustomerFN',
                             sortable: true,
-
                             formatter: function (cellvalue, options, rowobject) { 
                                 return cellvalue + ' ' + rowobject.CustomerLN;
                             },
 
                             search: false,
                         },
+                        //Поле з ім'ям агента
                         {
                             name: 'AgentFN',
                             index: 'AgentFN',
                             sortable: true,
-
                             formatter: function (cellvalue, options, rowobject) {
                                 return cellvalue? (cellvalue + ' ' + rowobject.AgentLN) : '';
                             },
-
                             search: false,
                         },
 
@@ -228,10 +240,8 @@ function CallInfo(rowid)
                     rowList: [10, 20, 30, 40],
                     viewrecords: true,
                     caption: "RPS",
-
+                    //Функція-колбек по двійному кліку на запит
                     ondblClickRow: function (rowid, iRow, iCol, e) {
-
-
                         CallInfo(rowid);
                     },
                     jsonReader: {
@@ -241,15 +251,8 @@ function CallInfo(rowid)
                         repeatitems: false,
                         id: "0"
                     },
-                    //gridComplete: function () {
-                    //    var ids = jQuery("#jqgDispatcher").jqGrid('getDataIDs');
-                    //    for (var i = 0; i < ids.length; i++) {
-                    //        var cl = ids[i];
-                    //        reply = '<input  type="button" id = "replyBtn" onclick="TestButtonClick()" />'
 
-                    //        jQuery("#jqgDispatcher").jqGrid('setRowData', ids[i], { Actions: reply });
-                    //    }
-                    //},
+                    //Функція-колбек по завантаженню даних в таблицю
                     loadComplete: function (data) {
 
                         document.getElementById("cssload-thecube").style.display = 'none';
@@ -281,9 +284,14 @@ function CallInfo(rowid)
                         $(gridSelector).jqGrid("setCaption", newCapture);
                         $(this).triggerHandler("jqGridLoadComplete", data);
                     },
-                }).navGrid("#pager", { edit: false, add: false, del: true },
+                }).navGrid("#pager",
                 {
-                    //edit options
+                    edit: false,
+                    add: false,
+                    del: true
+                },
+                //Оновлення
+                {
                     zIndex: 100,
                     url: 'Dispatcher/EditGridData',
                     closeOnEscape: true,
@@ -292,17 +300,7 @@ function CallInfo(rowid)
                     afterComplete: function (result) {
                     }
                 },
-
-                //add options
-                {
-                    zIndex: 100,
-                    url: 'Dispatcher/AddGridData',
-                    closeOnEscape: true,
-                    closeAfterEdit: true,
-                    afterComplete: function (result) {
-                    }
-                },
-                //delete
+                //Видалення
                 {
                     zIndex: 100,
                     url: 'Dispatcher/DeleteGridData',
@@ -320,6 +318,4 @@ function CallInfo(rowid)
         })
     }
 
-
 }(jQuery));
-//}
